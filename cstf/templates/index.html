@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="body-home">
+    <div class="container border border-dark" id="formularioLogin">
+        <form class="form-inline" name=form action="./comision/proyectos_finales.html">
+            <h4>UNCA GTF</h4>
+            <div class="form-group mx-sm-3">
+                <label for="usuario" class="sr-only">Usuario</label>
+                <input type="text" class="form-control" name="usuario" id="usuario">
+            </div>
+            <div class="form-group mx-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" name="password" id="password">
+            </div><br>
+            <div class="botones-form">
+              <input onclick="login()" type="button" class="btn btn-primary" value="Acceder">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+

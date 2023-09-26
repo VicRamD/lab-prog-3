@@ -1,0 +1,150 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Nuevo Proyecto{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/proyecto.css' %}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('#formulario').onsubmit = function () {
+                let fechaInput = document.getElementById("fecha_alta");
+                let fechaSeleccionada = fechaInput.value;
+                let fechaActual = new Date();
+                //convierte fecha actual a formato ISO y extrae los caracteres de año-mes-día
+                let fechaISO = fechaActual.toISOString().slice(0, 10);
+
+                if (fechaSeleccionada > fechaISO) {
+                    alert(`La fecha seleccionada para el proyecto no puede ser superior a la fecha actual \n\n Fecha actual: ${fechaISO}`);
+                    return false;
+                }
+                return true;
+            }
+        });
+    </script>
+
+    <script src="{% static 'scripts/proyectosJS.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="body-pages" >
+        <h1 class="textoPrincipal pt-3 text-center">Alta del Proyecto</h1>
+    <div class="container-fluid border border-dark pt-3 mt-6" id="formularioPF">
+        <div class="row">
+            <div class="col-6" id="columnaForm">
+                <div class="container body1 pt-3">
+                    <div class="card">
+                        <div class="card-header1">
+                            Datos Proyecto
+                        </div>
+                        <div class="card-body">
+                            <form form action="#" method="post" id="formulario" enctype="multipart/form-data">
+                                <div class="col-md-12">
+                                    <label for="fecha_alta"
+                                        class="mt-2 mb-2 form-control-label form-label">Fecha</label>
+                                    <input type="date" class="form-control" name="fecha_alta" id="fecha_alta" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="tituloProyecto" class="mt-1 mb-2 form-label">Título</label>
+                                    <input name="tituloProyecto" class="form-control" type="text" id="tituloProyecto"
+                                        placeholder="Ingrese título" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="descripcionProyecto" class="mt-1 mb-1 form-label">Descripción:</label>
+                                    <textarea name="descripcionProyecto" class="form-control" type="text"
+                                        id="descripcionProyecto" value="">
+                                    </textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="archivoProyecto" class="mt-1 mb-2 form-label">Archivo del
+                                        Proyecto</label>
+                                    <input name="archivoProyecto" type="file" id="archivoProyecto" class="form-control"
+                                        required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="certificadoAnalitico" class="mt-1 mb-2 form-label">Certificado
+                                        analítico</label>
+                                    <input name="certificadoAnalitico" type="file" id="certificadoAnalitico"
+                                        class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="notaDirector" class="mt-1 mb-2 form-label">Nota al Director</label>
+                                    <input type="file" id="notaDirector" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="cvDirector" class="mt-1 mb-2 form-label">CV del Director</label>
+                                    <input type="file" id="cvDirector" class="form-control">
+                                </div>
+                                <div class="col-12">
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="botones-form mt-1">
+                    <button type="submit" class="btn btn-primary" form="formulario">Guardar</button>
+                    <a class="btn btn-danger" href="./proyectos.html">Cancelar</a>
+                </div>
+            </div>
+            <div class="col-6" id="columnaFormEstudiante">
+                <div class="container body1 pt-3">
+                    <div class="card">
+                        <div class="card-header1">
+                            Datos Proyecto
+                        </div>
+                        <div class="card-body">
+                            <h3>Datos del alumno:</h3>
+                            <div class="row p-3">
+                                <div class="col-md-6"></div>
+                                <label for="apellidoAlumno">Apellido/s:</label>
+                                <input type="text" id="apellidoAlumno" class="form-control">
+                            </div>
+                            <div>
+                                <label for="nombreAlumno">Nombre/s:</label>
+                                <input type="text" id="nombreAlumno" class="form-control">
+                            </div>
+                            <div>
+                                <label for="dniAlumno">DNI:</label>
+                                <input type="number" id="dniAlumno" class="form-control">
+                            </div>
+                            <div>
+                                <label for="matriculaAlumno">Matricula:</label>
+                                <input type="text" id="matriculaAlumno" class="form-control">
+                            </div>
+                            <div>
+                                <button onclick="agregarEstudiante()" class="btn btn-success mt-3"
+                                    style="width: 25%; margin: auto;">Agregar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container border  p-3 mt-2">
+                    <h3>Alumnos participantes del proyecto</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: coral">DNI</th>
+                                    <th>APELLIDO</th>
+                                    <th style="background-color: coral;">NOMBRE</th>
+                                    <th>MATRÍCULA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaAlumnos">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+{% endblock %}
+

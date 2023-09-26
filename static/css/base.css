@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+/*Body*/
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/*h1*/
+div.franja .textoPrincipal {
+    text-align: center;
+    color: white;
+}
+
+/*fondo de la lista de proyectos*/
+.fondoC {
+    background-color: darkturquoise;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+/*fondo de la lista de proyectos*/
+
+.fondoLista {
+    background-color: lightcyan;
+}
+
+.resaltarBlanco {
+    color: aliceblue;
+}
+
+div.opcion {
+    background-color: lightsalmon;
+    display: inline;
+    border-style: solid;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+nav#barraNav {
+    background-color: #0693e3;
+}
+
+div.btn-group-vertical {
+    background-color: darkturquoise;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+div.columna-tabla {
+    background-color: lightcyan;
+}
+
+div.contenedorCuerpo{
+    background-color: lightgray;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+div.franja{
+    background-color: #009b94;
+    padding-bottom: 2px;
+}
+
+li.nav-item a.boton-nav {
+    color: white;
+}
+
+nav a.navbar-brand {
+    color: yellow;
+}
+
+a.bam {
+    background-color: #0693e3;
+    color: white;
+    border-style: solid;
+    border-color: black;
+}
+
+/* Footer*/
+
+
+/* footer {
+    background-color: rgb(86, 135, 209);
+    text-align: center;
+    margin-top: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1em;
+} */
+
+
+/*#formularioProyecto*/
+#formularioTribunal, #formularioComision {
+  width: 50%;
+  border-radius: 5px;
+  background-color: lightcyan;
+  padding: 20px;
+}
+
+/*, #formularioProyecto input[type=text] */
+#opcionDespliegue, #formularioTribunal input[type=text], #formularioTribunal select, #formularioComision input[type=text] {
+  padding: 8px 16px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/*#formularioProyecto .botones-form*/
+#formularioTribunal .botones-form, #formularioComision .botones-form{
+  text-align: right;
+}
+
+.body-pages {
+    margin-bottom: 70px;
+}
+
+.list-unstyled li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.negrita {
+    font-weight: bold;
+}
+
+/*Formularios*/
+
+.titulo-formulario {
+    text-align: center;
+    padding: 20px;
+}
+
+#formularioTribunal,
+#formularioProyecto,
+#formularioComision {
+    width: 50%;
+    border-radius: 5px;
+    background-color: lightcyan;
+    padding: 20px;
+}
+
+#opcionDespliegue,
+#formularioTribunal input[type=text],
+#formularioTribunal select,
+#formularioProyecto input[type=text],
+#formularioComision input[type=text] {
+    padding: 8px 16px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#formularioTribunal .botones-form,
+#formularioProyecto .botones-form,
+#formularioComision .botones-form {
+    text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+
+    #formularioTribunal,
+    #formularioProyecto,
+    #formularioComision {
+        width: 100%;
+        border-radius: 0%;
+    }
+
+    #formularioTribunal .botones-form,
+    #formularioProyecto .botones-form {
+        text-align: center;
+    }
+}
+
+/*ESTADISTICAS*/
+
+.card-header1 {
+    padding: .5rem 1rem;
+    margin-bottom: 0;
+    background-color: rgb(25, 53, 82);
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+    color: white;
+    font-size: 150%;
+}
+/*Home*/
+.body-home{
+    background-image: url({% static 'img/landing.jpg' %});
+    /*background-image: url('../img/landing.jpg');*/
+    background-repeat: round;
+    background-size: cover;
+    height: 100vh;
+}
+#formularioLogin{
+  border-radius: 2px 2px 5px 5px;
+  padding: 10px 20px 20px 20px;
+  width: 90%;
+  max-width: 320px;
+  background: #ffffff;
+  position: relative;
+  padding-bottom: 30px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.3);
+}
+#formularioLogin {
+  position: absolute;
+  top: 20%;
+  right: 10%;
+}
+div.body-home div.botones-form{
+    text-align: right;
+}
+.filtro-estadistica{
+    max-width: 700px;
+    margin-top: 0px
+}
