@@ -10,3 +10,6 @@ def seccionProyectos(request):
 
 def nuevoProyecto(request):
     return render(request, 'proyectos/nuevo_proyecto.html')
+
+def estadisticas(request):
+    return render(request, 'proyectos/eProyectos.html')
