@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+#Pasar modelos
+#Docente, estudiante, asesor para otra app
 class Docente(models.Model):
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
@@ -25,7 +28,7 @@ class Proyecto(models.Model):
 
     director = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="director")
     codirector = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="codirector")
-    #asesor = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="asesor")
+    #asesor = models.ForeignKey(Asesor, on_delete=models.PROTECT, related_name="asesor")
     titulo = models.CharField(max_length=50)
     descripcion = models.TextField()
     proyecto_escrito = models.FileField()
@@ -33,6 +36,7 @@ class Proyecto(models.Model):
     nota_director = models.FileField()
     cv = models.FileField()
     estado = models.CharField(choices=ESTADO_OPCIONES)
+    #observaciones
 
 
 class Estudiante(models.Model):
@@ -56,6 +60,7 @@ class Informe(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="informe_proyecto")
     fecha_de_entrega = models.DateField(auto_now_add=True)
     arch_evaluacion = models.FileField()
+    # observaciones
 
 
 class TrabajoFinal(models.Model):
@@ -63,7 +68,7 @@ class TrabajoFinal(models.Model):
     borrador = models.FileField()
     aceptacion_director = models.FileField()
     fecha_presentacion = models.DateField(auto_now_add=True)
-
+#Fecha manual
 
 class EvaluacionTF(models.Model):
     trabajo_final = models.OneToOneField(TrabajoFinal, on_delete=models.PROTECT, related_name="evaluacion_tf")
