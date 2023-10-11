@@ -13,3 +13,10 @@ def nuevoProyecto(request):
 
 def estadisticas(request):
     return render(request, 'proyectos/eProyectos.html')
+
+def seccionComision(request):
+    return render(request, 'comision/proyectos_finales.html')
+
+def comisionNuevoIntegrante(request):
+    return render(request, 'comision/registro_CSTF.html')
+
