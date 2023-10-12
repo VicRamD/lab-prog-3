@@ -1,6 +1,6 @@
 from django.db import models
 
-from persona.models import Docente, Asesor
+#from persona.models import Docente, Asesor
 
 
 # Create your models here.
@@ -28,9 +28,9 @@ class Evaluacion(models.Model):
 
 
 class Proyecto(models.Model):
-    director = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="director")
-    codirector = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="codirector")
-    asesor = models.ForeignKey(Asesor, on_delete=models.PROTECT, related_name="asesor")
+    #director = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="director")
+    #codirector = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="codirector")
+    #asesor = models.ForeignKey(Asesor, on_delete=models.PROTECT, related_name="asesor")
     titulo = models.CharField(max_length=50)
     descripcion = models.TextField()
     fecha_presentacion = models.DateField(blank=True)
@@ -39,7 +39,7 @@ class Proyecto(models.Model):
     nota_aceptacion = models.FileField()
     cv = models.FileField()
     instancia = models.ForeignKey(Instancia_evaluacion, on_delete=models.PROTECT, related_name="instancia")
-    estudiantes = models.ManyToManyField(Docente, related_name="estudiantes")
+    #estudiantes = models.ManyToManyField(Docente, related_name="estudiantes")
 class TrabajoFinal(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="tf_proyecto")
     borrador = models.FileField()
@@ -49,9 +49,9 @@ class TrabajoFinal(models.Model):
 
 
 class Tribunal(models.Model):
-    presidente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="presidente")
-    vocales = models.ManyToManyField(Docente, related_name="vocales")
-    vocales_suplentes = models.ManyToManyField(Docente, related_name="vocales_suplentes")
+    #presidente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="presidente")
+    #vocales = models.ManyToManyField(Docente, related_name="vocales")
+    #vocales_suplentes = models.ManyToManyField(Docente, related_name="vocales_suplentes")
     disposicion = models.FileField()
     fecha_disposicion = models.DateField()
     numero_disposicion = models.IntegerField()
@@ -63,3 +63,6 @@ class Defensa(models.Model):
     fecha = models.DateField()
     nota = models.IntegerField(blank=True)
     acta = models.FileField()
+
+class Comision(models.Model):
+    proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
