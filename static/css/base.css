@@ -198,12 +198,13 @@ a.bam {
     font-size: 150%;
 }
 /*Home*/
-.body-home{
-    background-image: url({% static 'img/landing.jpg' %});
-    /*background-image: url('../img/landing.jpg');*/
+.body-home img{
+    /*background-image: url({% static 'img/landing.jpg' %});
+    background-image: url('img/landing.jpg');*/
     background-repeat: round;
     background-size: cover;
     height: 100vh;
+    width: 100%;
 }
 #formularioLogin{
   border-radius: 2px 2px 5px 5px;

@@ -6,6 +6,7 @@ app_name = 'gestion'
 urlpatterns = [
     #path('', views.index, name='index'),
     path('proyectos/', views.seccionProyectos, name='proyectos'),
+    path('proyectos/<int:id>/', views.detalleProyecto, name='detalle_proyecto'),
     path('proyectos/nuevo_proyecto', views.nuevoProyecto, name='nuevo_proyecto'),
     path('estadisticas/', views.estadisticas, name='estadisticas'),
     path('comision/', views.seccionComision, name='comision'),

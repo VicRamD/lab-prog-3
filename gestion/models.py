@@ -1,68 +1,57 @@
 from django.db import models
-
-#from persona.models import Docente, Asesor
-
+from django.conf import settings
 
 # Create your models here.
 
 
-class Instancia_evaluacion(models.Model):
-    DESCRIPCION_EVALUACION = (
-        ('comision', 'COMISION DE SEGUIMIENTO'),
-        ('tribunal', 'TRIBUNAL EVALUADOR'),
-        ('defensa', 'DEFENSA TRABAJO FINAL'),
-        ('finalizado', 'FINALIZADO'),
-    )
-    descripcion = models.CharField(choices=DESCRIPCION_EVALUACION)
-    observacion = models.TextField()
-class Evaluacion(models.Model):
-    informe = models.FileField()
-    fecha = models.DateField()
-    ESTADO_OPCIONES = (
-        ('pendiente', 'PENDIENTE'),
-        ('aprobado', 'APROBADO'),
-        ('rechazado', 'RECHAZADO'),
-    )
-    estado = models.CharField(choices=ESTADO_OPCIONES)
-    instancia_evaluacion = models.OneToOneField(Instancia_evaluacion, on_delete=models.PROTECT, related_name="instancia_evaluacion", blank=True)
-
 
 class Proyecto(models.Model):
-    #director = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="director")
-    #codirector = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="codirector")
-    #asesor = models.ForeignKey(Asesor, on_delete=models.PROTECT, related_name="asesor")
     titulo = models.CharField(max_length=50)
     descripcion = models.TextField()
     fecha_presentacion = models.DateField(blank=True)
-    proyecto_escrito = models.FileField()
-    certificado_analitico = models.FileField()
-    nota_aceptacion = models.FileField()
-    cv = models.FileField()
-    instancia = models.ForeignKey(Instancia_evaluacion, on_delete=models.PROTECT, related_name="instancia")
-    #estudiantes = models.ManyToManyField(Docente, related_name="estudiantes")
+    proyecto_escrito = models.FileField(upload_to='uploads/')
+    certificado_analitico = models.FileField(upload_to='uploads/')
+    nota_aceptacion = models.FileField(upload_to='uploads/')
 class TrabajoFinal(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="tf_proyecto")
-    borrador = models.FileField()
-    aceptacion_director = models.FileField()
-    fecha_presentacion = models.DateField(auto_now_add=True)
-    # Fecha manual
+    borrador = models.FileField(upload_to='uploads/')
+    aceptacion_director = models.FileField(upload_to='uploads/')
+    fecha_presentacion = models.DateField()
 
 
 class Tribunal(models.Model):
-    #presidente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="presidente")
-    #vocales = models.ManyToManyField(Docente, related_name="vocales")
-    #vocales_suplentes = models.ManyToManyField(Docente, related_name="vocales_suplentes")
-    disposicion = models.FileField()
+    disposicion = models.FileField(upload_to='uploads/')
     fecha_disposicion = models.DateField()
     numero_disposicion = models.IntegerField()
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="tribunal_proyecto")
 
 
 class Defensa(models.Model):
-    trabajo_final = models.OneToOneField(TrabajoFinal, on_delete=models.PROTECT, related_name="defensa_tf")
+    proyecto = models.OneToOneField(Proyecto, on_delete=models.CASCADE, related_name="defensa_proyecto", null=True, blank=True)
     fecha = models.DateField()
-    nota = models.IntegerField(blank=True)
-    acta = models.FileField()
+    nota = models.IntegerField()
+    acta = models.FileField(upload_to='uploads/')
 
 class Comision(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
+
+class InstanciaEvaluacion(models.Model):
+    DESCRIPCION_EVALUACION = (
+        ('COMISION DE SEGUIMIENTO', 'COMISION DE SEGUIMIENTO'),
+        ('TRIBUNAL EVALUADOR', 'TRIBUNAL EVALUADOR'),
+        ('DEFENSA TRABAJO FINAL', 'DEFENSA TRABAJO FINAL'),
+        ('FINALIZADO', 'FINALIZADO'),
+    )
+    descripcion = models.CharField(choices=DESCRIPCION_EVALUACION)
+    observacion = models.TextField()
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, related_name="proyecto_instancia", null=True, blank=True)
+class Evaluacion(models.Model):
+    informe = models.FileField(upload_to='uploads/')
+    fecha = models.DateField()
+    ESTADO_OPCIONES = (
+        ('pendiente', 'OBSERVADO'),
+        ('aprobado', 'APROBADO'),
+        ('rechazado', 'RECHAZADO'),
+    )
+    estado = models.CharField(choices=ESTADO_OPCIONES)
+    instancia_evaluacion = models.OneToOneField(InstanciaEvaluacion, on_delete=models.CASCADE, related_name="instancia_evaluacion", blank=True)

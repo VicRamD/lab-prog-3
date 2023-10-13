@@ -6,6 +6,7 @@
 
 {% block content %}
 <div class="body-home">
+    <img src="{% static 'img/landing.jpg' %}">
     <!-- Si no está logueado sale la sección de iniciar sesión, caso contarrio no -->
     {% if login_correcto %}
 
@@ -34,8 +35,6 @@
 
         </div>
     {% endif %}
-
-
 </div>
 {% endblock %}
 

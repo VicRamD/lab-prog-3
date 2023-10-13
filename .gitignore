@@ -5,5 +5,8 @@ lab23/configuraciones_locales.py
 /lab23/__pycache__/
 /persona/__pycache__/
 /persona/migrations/__pycache__/
+/usuarios/__pycache__/
+/usuarios/migrations/__pycache__/
 
 /venv/
+/media/

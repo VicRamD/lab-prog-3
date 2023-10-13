@@ -19,25 +19,19 @@
             <table class="table table-hover table-sm">
               <thead>
                 <tr>
-                  <th scope="col">Fecha</th>
-                  <th scope="col">Nombre del tribunal</th>
-                  <th scope="col">Docente director</th>
-                  <th scope="col">Estado</th>
+                  <th scope="col">Titulo</th>
+                  <th scope="col">Descripcion</th>
+                  <th scope="col">Fecha de presentacion</th>
                 </tr>
               </thead>
               <tbody>
+              {% for proyecto in proyectos%}
                 <tr>
-                  <th scope="row">2023-11-20</th>
-                  <td>Tribunal ejemplo 1</td>
-                  <td>Perez Juan</td>
-                  <td>Aprobado</td>
+                  <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">{{proyecto.titulo}}</a></td>
+                  <td>{{proyecto.descripcion}}</td>
+                  <td>{{proyecto.fecha_presentacion}}</td>
                 </tr>
-                <tr>
-                  <th scope="row">2024-11-18</th>
-                  <td>Tribunal ejemplo 2</td>
-                  <td>Vargas Ana</td>
-                  <td>Pendiente</td>
-                </tr>
+              {% endfor %}
               </tbody>
             </table>
           </div>
