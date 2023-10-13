@@ -57,7 +57,6 @@ class IntegranteProyecto(models.Model):
     estudiante = models.OneToOneField(Estudiante, on_delete=models.PROTECT, related_name="estudiante")
     fecha_alta = models.DateField(blank=True)
     fecha_baja = models.DateField(blank=True, null=True)
-
 class IntegranteComision(models.Model):
     comision = models.ForeignKey(Comision, on_delete=models.PROTECT, related_name="comision")
     docente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="integrante_comision")

@@ -1,12 +1,13 @@
 #from django.http import HttpResponse
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from django.urls import reverse
 from django.utils import timezone
 
 from gestion.models import Proyecto, Comision, InstanciaEvaluacion
 from gestion.forms import ProyectoForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision,AsesorProyecto
+
 
 
 # Create your views here.
