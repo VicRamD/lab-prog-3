@@ -27,10 +27,11 @@
                         <!--<a class="nav-link boton-nav" href="{}">Inicio</a>-->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link boton-nav" href="../comision/registro_cstf.html">Comisión de Seguimiento</a>
+                        <a class="nav-link boton-nav" href="{% url 'gestion:comision' %}">Comisión de Seguimiento</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link boton-nav" href="./proyectos.html">Proyectos</a>
+                        <a class="nav-link boton-nav" href="{% url 'gestion:proyectos' %}">Proyectos</a>
+                        <!--<a class="nav-link boton-nav" href="./proyectos.html">Proyectos</a>-->
                     </li>
                     <li class="nav-item">
                         <a class="nav-link boton-nav" href="../tribunal/tribunales.html">Tribunales</a>
@@ -39,7 +40,7 @@
                         <a class="nav-link boton-nav" href="../estadisticas/estadisticas.html">Estadisticas</a>
                     </li>
                 </ul>
-                <button class="btn btn-primary" type="button">Iniciar Sesión</button>
+                <a href="{% url 'admin:login' %}" class="btn btn-primary">Iniciar Sesión</a>
             </div>
         </div>
     </nav>

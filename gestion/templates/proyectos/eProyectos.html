@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Informe de Estadísticas de Proyectos por Estado{% endblock %}
+
+{% block content %}
+    <h1 class="textoPrincipal pt-4">Información Estadística sobre Proyectos</h1>
+    <div class="filtro-estadistica">
+        <label for="opcionDespliegue">Listar por:</label>
+          <select id="opcionDespliegue">
+            <option value="E">Estado 1</option>
+            <option value="F">Estado 2</option>
+          </select>
+    </div>
+
+    <section class="separacion">
+        <div class="container body1">
+            <div class="card">
+                <div class="card-header1">
+                    Listado de Proyectos Finales por Estado
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Registro</th>
+                                <th scope="col">Nombre del proyecto</th>
+                                <th scope="col">Docente director</th>
+                                <th scope="col">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Proyecto ejemplo 1</td>
+                                <td>Perez Juan</td>
+                                <td>Aprobado</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Proyecto ejemplo 2</td>
+                                <td>Alderete Luis</td>
+                                <td>Pendiente</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

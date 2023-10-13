@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Informe de Estadísticas de Proyectos por Fecha{% endblock %}
+
+{% block head %}
+    <script src="../../scripts/comprobacion_fecha.js"> </script>
+{% endblock %}
+
+{% block content %}
+    <section class="body-pages" >
+        <br>
+        <div class= "container body1">
+            <div class="card">
+                  <div class="card-header1">
+                      Listado de Proyectos Finales por fecha
+                  </div>
+                  <div class="card-body">
+                            <form action="#" method="post" class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="fincial" class="form-label">Seleccione Fecha Inicial</label>
+                                    <input type="date" name="fincial" id="fincial" class="form-control" onchange=" comprobacionFecha()"><br><br>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ffin" class="form-label">Seleccione Fecha Fin</label>
+                                    <input type="date" name="ffin" id="ffin" class="form-control" onchange=" comprobacionFecha()"><br><br>
+                                </div>
+                            </form><br>
+
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Registro</th>
+                                    <th scope="col">Nombre del proyecto</th>
+                                    <th scope="col">Docente director</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Proyecto ejemplo 1</td>
+                                    <td>Perez Juan</td>
+                                    <td>Aprobado</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Proyecto ejemplo 2</td>
+                                    <td>Alderete Luis</td>
+                                    <td>Pendiente</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                  </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

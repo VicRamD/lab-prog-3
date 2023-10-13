@@ -1,4 +1,8 @@
+#pip install -r requirements/base.txt
+
 django==4.2.5
 
 #database
 psycopg2-binary==2.9.7
+
+django-extensions==3.2.3
