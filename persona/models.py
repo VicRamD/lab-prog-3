@@ -54,7 +54,7 @@ class RolTribunal(models.Model):
 
 class IntegranteProyecto(models.Model):
     proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, related_name="proyecto_integrante")
-    estudiante = models.OneToOneField(Estudiante, on_delete=models.PROTECT, related_name="estudiante")
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.PROTECT, related_name="estudiante")
     fecha_alta = models.DateField(blank=True)
     fecha_baja = models.DateField(blank=True, null=True)
 class IntegranteComision(models.Model):

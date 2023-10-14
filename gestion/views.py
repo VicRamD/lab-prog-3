@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
 
-from gestion.models import Proyecto, Comision, InstanciaEvaluacion, Evaluacion
+from gestion.models import Proyecto, Comision, InstanciaEvaluacion, ComisionProyecto
 from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision,AsesorProyecto
 
@@ -30,21 +30,17 @@ def agregarAsesorProyecto(asesor_seleccionado, proyecto):
 
 def agregarRolProyecto(docente_seleccionado, proyecto, rol):
     docente = Docente.objects.get(id=docente_seleccionado)
-    director_proyecto_instance = RolProyecto(descripcion=rol,
+    rol_proyecto_instance = RolProyecto(descripcion=rol,
                                              proyecto=proyecto,
                                              docente=docente,
                                              fecha_alta=timezone.now(),
                                              fecha_baja=None)
-    director_proyecto_instance.save()
+    rol_proyecto_instance.save()
 
-def agregarCSTFProyecto(comision_seleccionada, proyecto):
-    docentes_seleccionados = Docente.objects.filter(id__in=comision_seleccionada)
-    comision_instance = Comision(proyecto=proyecto)
+def agregarCSTFProyecto(id_comision, proyecto):
+    comision = get_object_or_404(Comision, id=id_comision)
+    comision_instance = ComisionProyecto(proyecto=proyecto, comision=comision)
     comision_instance.save()
-    for docente in docentes_seleccionados:
-        comision_proyecto_instance = IntegranteComision(comision=comision_instance,
-                                                          docente=docente)
-    comision_proyecto_instance.save()
 
 def agregarInstanciaEvaluacion(descripcion, proyecto):
     instancia_evaluacion_instance = InstanciaEvaluacion(descripcion=descripcion, proyecto=proyecto)
@@ -65,13 +61,13 @@ def nuevoProyecto(request):
         director_seleccionado = request.POST.getlist('director_seleccionado')
         codirector_seleccionado = request.POST.getlist('codirector_seleccionado')
         comision_seleccionada = request.POST.getlist('comision_seleccionada')
-        if form_proyecto.is_valid() and integrantes_seleccionados and asesor_seleccionado and director_seleccionado and codirector_seleccionado and comision_seleccionada:
+        if form_proyecto.is_valid() and integrantes_seleccionados and asesor_seleccionado and director_seleccionado and codirector_seleccionado:
             proyecto_instance = form_proyecto.save()
             agregarIntegranteProyecto(integrantes_seleccionados, proyecto_instance)
             agregarRolProyecto(director_seleccionado[0], proyecto_instance, 'Director')
             agregarRolProyecto(codirector_seleccionado[0], proyecto_instance, 'Codirector')
             agregarAsesorProyecto(asesor_seleccionado[0], proyecto_instance)
-            agregarCSTFProyecto(comision_seleccionada, proyecto_instance)
+            agregarCSTFProyecto(comision_seleccionada[0], proyecto_instance)
             agregarInstanciaEvaluacion('COMISION DE SEGUIMIENTO', proyecto_instance)
 
             messages.success(request, 'Se ha creado el proyecto correctamente.')
@@ -83,11 +79,13 @@ def nuevoProyecto(request):
     estudiantes = Estudiante.objects.all()
     asesores = Asesor.objects.all()
     docentes = Docente.objects.all()
+    comisiones = Comision.objects.all()
     return render(request, 'proyectos/nuevo_proyecto.html', {
         'form_proyecto': form_proyecto,
         'estudiantes': estudiantes,
         'asesores': asesores,
-        'docentes': docentes
+        'docentes': docentes,
+        'comisiones': comisiones
     })
 
 def controlEstado(id):

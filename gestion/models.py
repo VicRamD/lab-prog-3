@@ -24,12 +24,15 @@ class Tribunal(models.Model):
 class Defensa(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.CASCADE, related_name="defensa_proyecto", null=True, blank=True)
     fecha = models.DateField()
-    nota = models.IntegerField()
-    acta = models.FileField(upload_to='uploads/')
+    nota = models.IntegerField(null=True, blank=True)
+    acta = models.FileField(upload_to='uploads/', null=True, blank=True)
 
 class Comision(models.Model):
-    proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
+    descripcion = models.CharField(default="Comisión nueva")
 
+class ComisionProyecto(models.Model):
+    proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
+    comision = models.OneToOneField(Comision, on_delete=models.PROTECT, related_name="proyecto_comision")
 class InstanciaEvaluacion(models.Model):
     DESCRIPCION_EVALUACION = (
         ('COMISION DE SEGUIMIENTO', 'COMISION DE SEGUIMIENTO'),

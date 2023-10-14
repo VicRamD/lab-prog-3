@@ -101,10 +101,10 @@
                                     </div>
                                     <div class="row p-3">
                                         <div class="col-md-6"></div>
-                                        <label for="comision_seleccionada">Seleccione Integrantes de la Comisión de Seguimiento de Trabajos Finales /s:</label>
-                                        <select name="comision_seleccionada" multiple>
-                                        {% for docente in docentes %}
-                                          <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                        <label for="comision_seleccionada">Seleccione una Comision de seguimiento de Trabajos Finales:</label>
+                                        <select name="comision_seleccionada">
+                                        {% for comision in comisiones %}
+                                          <option value="{{ comision.id }}">{{ comision.descripcion }}</option>
                                         {% endfor %}
                                         </select>
                                     </div>
