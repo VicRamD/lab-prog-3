@@ -38,8 +38,7 @@ class InstanciaEvaluacion(models.Model):
         ('FINALIZADO', 'FINALIZADO'),
     )
     descripcion = models.CharField(choices=DESCRIPCION_EVALUACION)
-    observacion = models.TextField()
-    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, related_name="proyecto_instancia", null=True, blank=True)
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, related_name="proyecto_instancia")
 class Evaluacion(models.Model):
     informe = models.FileField(upload_to='uploads/')
     fecha = models.DateField()
@@ -49,5 +48,6 @@ class Evaluacion(models.Model):
         ('RECHAZADO', 'RECHAZADO'),
     )
     estado = models.CharField(choices=ESTADO_OPCIONES)
-    instancia_evaluacion = models.ForeignKey(InstanciaEvaluacion, on_delete=models.CASCADE, related_name="instancia_evaluacion", blank=True)
-
+    observacion = models.TextField()
+    instancia_evaluacion = models.ForeignKey(InstanciaEvaluacion, on_delete=models.CASCADE, related_name="instancia_evaluacion")
+    nuevoPTF = models.FileField(upload_to='uploads/', null=True, blank=True)

@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from gestion.models import Proyecto, Comision, InstanciaEvaluacion, Evaluacion
-from gestion.forms import ProyectoForm
+from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision,AsesorProyecto
 
 
@@ -46,8 +46,8 @@ def agregarCSTFProyecto(comision_seleccionada, proyecto):
                                                           docente=docente)
     comision_proyecto_instance.save()
 
-def agregarInstanciaEvaluacion(descripcion, observacion, proyecto):
-    instancia_evaluacion_instance = InstanciaEvaluacion(descripcion=descripcion, observacion=observacion, proyecto=proyecto)
+def agregarInstanciaEvaluacion(descripcion, proyecto):
+    instancia_evaluacion_instance = InstanciaEvaluacion(descripcion=descripcion, proyecto=proyecto)
     instancia_evaluacion_instance.save()
 def seccionProyectos(request):
     proyectos = Proyecto.objects.all().order_by('-fecha_presentacion')
@@ -72,9 +72,7 @@ def nuevoProyecto(request):
             agregarRolProyecto(codirector_seleccionado[0], proyecto_instance, 'Codirector')
             agregarAsesorProyecto(asesor_seleccionado[0], proyecto_instance)
             agregarCSTFProyecto(comision_seleccionada, proyecto_instance)
-            agregarInstanciaEvaluacion('COMISION DE SEGUIMIENTO',
-                                       'Proyecto Final Presentado. En evaluación por la Comisión de Seguimiento de Trabajo Finales',
-                                       proyecto_instance)
+            agregarInstanciaEvaluacion('COMISION DE SEGUIMIENTO', proyecto_instance)
 
             messages.success(request, 'Se ha creado el proyecto correctamente.')
             #return redirect(reverse('gestion:detalle_proyecto', args={proyecto_instance.id}))
@@ -92,45 +90,51 @@ def nuevoProyecto(request):
         'docentes': docentes
     })
 
-def controlMovimiento(id, instancia_actual, estado, observacion_movimiento):
+def controlEstado(id):
     proyecto = get_object_or_404(Proyecto, id=id)
-    if estado == 'APROBADO':
-        if instancia_actual == 'COMISION DE SEGUIMIENTO':
-            agregarInstanciaEvaluacion('TRIBUNAL EVALUADOR', observacion_movimiento, proyecto)
-        elif instancia_actual == 'TRIBUNAL EVALUADOR':
-            agregarInstanciaEvaluacion('DEFENSA TRABAJO FINAL', observacion_movimiento, proyecto)
-        elif instancia_actual == 'DEFENSA TRABAJO FINAL':
-            agregarInstanciaEvaluacion('FINALIZADO', observacion_movimiento, proyecto)
-    elif estado == 'OBSERVADO':
-        if instancia_actual != 'FINALIZADO':
-            agregarInstanciaEvaluacion(instancia_actual, observacion_movimiento, proyecto)
-    elif estado == 'RECHAZADO':
-        if instancia_actual != 'FINALIZADO':
-            agregarInstanciaEvaluacion('FINALIZADO', observacion_movimiento, proyecto)
-
-def agregarResultadoEvaluacion(id, informe, estado):
-    proyecto = get_object_or_404(Proyecto, id=id)
-    ultima_instancia = proyecto.proyecto_instancia.last()
-    evaluacion_instance = Evaluacion(informe=informe,
-                                     fecha=timezone.now(),
-                                     estado=estado,
-                                     instancia_evaluacion=ultima_instancia)
-    evaluacion_instance.save()
+    ultimo_estado = proyecto.proyecto_instancia.last()
+    ultima_evaluacion = ultimo_estado.instancia_evaluacion.last()
+    if ultima_evaluacion.estado == 'APROBADO':
+        if ultimo_estado.descripcion == 'COMISION DE SEGUIMIENTO':
+            agregarInstanciaEvaluacion('TRIBUNAL EVALUADOR', proyecto)
+        elif ultimo_estado.descripcion == 'TRIBUNAL EVALUADOR':
+            agregarInstanciaEvaluacion('DEFENSA TRABAJO FINAL', proyecto)
+        elif ultimo_estado.descripcion == 'DEFENSA TRABAJO FINAL':
+            agregarInstanciaEvaluacion('FINALIZADO', proyecto)
+    elif ultima_evaluacion.estado == 'RECHAZADO':
+            agregarInstanciaEvaluacion('FINALIZADO', proyecto)
 
 def movimientos(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
     if request.method == 'POST':
-        resultado_evaluacion = request.POST.get('estado')
-        informe_evaluacion = request.FILES['informe']
-        observacion_movimiento = request.POST.get('observacion', '')
-        instancia_actual= proyecto.proyecto_instancia.last().descripcion
-        if resultado_evaluacion and informe_evaluacion and observacion_movimiento:
-            controlMovimiento(proyecto.id, instancia_actual, resultado_evaluacion,observacion_movimiento)
-            agregarResultadoEvaluacion(proyecto.id, informe_evaluacion, resultado_evaluacion)
-            messages.success(request, 'Se agregó la nueva instancia correctamente.')
+        form_evaluacion = EvaluacionForm(request.POST, request.FILES, prefix='evaluacion')
+        form_defensa = DefensaForm(request.POST, request.FILES, prefix='defensa')
+        instancia_actual= proyecto.proyecto_instancia.last()
+
+        if form_evaluacion.is_valid():
+            evaluacion_instance = form_evaluacion.save(commit=False)
+            evaluacion_instance.fecha= timezone.now()
+            evaluacion_instance.instancia_evaluacion= instancia_actual
+            evaluacion_instance.save()
+            controlEstado(proyecto.id)
             return redirect(reverse('gestion:movimientos', args={proyecto.id}))
 
-    return render(request, 'movimientos/movimientos.html', {'proyecto': proyecto})
+        elif form_defensa.is_valid():
+            print("antes de grabar defensa")
+            defensa_instance = form_defensa.save(commit=False)
+            defensa_instance.proyecto = proyecto
+            defensa_instance.save()
+            controlEstado(proyecto.id)
+            return redirect(reverse('gestion:movimientos', args={proyecto.id}))
+
+    else:
+        form_evaluacion = EvaluacionForm(prefix='evaluacion')
+        form_defensa = DefensaForm(prefix='defensa')
+
+    return render(request, 'movimientos/movimientos.html', {
+        'proyecto': proyecto,
+        'form_evaluacion': form_evaluacion,
+        'form_defensa': form_defensa})
 
 def estadisticas(request):
     return render(request, 'proyectos/eProyectos.html')

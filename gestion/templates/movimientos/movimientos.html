@@ -18,7 +18,7 @@
             <div class="col-md-7">
                 <div class="table-responsive mt-3">
                     <table class="table table-hover table-sm">
-                        <tr>
+                        <tr class="table-info">
                             <th>ID</th>
                             <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">PTF-{{proyecto.id}}</a></td>
                         </tr>
@@ -31,51 +31,109 @@
                             <td>{{proyecto.fecha_presentacion|date:"SHORT_DATE_FORMAT"}}</td>
                         </tr>
                         {% for instancia in proyecto.proyecto_instancia.all %}
-                            <tr>
+                            <tr class="table-info">
                                 <th>Estado</th>
                                 <td>{{instancia.descripcion}}</td>
                             </tr>
-                            <tr>
-                                <th>Observación</th>
-                                <td>{{instancia.observacion}}</td>
-                            </tr>
+                            {% for evaluacion in instancia.instancia_evaluacion.all %}
+                                <tr>
+                                    <th>Resultado de evaluación</th>
+                                    <td>{{evaluacion.estado}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Observación</th>
+                                    <td>{{evaluacion.observacion}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Fecha evaluación</th>
+                                    <td>{{evaluacion.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Informe</th>
+                                    <td><a href="{{evaluacion.informe.url}}">Ver documento</a></td>
+                                </tr>
+                                <tr>
+                                    <th>Nueva version de Proyecto:</th>
+                                    <td><a href="{{evaluacion.informe.url}}">Cargar archivo</a></td>
+                                </tr>
+                            {% endfor %}
                         {% endfor %}
+                        {% if proyecto.defensa_proyecto %}
+                            <tr>
+                                <th>Nota:</th>
+                                <td>{{proyecto.defensa_proyecto.nota}}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha:</th>
+                                <td>{{proyecto.defensa_proyecto.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                            </tr>
+                            <tr>
+                                <th>Acta:</th>
+                                <td><a href="{{proyecto.defensa_proyecto.acta.url}}">Ver documento</a></td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </div>
             </div>
 
             <!-- Columna para el formulario -->
             <div class="col-md-5">
-                <form method="post" id="formulario" enctype="multipart/form-data">
                     <div class="container body1 pt-3">
+                    <form method="post"  enctype="multipart/form-data">
                         <div class="card">
                             <div class="card-header1">
                                 Resultados de evaluación
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="estado" class="form-label">Resultado:</label>
-                                    <select name="estado" required="" id="estado" class="form-control">
-                                      <option value="" selected>---------</option>
-                                      <option value="OBSERVADO">OBSERVADO</option>
-                                      <option value="APROBADO">APROBADO</option>
-                                      <option value="RECHAZADO">RECHAZADO</option>
-                                    </select>
+                                    <label for="{{ form_evaluacion.estado.id_for_label }}" class="mt-1 mb-2 form-label">Resultado:</label>
+                                    {{form_evaluacion.estado}}
+                                    {{form_evaluacion.estado.errors}}
                                 </div>
                                 <div class="form-group">
-                                    <label for="informe" class="form-label">Informe:</label>
-                                    <input type="file" name="informe" required="" id="informe" class="form-control">
+                                    <label for="{{ form_evaluacion.informe.id_for_label }}" class="mt-1 mb-2 form-label">Informe:</label>
+                                    {{form_evaluacion.informe}}
+                                    {{form_evaluacion.informe.errors}}
                                 </div>
                                 <div class="form-group">
-                                    <label for="observacion" class="form-label">Observación:</label>
-                                    <textarea name="observacion" rows="5" required="" id="observacion" class="form-control"></textarea>
+                                    <label for="{{ form_evaluacion.observacion.id_for_label }}" class="mt-1 mb-2 form-label">Observación:</label><br>
+                                    {{form_evaluacion.observacion}}
+                                    {{form_evaluacion.observacion.errors}}
                                 </div>
                             </div>
                             {% csrf_token %}
                             <input type="submit" value="Guardar" class="btn btn-success mt-3">
                         </div>
+                        </form>
                     </div>
-                </form>
+                    <div class="container body1 pt-3">
+                        <form method="post" enctype="multipart/form-data">
+                        <div class="card">
+                            <div class="card-header1">
+                                Resultados de Defensa
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="{{ form_defensa.fecha.id_for_label }}" class="mt-1 mb-2 form-label">Fecha:</label>
+                                        {{form_defensa.fecha}}
+                                        {{form_defensa.fecha.errors}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form_defensa.nota.id_for_label }}" class="mt-1 mb-2 form-label">Nota:</label>
+                                        {{form_defensa.nota}}
+                                        {{form_defensa.nota.errors}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form_defensa.acta.id_for_label }}" class="mt-1 mb-2 form-label">Acta:</label>
+                                        {{form_defensa.acta}}
+                                        {{form_defensa.acta.errors}}
+                                </div>
+                            </div>
+                            {% csrf_token %}
+                            <input type="submit" value="Guardar" class="btn btn-success mt-3">
+                        </div>
+                        </form>
+                    </div>
             </div>
         </div>
     </div>
