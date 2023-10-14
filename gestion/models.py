@@ -17,16 +17,9 @@ class TrabajoFinal(models.Model):
 
 class Tribunal(models.Model):
     disposicion = models.FileField(upload_to='uploads/')
-
-class Instancia_evaluacion(models.Model):
-    DESCRIPCION_EVALUACION = (
-        ('COMISION DE SEGUIMIENTO', 'COMISION DE SEGUIMIENTO'),
-        ('TRIBUNAL EVALUADOR', 'TRIBUNAL EVALUADOR'),
-        ('DEFENSA TRABAJO FINAL', 'DEFENSA TRABAJO FINAL'),
-        ('FINALIZADO', 'FINALIZADO'),
-    )
-    descripcion = models.CharField(choices=DESCRIPCION_EVALUACION)
-    observacion = models.TextField()
+    fecha_disposicion = models.DateField()
+    numero_disposicion = models.CharField(max_length=50)
+    proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="tribunal_proyecto")
 
 class Defensa(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.CASCADE, related_name="defensa_proyecto", null=True, blank=True)
@@ -51,10 +44,10 @@ class Evaluacion(models.Model):
     informe = models.FileField(upload_to='uploads/')
     fecha = models.DateField()
     ESTADO_OPCIONES = (
-        ('pendiente', 'OBSERVADO'),
-        ('aprobado', 'APROBADO'),
-        ('rechazado', 'RECHAZADO'),
+        ('OBSERVADO', 'OBSERVADO'),
+        ('APROBADO', 'APROBADO'),
+        ('RECHAZADO', 'RECHAZADO'),
     )
     estado = models.CharField(choices=ESTADO_OPCIONES)
-    instancia_evaluacion = models.OneToOneField(InstanciaEvaluacion, on_delete=models.CASCADE, related_name="instancia_evaluacion", blank=True)
+    instancia_evaluacion = models.ForeignKey(InstanciaEvaluacion, on_delete=models.CASCADE, related_name="instancia_evaluacion", blank=True)
 

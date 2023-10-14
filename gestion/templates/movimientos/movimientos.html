@@ -1,0 +1,85 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Nueva Instancia{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/proyecto.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <div class="body-pages">
+    <h1 class="textoPrincipal pt-3 text-center">Movimientos y Estados de un Trabajo Final</h1>
+    <div class="container-fluid border border-dark pt-3 mt-6">
+        <div class="row">
+            <!-- Columna para detalles -->
+            <div class="col-md-7">
+                <div class="table-responsive mt-3">
+                    <table class="table table-hover table-sm">
+                        <tr>
+                            <th>ID</th>
+                            <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">PTF-{{proyecto.id}}</a></td>
+                        </tr>
+                        <tr>
+                            <th>Titulo</th>
+                            <td>{{proyecto.titulo}}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de presentación</th>
+                            <td>{{proyecto.fecha_presentacion|date:"SHORT_DATE_FORMAT"}}</td>
+                        </tr>
+                        {% for instancia in proyecto.proyecto_instancia.all %}
+                            <tr>
+                                <th>Estado</th>
+                                <td>{{instancia.descripcion}}</td>
+                            </tr>
+                            <tr>
+                                <th>Observación</th>
+                                <td>{{instancia.observacion}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            <!-- Columna para el formulario -->
+            <div class="col-md-5">
+                <form method="post" id="formulario" enctype="multipart/form-data">
+                    <div class="container body1 pt-3">
+                        <div class="card">
+                            <div class="card-header1">
+                                Resultados de evaluación
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="estado" class="form-label">Resultado:</label>
+                                    <select name="estado" required="" id="estado" class="form-control">
+                                      <option value="" selected>---------</option>
+                                      <option value="OBSERVADO">OBSERVADO</option>
+                                      <option value="APROBADO">APROBADO</option>
+                                      <option value="RECHAZADO">RECHAZADO</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="informe" class="form-label">Informe:</label>
+                                    <input type="file" name="informe" required="" id="informe" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="observacion" class="form-label">Observación:</label>
+                                    <textarea name="observacion" rows="5" required="" id="observacion" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            {% csrf_token %}
+                            <input type="submit" value="Guardar" class="btn btn-success mt-3">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

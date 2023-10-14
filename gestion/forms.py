@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput
 
-from gestion.models import Proyecto
+from gestion.models import Proyecto, InstanciaEvaluacion, Evaluacion
 
 
 class ProyectoForm(forms.ModelForm):

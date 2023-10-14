@@ -3,8 +3,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils import timezone
+from django.urls import reverse
 
-from gestion.models import Proyecto, Comision, InstanciaEvaluacion
+from gestion.models import Proyecto, Comision, InstanciaEvaluacion, Evaluacion
 from gestion.forms import ProyectoForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision,AsesorProyecto
 
@@ -46,15 +47,15 @@ def agregarCSTFProyecto(comision_seleccionada, proyecto):
     comision_proyecto_instance.save()
 
 def agregarInstanciaEvaluacion(descripcion, observacion, proyecto):
-    instancia_evaluacion_instance = InstanciaEvaluacion(descripcion=descripcion, observacion=observacion, proyecto=proyecto,)
+    instancia_evaluacion_instance = InstanciaEvaluacion(descripcion=descripcion, observacion=observacion, proyecto=proyecto)
     instancia_evaluacion_instance.save()
 def seccionProyectos(request):
-    proyectos = Proyecto.objects.all()
+    proyectos = Proyecto.objects.all().order_by('-fecha_presentacion')
     return render(request, 'proyectos/proyectos.html',{'proyectos': proyectos})
 def detalleProyecto(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
-    instancias_evaluacion = InstanciaEvaluacion.objects.filter(proyecto=proyecto).latest('id')
-    return render(request, 'proyectos/detalleProyecto.html',{'proyecto': proyecto, 'instancia_actual': instancias_evaluacion.descripcion})
+    #instancias_evaluacion = InstanciaEvaluacion.objects.filter(proyecto=proyecto).latest('id')
+    return render(request, 'proyectos/detalleProyecto.html',{'proyecto': proyecto})
 
 def nuevoProyecto(request):
     if request.method == 'POST':
@@ -90,6 +91,46 @@ def nuevoProyecto(request):
         'asesores': asesores,
         'docentes': docentes
     })
+
+def controlMovimiento(id, instancia_actual, estado, observacion_movimiento):
+    proyecto = get_object_or_404(Proyecto, id=id)
+    if estado == 'APROBADO':
+        if instancia_actual == 'COMISION DE SEGUIMIENTO':
+            agregarInstanciaEvaluacion('TRIBUNAL EVALUADOR', observacion_movimiento, proyecto)
+        elif instancia_actual == 'TRIBUNAL EVALUADOR':
+            agregarInstanciaEvaluacion('DEFENSA TRABAJO FINAL', observacion_movimiento, proyecto)
+        elif instancia_actual == 'DEFENSA TRABAJO FINAL':
+            agregarInstanciaEvaluacion('FINALIZADO', observacion_movimiento, proyecto)
+    elif estado == 'OBSERVADO':
+        if instancia_actual != 'FINALIZADO':
+            agregarInstanciaEvaluacion(instancia_actual, observacion_movimiento, proyecto)
+    elif estado == 'RECHAZADO':
+        if instancia_actual != 'FINALIZADO':
+            agregarInstanciaEvaluacion('FINALIZADO', observacion_movimiento, proyecto)
+
+def agregarResultadoEvaluacion(id, informe, estado):
+    proyecto = get_object_or_404(Proyecto, id=id)
+    ultima_instancia = proyecto.proyecto_instancia.last()
+    evaluacion_instance = Evaluacion(informe=informe,
+                                     fecha=timezone.now(),
+                                     estado=estado,
+                                     instancia_evaluacion=ultima_instancia)
+    evaluacion_instance.save()
+
+def movimientos(request, id):
+    proyecto = get_object_or_404(Proyecto, id=id)
+    if request.method == 'POST':
+        resultado_evaluacion = request.POST.get('estado')
+        informe_evaluacion = request.FILES['informe']
+        observacion_movimiento = request.POST.get('observacion', '')
+        instancia_actual= proyecto.proyecto_instancia.last().descripcion
+        if resultado_evaluacion and informe_evaluacion and observacion_movimiento:
+            controlMovimiento(proyecto.id, instancia_actual, resultado_evaluacion,observacion_movimiento)
+            agregarResultadoEvaluacion(proyecto.id, informe_evaluacion, resultado_evaluacion)
+            messages.success(request, 'Se agregó la nueva instancia correctamente.')
+            return redirect(reverse('gestion:movimientos', args={proyecto.id}))
+
+    return render(request, 'movimientos/movimientos.html', {'proyecto': proyecto})
 
 def estadisticas(request):
     return render(request, 'proyectos/eProyectos.html')

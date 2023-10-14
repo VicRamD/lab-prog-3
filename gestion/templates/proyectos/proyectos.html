@@ -22,6 +22,7 @@
                   <th scope="col">Titulo</th>
                   <th scope="col">Descripcion</th>
                   <th scope="col">Fecha de presentacion</th>
+                  <th scope="col">Instancia Actual</th>
                 </tr>
               </thead>
               <tbody>
@@ -30,6 +31,7 @@
                   <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">{{proyecto.titulo}}</a></td>
                   <td>{{proyecto.descripcion}}</td>
                   <td>{{proyecto.fecha_presentacion}}</td>
+                  <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{ proyecto.proyecto_instancia.last.descripcion }}</a></td>
                 </tr>
               {% endfor %}
               </tbody>
