@@ -10,6 +10,12 @@ class Persona(models.Model):
     email = models.EmailField(max_length=45)
     telefono = models.CharField()
 
+    class Meta:
+        abstract = True
+
+    def nombre_completo(self):
+        return self.apellido + " " + self.nombre
+
 class Docente(Persona):
     '''fecha_alta = models.DateField(blank=True)
     fecha_baja = models.DateField(blank=True)
