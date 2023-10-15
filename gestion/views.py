@@ -4,10 +4,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
+from datetime import datetime
 
-from gestion.models import Proyecto, Comision, InstanciaEvaluacion, ComisionProyecto
-from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm, ComisionForm
-from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision,AsesorProyecto
+from gestion.models import Proyecto, Comision, InstanciaEvaluacion, ComisionProyecto, Tribunal
+from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm, ComisionForm,TribunalForm
+from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision, AsesorProyecto, RolTribunal
 
 
 
@@ -45,13 +46,52 @@ def agregarCSTFProyecto(id_comision, proyecto):
 def agregarInstanciaEvaluacion(descripcion, proyecto):
     instancia_evaluacion_instance = InstanciaEvaluacion(descripcion=descripcion, proyecto=proyecto)
     instancia_evaluacion_instance.save()
+
+def filtrarProyectoPorEstado(estado):
+    if estado != 'TODOS':
+        instancias_filtradas = InstanciaEvaluacion.objects.filter(descripcion=estado)
+        proyectos_asociados = Proyecto.objects.filter(proyecto_instancia__in=instancias_filtradas).order_by('-fecha_presentacion')
+        proyectos_lista = list(proyectos_asociados)
+    else:
+        proyectos_lista = Proyecto.objects.all().order_by('-fecha_presentacion')
+    return proyectos_lista
+
+def filtrarProyectoPorRango(fecha_desde, fecha_hasta):
+    formato_fecha = "%Y-%m-%d"
+    fecha_desde = datetime.strptime(fecha_desde, formato_fecha).date()
+    fecha_hasta = datetime.strptime(fecha_hasta, formato_fecha).date()
+    proyectos_en_rango = Proyecto.objects.filter(fecha_presentacion__range=(fecha_desde, fecha_hasta))
+    return proyectos_en_rango.order_by('-fecha_presentacion')
+
+def filtrarProyectoEstadoYRango(estado,fecha_desde, fecha_hasta):
+    proyectos_rango = filtrarProyectoPorRango(fecha_desde, fecha_hasta)
+    instancias_filtradas = InstanciaEvaluacion.objects.filter(descripcion=estado)
+    proyectos_asociados = proyectos_rango.filter(proyecto_instancia__in=instancias_filtradas).order_by('-fecha_presentacion')
+    return proyectos_asociados
 def seccionProyectos(request):
+    if request.method == 'POST':
+        estado_seleccionado = request.POST.get('estado_seleccionado')
+        fecha_desde = request.POST.get('fecha_desde')
+        fecha_hasta = request.POST.get('fecha_hasta')
+        if estado_seleccionado != 'TODOS' and fecha_desde and fecha_hasta:
+            proyectos_lista = filtrarProyectoEstadoYRango(estado_seleccionado,fecha_desde, fecha_hasta)
+        elif estado_seleccionado:
+            proyectos_lista = filtrarProyectoPorEstado(estado_seleccionado)
+        elif fecha_desde and fecha_hasta:
+            proyectos_lista = filtrarProyectoPorRango(fecha_desde, fecha_hasta)
+
+        return render(request, 'proyectos/proyectos.html', {'proyectos': proyectos_lista})
+
     proyectos = Proyecto.objects.all().order_by('-fecha_presentacion')
     return render(request, 'proyectos/proyectos.html',{'proyectos': proyectos})
 def detalleProyecto(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
-    #instancias_evaluacion = InstanciaEvaluacion.objects.filter(proyecto=proyecto).latest('id')
-    return render(request, 'proyectos/detalleProyecto.html',{'proyecto': proyecto})
+    id_comision = proyecto.comision_proyecto.comision.id
+    id_tribunal = proyecto.tribunal_proyecto.id
+    return render(request, 'proyectos/detalleProyecto.html',{
+        'proyecto': proyecto,
+        'id_comision': id_comision,
+        'id_tribunal': id_tribunal})
 
 def nuevoProyecto(request):
     if request.method == 'POST':
@@ -142,8 +182,8 @@ def seccionComision(request):
     return render(request, 'comision/comision_seguimiento.html',{'comisiones':comisiones})
 
 def agregarIntegranteComision(integrantes, comision):
-    estudiantes_seleccionados = Docente.objects.filter(id__in=integrantes)
-    for integrante in estudiantes_seleccionados:
+    docentes_seleccionados = Docente.objects.filter(id__in=integrantes)
+    for integrante in docentes_seleccionados:
         integrante_comision_instance = IntegranteComision(comision=comision,
                                                           docente=integrante,
                                                           fecha_alta=timezone.now())
@@ -151,7 +191,7 @@ def agregarIntegranteComision(integrantes, comision):
 
 def nuevaComision(request):
     if request.method == 'POST':
-        form_comision = ComisionForm(request.POST, request.FILES, prefix='proyecto')
+        form_comision = ComisionForm(request.POST, request.FILES)
         integrantes_seleccionados = request.POST.getlist('integrantesSelecionados')
         if form_comision.is_valid() and integrantes_seleccionados:
             comision_instance = form_comision.save()
@@ -160,7 +200,7 @@ def nuevaComision(request):
             messages.success(request, 'Se ha creado el comision correctamente.')
             return redirect('gestion:detalle_integrante_comision', comision_instance.id)
     else:
-        form_comision = ComisionForm(prefix='proyecto')
+        form_comision = ComisionForm()
 
     docentes = Docente.objects.all()
     return render(request, 'comision/registro_CSTF.html', {
@@ -173,3 +213,44 @@ def detalleIntegrantesComision(request, id):
 def detalleProyectosComision(request, id):
     comision = get_object_or_404(Comision, id=id)
     return render(request, 'comision/detalleProyectos.html',{'comision': comision})
+
+
+def seccionTribunales(request):
+    tribunales = Tribunal.objects.all().order_by('-fecha_disposicion')
+    return render(request, 'tribunales/tribunales.html',{'tribunales':tribunales})
+def detalleIntegrantesTribunal(request, id):
+    tribunal = get_object_or_404(Tribunal, id=id)
+    return render(request, 'tribunales/detalleIntegrantes.html',{'tribunal': tribunal})
+def detalleProyectosTribunal(request, id):
+    tribunal = get_object_or_404(Tribunal, id=id)
+    return render(request, 'tribunales/detalleProyectos.html',{'tribunal': tribunal})
+def agregarIntegrantesTribunal(integrantes, tribunal,rol):
+    docentes_seleccionados = Docente.objects.filter(id__in=integrantes)
+    for integrante in docentes_seleccionados:
+        integrante_tribunal_instance = RolTribunal(descripcion=rol,
+                                                   tribunal=tribunal,
+                                                   docente=integrante,
+                                                   fecha_alta=timezone.now())
+        integrante_tribunal_instance.save()
+def nuevoTribunal(request):
+    if request.method == 'POST':
+        form_tribunal = TribunalForm(request.POST, request.FILES, prefix='tribunal')
+        presidente_seleccionado = request.POST.getlist('presidente_seleccionado')
+        vocales_seleccionados = request.POST.getlist('vocales_seleccionados')
+        vocales_suplentes_seleccionados = request.POST.getlist('vocales_suplentes_seleccionados')
+        if form_tribunal.is_valid() and presidente_seleccionado and vocales_seleccionados and vocales_suplentes_seleccionados:
+            tribunal_instance = form_tribunal.save()
+            agregarIntegrantesTribunal(presidente_seleccionado, tribunal_instance,'Presidente')
+            agregarIntegrantesTribunal(vocales_seleccionados, tribunal_instance, 'Vocal')
+            agregarIntegrantesTribunal(vocales_suplentes_seleccionados, tribunal_instance, 'Vocal suplente')
+
+            messages.success(request, 'Se ha creado el tribunal correctamente.')
+            return redirect('gestion:detalle_integrante_tribunal', tribunal_instance.id)
+    else:
+        form_tribunal = TribunalForm(prefix='tribunal')
+
+    docentes = Docente.objects.all()
+    return render(request, 'tribunales/registro.html', {
+        'form_tribunal': form_tribunal,
+        'docentes': docentes,
+    })

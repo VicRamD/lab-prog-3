@@ -1,6 +1,7 @@
 from django.db import models
 from gestion.models import Proyecto, Tribunal, Comision
 from django.utils import timezone
+from datetime import date
 
 class Persona(models.Model):
     nombre = models.CharField(max_length=30)
@@ -51,6 +52,8 @@ class RolTribunal(models.Model):
     descripcion = models.CharField(choices=ROL_OPCIONES)
     tribunal = models.ForeignKey(Tribunal, on_delete=models.CASCADE, related_name="tribunal")
     docente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="docente_tribunal")
+    fecha_alta = models.DateField(default=timezone.now)
+    fecha_baja = models.DateField(default=date(9999, 12, 31))
 
 class IntegranteProyecto(models.Model):
     proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, related_name="proyecto_integrante")

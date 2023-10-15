@@ -12,6 +12,9 @@ urlpatterns = [
     path('estadisticas/', views.estadisticas, name='estadisticas'),
     path('comision/', views.seccionComision, name='comision'),
     path('comision/nuevo_integrante', views.nuevaComision, name='nuevo_integrante'),
-    path('comision/detalle-ntegrantes/<int:id>/', views.detalleIntegrantesComision, name='detalle_integrantes_comision'),
-    path('comision/detalle-proyectos/<int:id>/', views.detalleProyectosComision, name='detalle_proyectos_comision')
+    path('comision/detalle-integrantes/<int:id>/', views.detalleIntegrantesComision, name='detalle_integrantes_comision'),
+    path('comision/detalle-proyectos/<int:id>/', views.detalleProyectosComision, name='detalle_proyectos_comision'),
+    path('tribunales/', views.seccionTribunales, name='tribunales'),
+    path('tribunales/nuevo_tribunal', views.nuevoTribunal, name='nuevo_tribunal'),
+    path('tribunales/detalle-integrantes/<int:id>/', views.detalleIntegrantesTribunal, name='detalle_integrantes_tribunal')
 ]

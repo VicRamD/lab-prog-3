@@ -36,7 +36,7 @@
                 </tr>
                 <tr>
                     <th>Fecha de alta</th>
-                    <td>{{proyecto.fecha_alta|date:"SHORT_DATE_FORMAT"}}</td>
+                    <td>{{proyecto.fecha_alta|date:"d-m-Y"}}</td>
                 </tr>
                 <tr>
                     <th>Título</th>
@@ -47,12 +47,12 @@
                     <td>{{proyecto.proyecto.descripcion}}</td>
                 </tr>
                 <tr>
-                    <th>fecha_presentacion</th>
-                    <td>{{proyecto.proyecto.fecha_presentacion}}</td>
+                    <th>Fecha de presentación</th>
+                    <td>{{proyecto.proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                 </tr>
                 <tr>
-                    <th>Telefono</th>
-                    <td>{{proyecto.proyecto.telefono}}</td>
+                    <th>Estado Actual</th>
+                    <td>{{proyecto.proyecto.proyecto_instancia.last.descripcion}}</td>
                 </tr>
                 {% endfor %}
             </table>

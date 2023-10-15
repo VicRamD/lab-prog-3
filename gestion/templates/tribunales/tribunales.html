@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Tribunales{% endblock %}
+
+{% block content %}
+<h1 class=" textoPrincipal pt-3 text-center"> Tribunales Evaluadores</h1>
+  <div class="body-pages pt-3">
+    <div class="container p-6 border border-dark">
+      <div class="row bg-color-oscuro text-right">
+        <div class="col-sm-7"></div>
+        <div class="col-sm-5">
+          <div class="btn justify-content-end">
+          <a href="{% url 'gestion:nuevo_tribunal' %}" class="btn btn-outline-dark">Nuevo Tribunal</a>
+          <a href="#" class="btn btn-outline-dark">Modificar Tribunal</a>
+          <a href="#" class="btn btn-outline-dark">Eliminar Tribunal</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 columna-tabla">
+          <div class="table-responsive mt-3">
+            <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Registro</th>
+                  <th scope="col">Proyecto</th>
+                  <th scope="col">Numero de disposicion</th>
+                  <th scope="col">Fecha de disposicion</th>
+                  <th scope="col">Integrantes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for tribunal in tribunales%}
+                <tr>
+                  <td>TE-{{tribunal.id}}</td>
+                  <td><a href="{% url 'gestion:detalle_proyecto' tribunal.proyecto.id %}">PTF-{{tribunal.proyecto.id}}</a></td>
+                  <td>{{tribunal.numero_disposicion}}</td>
+                  <td>{{tribunal.fecha_disposicion|date:"d-m-Y"}}</td>
+                  <td><a href="{% url 'gestion:detalle_integrantes_tribunal' tribunal.id %}">Ver detalle de integrantes</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

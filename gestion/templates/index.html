@@ -7,12 +7,16 @@
 {% block content %}
 <div class="body-home">
     <img src="{% static 'img/landing.jpg' %}">
+    <div class="landing-container">
+        <p class="landing-paragraph">
+            GTF es un Sistema de gestión de Trabajos Finales diseñado para facilitar la administración y seguimiento de los proyectos académicos. Tanto los profesores, el personal administrativo como los estudiantes encontrarán en esta plataforma una solución eficiente y efectiva para llevar un registro detallado de los Trabajos Finales. Desde la presentación inicial hasta la evaluación y aprobación final, nuestro sistema simplifica cada paso del proceso, asegurando una gestión eficaz y un seguimiento transparente de los estados de los proyectos. ¡Únete a nosotros y optimiza tu trabajo académico hoy mismo!
+        </p>
+    </div>
         <!-- Si no está logueado sale la sección de iniciar sesión, caso contarrio no -->
     {% if login_correcto %}
 
     {% else %}
         <div class="container border border-dark" id="formularioLogin">
-
             <form class="form-inline" name=form action="{% url 'usuarios:login' %}" method="post">
                 <h4>UNCA GTF</h4>
                 {% csrf_token %}

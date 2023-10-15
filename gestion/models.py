@@ -8,6 +8,9 @@ class Proyecto(models.Model):
     proyecto_escrito = models.FileField(upload_to='uploads/')
     certificado_analitico = models.FileField(upload_to='uploads/')
     nota_aceptacion = models.FileField(upload_to='uploads/')
+
+    def __str__(self):
+        return f"PTF-{self.id}"
 class TrabajoFinal(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="tf_proyecto")
     borrador = models.FileField(upload_to='uploads/')
@@ -39,7 +42,7 @@ class Comision(models.Model):
     departamento = models.CharField(choices=DESCRIPCION_DEPARTAMENTO, default="Informatica")
 
 class ComisionProyecto(models.Model):
-    proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
+    proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
     comision = models.ForeignKey(Comision, on_delete=models.PROTECT, related_name="proyecto_comision")
     fecha_alta = models.DateField()
 class InstanciaEvaluacion(models.Model):
