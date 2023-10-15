@@ -1,7 +1,7 @@
 from django import forms
 from persona.models import Estudiante, Persona, Asesor, Docente
 
-class EstudianteForm(forms.Form):
+class EstudianteForm(forms.ModelForm):
 
     class Meta:
         model = Estudiante
