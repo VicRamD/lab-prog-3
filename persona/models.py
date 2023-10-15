@@ -16,6 +16,10 @@ class Persona(models.Model):
     def nombre_completo(self):
         return self.apellido + " " + self.nombre
 
+    def guardar_dni(self):
+        cuil = self.cuil
+        self.dni = cuil[2:10]
+
 class Docente(Persona):
     '''fecha_alta = models.DateField(blank=True)
     fecha_baja = models.DateField(blank=True)

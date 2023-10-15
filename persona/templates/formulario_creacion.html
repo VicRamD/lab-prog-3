@@ -54,11 +54,13 @@
                     { form_persona.nombre.errors  -->
                   <!--<input type="text" class="form-control" id="cuilD" placeholder="Ingrese Su CUIL sin Guiones" required onkeypress="return validacionDeTeclasNumericas(event);">-->
                 </div>
-                <div class="col-md-6">
-                  <label for="id_matricula" class="form-label">Matricula</label>
-                  <input id="id_matricula" type="text" name="matricula" class="form-control" required>
-                  <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
-                </div>
+                {% if tipo_persona == "estudiante" %}
+                    <div class="col-md-6">
+                      <label for="id_matricula" class="form-label">Matricula</label>
+                      <input id="id_matricula" type="text" name="matricula" class="form-control" required>
+                      <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
+                    </div>
+                {% endif %}
                 <div class="col-md-6">
                   <label for="id_telefono" class="form-label">Telefono</label>
                   <input id="id_telefono" type="text" name="telefono" class="form-control">
@@ -69,6 +71,13 @@
                   <input id="id_email" type="email" name="email" class="form-control" required>
                   <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
                 </div>
+                {% if tipo_persona == "asesor" %}
+                    <div class="col-md-6">
+                      <label for="id_cv" class="form-label">CV</label>
+                      <input id="id_cv" type="file" name="cv" class="form-control" required>
+                      <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
+                    </div>
+                {% endif %}
 
                 <div class="col-12">
                   <button type="submit" class="btn btn-outline-dark boton">Guardar</button>

@@ -41,7 +41,7 @@
               {% if tipo_persona == "estudiante" %}
                 <p><strong>Matricula: </strong>{{ persona.matricula }}</p>
               {% elif tipo_persona == "asesor" %}
-                <p><strong>Asesor: </strong>{{ persona.matricula }}</p>
+                <p><strong>CV: </strong><a href="{{ persona.cv.url }}">Ver</a></p>
               {% endif %}
 
             </div>
