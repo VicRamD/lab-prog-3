@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput
 
-from gestion.models import Proyecto,Defensa, Evaluacion
+from gestion.models import Proyecto, Defensa, Evaluacion, Comision
 
 
 class ProyectoForm(forms.ModelForm):
@@ -25,3 +25,7 @@ class DefensaForm(forms.ModelForm):
         widgets = {
             'fecha': DateInput(format='%d-m-Y%',attrs={'type': 'date'})
         }
+class ComisionForm(forms.ModelForm):
+    class Meta:
+        model = Comision
+        fields = ('descripcion', 'resolucion', 'departamento')

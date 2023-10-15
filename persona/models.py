@@ -1,6 +1,6 @@
 from django.db import models
 from gestion.models import Proyecto, Tribunal, Comision
-from django.conf import settings
+from django.utils import timezone
 
 class Persona(models.Model):
     nombre = models.CharField(max_length=30)
@@ -60,3 +60,4 @@ class IntegranteProyecto(models.Model):
 class IntegranteComision(models.Model):
     comision = models.ForeignKey(Comision, on_delete=models.PROTECT, related_name="comision")
     docente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="integrante_comision")
+    fecha_alta = models.DateField(default=timezone.now)

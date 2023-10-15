@@ -109,7 +109,8 @@
                                         </select>
                                     </div>
                                     {% csrf_token %}
-                                    <input type="submit" value="Guardar" class="btn btn-success  mt-3">
+                                    <input type="submit" value="Guardar" class="btn btn-outline-dark boton  mt-3">
+                                    <a href="{% url 'gestion:proyectos'%}" class="btn btn-outline-dark boton  mt-3">Cancelar</a>
                                 </div>
                             </div>
                         </div>

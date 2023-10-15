@@ -11,5 +11,7 @@ urlpatterns = [
     path('movimientos/<int:id>/', views.movimientos, name='movimientos'),
     path('estadisticas/', views.estadisticas, name='estadisticas'),
     path('comision/', views.seccionComision, name='comision'),
-    path('comision/nuevo_integrante', views.comisionNuevoIntegrante, name='nuevo_integrante')
+    path('comision/nuevo_integrante', views.nuevaComision, name='nuevo_integrante'),
+    path('comision/detalle-ntegrantes/<int:id>/', views.detalleIntegrantesComision, name='detalle_integrantes_comision'),
+    path('comision/detalle-proyectos/<int:id>/', views.detalleProyectosComision, name='detalle_proyectos_comision')
 ]

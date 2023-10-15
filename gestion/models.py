@@ -28,11 +28,20 @@ class Defensa(models.Model):
     acta = models.FileField(upload_to='uploads/', null=True, blank=True)
 
 class Comision(models.Model):
+    DESCRIPCION_DEPARTAMENTO = (
+        ('Informatica', 'Informatica'),
+        ('Minas', 'Minas'),
+        ('Electronica', 'Electronica'),
+        ('Agrimensura', 'Agrimensura'),
+    )
     descripcion = models.CharField(default="Comisión nueva")
+    resolucion = models.FileField(upload_to='uploads/', null=True, blank=True)
+    departamento = models.CharField(choices=DESCRIPCION_DEPARTAMENTO, default="Informatica")
 
 class ComisionProyecto(models.Model):
-    proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
-    comision = models.OneToOneField(Comision, on_delete=models.PROTECT, related_name="proyecto_comision")
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
+    comision = models.ForeignKey(Comision, on_delete=models.PROTECT, related_name="proyecto_comision")
+    fecha_alta = models.DateField()
 class InstanciaEvaluacion(models.Model):
     DESCRIPCION_EVALUACION = (
         ('COMISION DE SEGUIMIENTO', 'COMISION DE SEGUIMIENTO'),

@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from gestion.models import Proyecto, Comision, InstanciaEvaluacion, ComisionProyecto
-from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm
+from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm, ComisionForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision,AsesorProyecto
 
 
@@ -39,7 +39,7 @@ def agregarRolProyecto(docente_seleccionado, proyecto, rol):
 
 def agregarCSTFProyecto(id_comision, proyecto):
     comision = get_object_or_404(Comision, id=id_comision)
-    comision_instance = ComisionProyecto(proyecto=proyecto, comision=comision)
+    comision_instance = ComisionProyecto(proyecto=proyecto, comision=comision, fecha_alta=timezone.now())
     comision_instance.save()
 
 def agregarInstanciaEvaluacion(descripcion, proyecto):
@@ -138,8 +138,38 @@ def estadisticas(request):
     return render(request, 'proyectos/eProyectos.html')
 
 def seccionComision(request):
-    return render(request, 'comision/proyectos_finales.html')
+    comisiones = Comision.objects.all()
+    return render(request, 'comision/comision_seguimiento.html',{'comisiones':comisiones})
 
-def comisionNuevoIntegrante(request):
-    return render(request, 'comision/registro_CSTF.html')
+def agregarIntegranteComision(integrantes, comision):
+    estudiantes_seleccionados = Docente.objects.filter(id__in=integrantes)
+    for integrante in estudiantes_seleccionados:
+        integrante_comision_instance = IntegranteComision(comision=comision,
+                                                          docente=integrante,
+                                                          fecha_alta=timezone.now())
+        integrante_comision_instance.save()
 
+def nuevaComision(request):
+    if request.method == 'POST':
+        form_comision = ComisionForm(request.POST, request.FILES, prefix='proyecto')
+        integrantes_seleccionados = request.POST.getlist('integrantesSelecionados')
+        if form_comision.is_valid() and integrantes_seleccionados:
+            comision_instance = form_comision.save()
+            agregarIntegranteComision(integrantes_seleccionados, comision_instance)
+
+            messages.success(request, 'Se ha creado el comision correctamente.')
+            return redirect('gestion:detalle_integrante_comision', comision_instance.id)
+    else:
+        form_comision = ComisionForm(prefix='proyecto')
+
+    docentes = Docente.objects.all()
+    return render(request, 'comision/registro_CSTF.html', {
+        'form_comision': form_comision,
+        'docentes': docentes,
+    })
+def detalleIntegrantesComision(request, id):
+    comision = get_object_or_404(Comision, id=id)
+    return render(request, 'comision/detalleIntegrantes.html',{'comision': comision})
+def detalleProyectosComision(request, id):
+    comision = get_object_or_404(Comision, id=id)
+    return render(request, 'comision/detalleProyectos.html',{'comision': comision})

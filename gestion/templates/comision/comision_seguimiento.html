@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}CSTF{% endblock %}
+
+{% block content %}
+<h1 class=" textoPrincipal pt-3 text-center"> Comisión de Seguimiento de Trabajo Final</h1>
+  <div class="body-pages pt-3">
+    <div class="container p-6 border border-dark">
+      <div class="row">
+        <div class="col-sm-2 btn-group-vertical">
+          <a href="{% url 'gestion:nuevo_integrante' %}" class="btn bam">Nueva Comision</a>
+          <a href="#" class="btn bam">Modificar Integrante</a>
+          <a href="#" class="btn bam">Eliminar Integrante</a>
+        </div>
+        <div class="col-sm-10 columna-tabla">
+          <h4>Lista de Comisiones:</h4>
+          <label for="opcionDespliegue">Listar por departamento:</label>
+          <select id="opcionDespliegue">
+            <option value="E">Informatica</option>
+            <option value="F">Minas</option>
+            <option value="E">Electronica</option>
+            <option value="F">Agrimensura</option>
+          </select>
+          <div class="table-responsive mt-3">
+            <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Registro</th>
+                  <th scope="col">Descripción</th>
+                  <th scope="col">Departamento</th>
+                  <th scope="col">Integrantes</th>
+                  <th scope="col">Proyectos asociados</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for comision in comisiones%}
+                <tr>
+                  <td>CSTF-{{comision.id}}</td>
+                  <td>{{comision.descripcion}}</td>
+                  <td>{{comision.departamento}}</td>
+                  <td><a href="{% url 'gestion:detalle_integrantes_comision' comision.id %}">Ver más integrantes</a></td>
+                  <td><a href="{% url 'gestion:detalle_proyectos_comision' comision.id %}">Ver proyectos asociados</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
