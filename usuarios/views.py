@@ -13,7 +13,7 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("usuarios:index_login"))
         else:
-            return render(request, "index.html", {"mensaje": "Credenciales incorrectas"})
+            return render(request, "index.html", {"mensaje": "Los datos son incorrectos"})
     return render(request, 'login.html')
 
 def index_logeado(request):
