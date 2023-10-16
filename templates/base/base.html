@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="miNavbar">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link boton-nav" href="../index.html">Inicio</a>
+                        <a class="nav-link boton-nav" href="">Inicio</a>
                         <!--<a class="nav-link boton-nav" href="{}">Inicio</a>-->
                     </li>
                     <li class="nav-item">
@@ -34,7 +34,7 @@
                         <!--<a class="nav-link boton-nav" href="./proyectos.html">Proyectos</a>-->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link boton-nav" href="../tribunal/tribunales.html">Tribunales</a>
+                        <a class="nav-link boton-nav" href="{% url 'gestion:tribunales' %}">Tribunales</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link boton-nav" href="../estadisticas/estadisticas.html">Estadisticas</a>
@@ -44,8 +44,14 @@
             </div>
         </div>
     </nav>
-    {% block content %}
+    {% if mensaje %}
+        <div style="color: red; border:solid;" class="mt-2">{{message}}</div>
+    {% endif %}
+    <div class="body-base">
+        {% block content %}
     {% endblock %}
+    </div>
+
 
 <!-- FOOTER -->
     <footer class="bg-primary text-white text-center text-lg-start footer">

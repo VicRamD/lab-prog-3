@@ -40,7 +40,7 @@ def nuevoAsesor(request):
                                                         'tipo_persona': 'asesor'})
 
 def asesorDetalle(request, pk):
-    asesor = get_object_or_404(Estudiante, pk=pk)
+    asesor = get_object_or_404(Asesor, pk=pk)
     return render(request, 'detalle_persona.html',
                   {'persona': asesor, 'tipo_persona': 'asesor'})
 
@@ -59,7 +59,7 @@ def nuevoDocente(request):
                                                         'tipo_persona':'docente'})
 
 def docenteDetalle(request, pk):
-    docente = get_object_or_404(Estudiante, pk=pk)
+    docente = get_object_or_404(Docente, pk=pk)
     return render(request, 'detalle_persona.html',
                   {'persona': docente, 'tipo_persona': 'docente'})
 

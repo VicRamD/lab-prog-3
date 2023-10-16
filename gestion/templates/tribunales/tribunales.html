@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Tribunales{% endblock %}
+
+{% block content %}
+<h1 class=" textoPrincipal pt-3 text-center"> Tribunales Evaluadores</h1>
+  <div class="body-pages pt-3">
+    <div class="container p-6 border border-dark">
+      <div class="row bg-color-oscuro text-right">
+        <div class="col-sm-7"></div>
+        <div class="col-sm-5">
+          <div class="btn justify-content-end">
+          <a href="{% url 'gestion:proyectos' %}" class="btn btn-outline-dark">Nuevo Tribunal</a>
+          <a href="#" class="btn btn-outline-dark">Modificar Tribunal</a>
+          <a href="#" class="btn btn-outline-dark">Eliminar Tribunal</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 columna-tabla">
+          <div class="table-responsive mt-3">
+            <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Registro</th>
+                  <th scope="col">Proyecto</th>
+                  <th scope="col">N° de disposición</th>
+                  <th scope="col">Fecha de disposición</th>
+                  <th scope="col">Documento de disposición</th>
+                  <th scope="col">Integrantes</th>
+                  <th scope="col">Operación</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for tribunal in tribunales%}
+                <tr>
+                  <td>TE-{{tribunal.id}}</td>
+                  <td><a href="{% url 'gestion:detalle_proyecto' tribunal.proyecto.id %}">PTF-{{tribunal.proyecto.id}}</a></td>
+                  <td>{{tribunal.numero_disposicion}}</td>
+                  <td>{{tribunal.fecha_disposicion|date:"d-m-Y"}}</td>
+                  <td><a href="{{ tribunal.disposicion.url }}">Ver documento</a></td>
+                  <td>
+                    {% for integrante in tribunal.tribunal.all%}
+                    <a href="{% url 'persona:detalle_docente' integrante.docente.id %}">{{integrante.descripcion}} - {{integrante.docente.apellido}} {{integrante.docente.nombre}}</a><br>
+                    {% endfor %}
+                  </td>
+                  <td>
+                      <a href="#">Modificar</a>
+                      <a href="#">Eliminar</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

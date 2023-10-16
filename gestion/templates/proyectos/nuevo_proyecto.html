@@ -12,10 +12,10 @@
 {% block content %}
     <div class="body-pages" >
         <h1 class="textoPrincipal pt-3 text-center">Alta del Proyecto</h1>
-        <div class="container-fluid border border-dark pt-3 mt-6" id="formularioPF">
+        <div class="container-fluid border-dark pt-3 mt-6">
             <form method="post" id="formulario" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-6" id="columnaForm">
+                    <div class="col-6">
                         <div class="container body1 pt-3">
                             <div class="card">
                                 <div class="card-header1">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6" id="columnaFormEstudiante">
+                    <div class="col-6" >
                         <div class="container body1 pt-3">
                             <div class="card">
                                 <div class="card-header1">
@@ -109,7 +109,8 @@
                                         </select>
                                     </div>
                                     {% csrf_token %}
-                                    <input type="submit" value="Guardar" class="btn btn-success  mt-3">
+                                    <input type="submit" value="Guardar" class="btn btn-outline-dark boton  mt-3">
+                                    <a href="{% url 'gestion:proyectos'%}" class="btn btn-outline-dark boton  mt-3">Cancelar</a>
                                 </div>
                             </div>
                         </div>

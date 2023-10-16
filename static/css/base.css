@@ -12,7 +12,9 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
-
+textarea {
+    width: 100%;
+}
 /*h1*/
 div.franja .textoPrincipal {
     text-align: center;
@@ -199,12 +201,11 @@ a.bam {
 }
 /*Home*/
 .body-home img{
-    /*background-image: url({% static 'img/landing.jpg' %});
-    background-image: url('img/landing.jpg');*/
     background-repeat: round;
     background-size: cover;
     height: 100vh;
     width: 100%;
+    opacity: 0.3;
 }
 #formularioLogin{
   border-radius: 2px 2px 5px 5px;
@@ -227,4 +228,26 @@ div.body-home div.botones-form{
 .filtro-estadistica{
     max-width: 700px;
     margin-top: 0px
+}
+.bg-color-oscuro{
+    background-color: darkturquoise;
+}
+
+.landing-container {
+      width: 60%;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: left;
+      position: absolute;
+      top: 15%;
+      left: 5%;
+    }
+.landing-paragraph {
+  font-size: 25px;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.6;
+}
+.body-base {
+    min-height: 71vh;
 }

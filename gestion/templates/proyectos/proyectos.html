@@ -8,30 +8,57 @@
   <div class="body-pages pt-3">
     <h1 class="textoPrincipal pt-3 text-center">Gestion de proyectos</h1>
     <div class="container p-6 border border-dark">
-      <div class="row">
-        <div class="col-sm-2 btn-group-vertical">
-          <a href="{% url 'gestion:nuevo_proyecto' %}" class="btn bam">Nuevo Proyecto</a>
-          <a href="#" class="btn bam">Modificar Proyecto</a>
-          <a href="#" class="btn bam">Eliminar Proyecto</a>
+      <div class="row bg-color-oscuro">
+        <div class="col-sm-10 btn-group p-2">
+          <div class="bg-color form-inline d-flex">
+            <form method="post" class="d-flex flex-grow-1">
+                <label for="estado_seleccionado" class="mt-3">Estado:</label>
+                <select name="estado_seleccionado" class="form-control m-2">
+                    <option value="TODOS">Todos</option>
+                    <option value="COMISION DE SEGUIMIENTO">Comisión de Seguimiento</option>
+                    <option value="TRIBUNAL EVALUADOR">Tribunal Evaluador</option>
+                    <option value="DEFENSA TRABAJO FINAL">Defensa de Trabajo Final</option>
+                    <option value="FINALIZADO">Finalizado</option>
+                </select>
+                <input type="date" name="fecha_desde" id="fecha_desde" class="form-control m-2">
+                <span class="mt-3">-</span>
+                <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control m-2">
+                {% csrf_token %}
+                <input type="submit" value="Filtrar" class="btn btn-outline-dark m-2">
+            </form>
         </div>
-        <div class="col-sm-10 columna-tabla">
+
+        </div>
+        <div class="col-sm-2 btn text-right">
+          <a href="{% url 'gestion:nuevo_proyecto' %}" class="btn btn-outline-dark mt-2">Nuevo Proyecto</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 columna-tabla">
           <div class="table-responsive mt-3">
             <table class="table table-hover table-sm">
               <thead>
                 <tr>
+                  <th scope="col">Registro</th>
                   <th scope="col">Titulo</th>
                   <th scope="col">Descripcion</th>
                   <th scope="col">Fecha de presentacion</th>
                   <th scope="col">Instancia Actual</th>
+                  <th scope="col">Operación</th>
                 </tr>
               </thead>
               <tbody>
               {% for proyecto in proyectos%}
                 <tr>
-                  <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">{{proyecto.titulo}}</a></td>
+                  <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">PTF-{{proyecto.id}}</a></td>
+                  <td>{{proyecto.titulo}}</td>
                   <td>{{proyecto.descripcion}}</td>
-                  <td>{{proyecto.fecha_presentacion}}</td>
+                  <td>{{proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                   <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{ proyecto.proyecto_instancia.last.descripcion }}</a></td>
+                  <td>
+                      <a href="#">Modificar</a>
+                      <a href="#">Eliminar</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>

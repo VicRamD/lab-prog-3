@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Integrantes CSTF{% endblock %}
+
+{% block content %}
+  <div class="body-pages pt-3">
+    <h1 class="textoPrincipal pt-3 text-center">Detalle de Integrantes de CSTF</h1>
+    <div class="container p-6 border border-dark">
+      <div class="row">
+          <div class="col-sm-2 btn-group-vertical">
+          <a href="{% url 'gestion:comision' %}" class="btn bam">Comisiones</a>
+          <a href="#" class="btn bam">Modificar Comision</a>
+          <a href="{% url 'gestion:detalle_proyectos_comision' comision.id %}" class="btn bam">Ver proyectos asociados</a>
+        </div>
+        <div class="col-sm-10 columna-tabla">
+          <div class="table-responsive mt-3">
+            <table class="table table-hover table-sm">
+                <tr>
+                    <th>ID</th>
+                    <td>CSTF-{{comision.id}}</td>
+                </tr>
+                <tr>
+                    <th>Descripcion</th>
+                    <td>{{comision.descripcion}}</td>
+                </tr>
+                <tr>
+                    <th>Departamento</th>
+                    <td>{{comision.departamento}}</td>
+                </tr>
+                {% for integrante in comision.comision.all%}
+                <tr class="table-info">
+                    <th>Cuil</th>
+                    <td>{{integrante.docente.cuil}}</td>
+                </tr>
+                <tr>
+                    <th>Fecha de alta</th>
+                    <td>{{integrante.fecha_alta|date:"d-m-Y"}}</td>
+                </tr>
+                <tr>
+                    <th>DNI</th>
+                    <td>{{integrante.docente.dni}}</td>
+                </tr>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <td>{{integrante.docente.apellido}} {{integrante.docente.nombre}}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{integrante.docente.email}}</td>
+                </tr>
+                <tr>
+                    <th>Telefono</th>
+                    <td>{{integrante.docente.telefono}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
