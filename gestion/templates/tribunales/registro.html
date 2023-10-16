@@ -38,11 +38,6 @@
                                                     {{form_tribunal.disposicion.errors}}
                                             </div>
                                             <div class="form-group">
-                                                <label for="{{ form_tribunal.proyecto.id_for_label }}" class="mt-1 mb-2 form-label">Seleccione un proyecto:</label>
-                                                    {{form_tribunal.proyecto}}
-                                                    {{form_tribunal.proyecto.errors}}
-                                            </div>
-                                            <div class="form-group">
                                                 <label for="presidente_seleccionado" class="mt-1 mb-2 form-label">Seleccione un Presidente:</label>
                                                 <select name="presidente_seleccionado" >
                                                 {% for docente in docentes %}

@@ -6,8 +6,8 @@ app_name = 'gestion'
 urlpatterns = [
     #path('', views.index, name='index'),
     path('proyectos/', views.seccionProyectos, name='proyectos'),
-    path('proyectos/<int:id>/', views.detalleProyecto, name='detalle_proyecto'),
     path('proyectos/nuevo_proyecto', views.nuevoProyecto, name='nuevo_proyecto'),
+    path('proyectos/<int:id>/', views.detalleProyecto, name='detalle_proyecto'),
     path('movimientos/<int:id>/', views.movimientos, name='movimientos'),
     path('movimientos/cargar-nuevo-PTF/<int:id>/', views.cargarNuevoPTF, name='cargar-nuevo-PTF'),
     path('estadisticas/', views.estadisticas, name='estadisticas'),
@@ -16,6 +16,6 @@ urlpatterns = [
     path('comision/detalle-integrantes/<int:id>/', views.detalleIntegrantesComision, name='detalle_integrantes_comision'),
     path('comision/detalle-proyectos/<int:id>/', views.detalleProyectosComision, name='detalle_proyectos_comision'),
     path('tribunales/', views.seccionTribunales, name='tribunales'),
-    path('tribunales/nuevo_tribunal', views.nuevoTribunal, name='nuevo_tribunal'),
+    path('tribunales/nuevo_tribunal/<int:id>/', views.nuevoTribunal, name='nuevo_tribunal'),
     path('tribunales/detalle-integrantes/<int:id>/', views.detalleIntegrantesTribunal, name='detalle_integrantes_tribunal')
 ]

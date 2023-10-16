@@ -10,7 +10,7 @@ class ProyectoForm(forms.ModelForm):
         fields = ('titulo','descripcion', 'fecha_presentacion', 'proyecto_escrito', 'certificado_analitico', 'nota_aceptacion')
 
         widgets = {
-            'fecha_presentacion': DateInput(format='%d-m-Y%',attrs={'type': 'date'})
+            'fecha_presentacion': DateInput(format='%d-m-Y%', attrs={'type': 'date'})
         }
 class EvaluacionForm(forms.ModelForm):
     class Meta:
@@ -32,7 +32,7 @@ class ComisionForm(forms.ModelForm):
 class TribunalForm(forms.ModelForm):
     class Meta:
         model = Tribunal
-        fields = ('numero_disposicion', 'fecha_disposicion', 'disposicion', 'proyecto')
+        fields = ('numero_disposicion', 'fecha_disposicion', 'disposicion')
 
     widgets = {
         'fecha_disposicion': DateInput(format='%d-m-Y%', attrs={'type': 'date'})

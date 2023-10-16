@@ -7,22 +7,19 @@
 {% block content %}
   <div class="body-pages pt-3">
     <h1 class="textoPrincipal pt-3 text-center">Detalle del Proyecto</h1>
-    <div class="container p-6 border border-dark">
+    <div class="container p-6 border-dark">
+        <div class="row bg-color-oscuro text-right">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-5">
+              <div class="btn justify-content-end">
+              <a href="{% url 'gestion:nuevo_proyecto' %}" class="btn btn-outline-dark">Nuevo Proyecto</a>
+              <a href="#" class="btn btn-outline-dark">Modificar Proyecto</a>
+              <a href="#" class="btn btn-outline-dark">Eliminar Proyecto</a>
+              </div>
+            </div>
+      </div>
       <div class="row">
-        <div class="col-sm-2 btn-group-vertical">
-            <a href="#" class="btn bam">Detalle de Integrantes</a>
-            <a href="{% url 'gestion:detalle_integrantes_comision' id_comision %}" class="btn bam">Detalle de Comisión</a>
-            {% if id_tribunal != 0 %}
-            <a href="{% url 'gestion:detalle_integrantes_tribunal' id_tribunal %}" class="btn bam">Detalle de Tribunal</a>
-            {% else %}
-            <a href="{% url 'gestion:nuevo_tribunal' %}" class="btn bam">Asignar Tribunal</a>
-            {% endif %}
-            <a href="#" class="btn bam">Detalle de Director</a>
-            <a href="#" class="btn bam">Detalle de Co-director</a>
-            <a href="#" class="btn bam">Detalle de Asesor</a>
-            <a href="{% url 'gestion:movimientos' proyecto.id %}" class="btn bam">Movimientos</a>
-        </div>
-        <div class="col-sm-10 columna-tabla">
+        <div class="col-sm-12 columna-tabla">
           <div class="table-responsive mt-3">
             <table class="table table-hover table-sm">
                 <tr>
@@ -44,19 +41,19 @@
                 {% for integrante in proyecto.proyecto_integrante.all%}
                 <tr>
                     <th>Integrante</th>
-                    <td>{{integrante.estudiante.matricula}} - {{integrante.estudiante.apellido}} {{integrante.estudiante.nombre}}</td>
+                    <td><a href="{% url 'persona:detalle_estudiante' integrante.estudiante.id %}">{{integrante.estudiante.matricula}} - {{integrante.estudiante.apellido}} {{integrante.estudiante.nombre}}</a></td>
                 </tr>
                 {% endfor %}
                 {% for rol in proyecto.proyecto.all%}
                 <tr>
                     <th>{{rol.descripcion}}</th>
-                    <td>{{rol.docente.apellido}} {{rol.docente.nombre}}</td>
+                    <td><a href="{% url 'persona:detalle_docente' rol.docente.id %}">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
                 </tr>
                 {% endfor %}
                 {% for asesor in proyecto.asesor_proyecto.all%}
                 <tr>
                     <th>Asesor</th>
-                    <td>{{asesor.asesor.apellido}} {{asesor.asesor.nombre}}</td>
+                    <td><a href="{% url 'persona:detalle_asesor' asesor.asesor.id %}">{{asesor.asesor.apellido}} {{asesor.asesor.nombre}}</a></td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -72,8 +69,20 @@
                     <td><a href="{{proyecto.nota_aceptacion.url}}">Ver documento</a></td>
                 </tr>
                 <tr>
+                    <th>Comisión asignada</th>
+                    <td><a href="{% url 'gestion:detalle_integrantes_comision' proyecto.comision_proyecto.comision.id %}">CSTF-{{proyecto.comision_proyecto.comision.id}} - {{proyecto.comision_proyecto.comision.descripcion}}</a></td>
+                </tr>
+                {% if tribunal_true %}
+                {% for rol in proyecto.tribunal_proyecto.tribunal.all%}
+                <tr>
+                    <th>{{rol.descripcion}}</th>
+                    <td><a href="{% url 'persona:detalle_docente' rol.docente.id %}">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                <tr>
                     <th>Estado Actual</th>
-                    <td>{{proyecto.proyecto_instancia.last.descripcion}}</td>
+                    <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{proyecto.proyecto_instancia.last.descripcion}}</a></td>
                 </tr>
             </table>
           </div>
