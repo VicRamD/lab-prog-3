@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        #dejo ambos, quiza haya que quitar uno
+        ('gestion', '0003_alter_defensa_acta_alter_defensa_nota'),
         ('gestion', '0001_initial'),
     ]
 
