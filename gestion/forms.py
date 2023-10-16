@@ -23,7 +23,7 @@ class DefensaForm(forms.ModelForm):
         fields = ('fecha', 'nota', 'acta')
 
         widgets = {
-            'fecha': DateInput(format='%d-m-Y%',attrs={'type': 'date'})
+            'fecha': DateInput(format='%d-m-Y%', attrs={'type': 'date'})
         }
 class ComisionForm(forms.ModelForm):
     class Meta:
@@ -35,5 +35,6 @@ class TribunalForm(forms.ModelForm):
         fields = ('numero_disposicion', 'fecha_disposicion', 'disposicion', 'proyecto')
 
     widgets = {
-        'fecha_disposicion': DateInput(attrs={'type': 'date'})
+        'fecha_disposicion': DateInput(format='%d-m-Y%', attrs={'type': 'date'})
     }
+

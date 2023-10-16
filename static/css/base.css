@@ -12,7 +12,9 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
-
+textarea {
+    width: 100%;
+}
 /*h1*/
 div.franja .textoPrincipal {
     text-align: center;
@@ -247,5 +249,5 @@ div.body-home div.botones-form{
   line-height: 1.6;
 }
 .body-base {
-    min-height: 65vh;
+    min-height: 71vh;
 }

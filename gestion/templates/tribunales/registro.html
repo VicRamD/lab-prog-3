@@ -12,69 +12,72 @@
 {% block content %}
     <div class="body-pages" >
         <h1 class="textoPrincipal pt-3 text-center">Alta de Tribunal</h1>
-        <div class="container-fluid border border-dark pt-3 mt-6" id="formularioPF">
-            <form method="post" id="formulario" enctype="multipart/form-data">
+        <div class="container-fluid  border-dark pt-3 mt-6">
                 <div class="row">
-                    <div class="col-6" id="columnaForm">
-                        <div class="container body1 pt-3">
-                            <div class="card">
-                                <div class="card-header1">
-                                    Datos del tribunal
-                                </div>
-                                <div class="card-body">
-                                    <div class="col-md-12">
-                                        <label for="{{ form_tribunal.numero_disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Numero de disposición:</label>
-                                        {{form_tribunal.numero_disposicion}}
-                                        {{form_tribunal.numero_disposicion.errors}}
+                    <div class="">
+                        <div class="col-md-7">
+                            <div class="container body1 pt-3">
+                                <form method="post" enctype="multipart/form-data">
+                                    <div class="card">
+                                        <div class="card-header1">
+                                            Datos del tribunal
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="{{ form_tribunal.numero_disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Número de disposición:</label>
+                                                    {{form_tribunal.numero_disposicion}}
+                                                    {{form_tribunal.numero_disposicion.errors}}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="{{ form_tribunal.fecha_disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Fecha de disposición:</label>
+                                                <input type="date" name="tribunal-fecha_disposicion" required="" id="id_tribunal-fecha_disposicion">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="{{ form_tribunal.disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Documento de disposicion:</label>
+                                                    {{form_tribunal.disposicion}}
+                                                    {{form_tribunal.disposicion.errors}}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="{{ form_tribunal.proyecto.id_for_label }}" class="mt-1 mb-2 form-label">Seleccione un proyecto:</label>
+                                                    {{form_tribunal.proyecto}}
+                                                    {{form_tribunal.proyecto.errors}}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="presidente_seleccionado" class="mt-1 mb-2 form-label">Seleccione un Presidente:</label>
+                                                <select name="presidente_seleccionado" >
+                                                {% for docente in docentes %}
+                                                  <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="vocales_seleccionados" class="mt-1 mb-2 form-label">Seleccione Vocales:</label><br>
+                                                <select name="vocales_seleccionados" multiple>
+                                                {% for docente in docentes %}
+                                                  <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="vocales_suplentes_seleccionados" class="mt-1 mb-2 form-label">Seleccione Vocales Suplentes</label><br>
+                                                <select name="vocales_suplentes_seleccionados" multiple>
+                                                {% for docente in docentes %}
+                                                  <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {% csrf_token %}
+                                        <div class="float-right">
+                                            <input type="submit" value="Guardar" class="btn btn-outline-dark boton m-3">
+                                            <a href="{% url 'gestion:tribunales'%}" class="btn btn-outline-dark boton">Cancelar</a>
+                                        </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_tribunal.fecha_disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Fecha de disposición:</label>
-                                        {{form_tribunal.fecha_disposicion}}
-                                        {{form_tribunal.fecha_disposicion.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_tribunal.departamento.id_for_label }}" class="mt-1 mb-2 form-label">Documento de disposicion:</label>
-                                        {{form_tribunal.disposicion}}
-                                        {{form_tribunal.disposicion.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_tribunal.proyecto.id_for_label }}" class="mt-1 mb-2 form-label">Seleccione un proyecto:</label>
-                                        {{form_tribunal.proyecto}}
-                                        {{form_tribunal.proyecto.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="presidente_seleccionado">Seleccione Integrante/s:</label><br>
-                                        <select name="presidente_seleccionado" >
-                                        {% for docente in docentes %}
-                                          <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
-                                        {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="vocales_seleccionados">Seleccione Vocales:</label><br>
-                                        <select name="vocales_seleccionados" multiple>
-                                        {% for docente in docentes %}
-                                          <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
-                                        {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="vocales_suplentes_seleccionados">Seleccione Vocales Suplentes:</label><br>
-                                        <select name="vocales_suplentes_seleccionados" multiple>
-                                        {% for docente in docentes %}
-                                          <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
-                                        {% endfor %}
-                                        </select>
-                                    </div>
-                                    {% csrf_token %}
-                                    <input type="submit" value="Guardar" class="btn btn-outline-dark boton  mt-3">
-                                    <a href="{% url 'gestion:tribunales'%}" class="btn btn-outline-dark boton  mt-3">Cancelar</a>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 

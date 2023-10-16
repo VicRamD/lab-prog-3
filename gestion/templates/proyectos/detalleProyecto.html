@@ -12,7 +12,11 @@
         <div class="col-sm-2 btn-group-vertical">
             <a href="#" class="btn bam">Detalle de Integrantes</a>
             <a href="{% url 'gestion:detalle_integrantes_comision' id_comision %}" class="btn bam">Detalle de Comisión</a>
+            {% if id_tribunal != 0 %}
             <a href="{% url 'gestion:detalle_integrantes_tribunal' id_tribunal %}" class="btn bam">Detalle de Tribunal</a>
+            {% else %}
+            <a href="{% url 'gestion:nuevo_tribunal' %}" class="btn bam">Asignar Tribunal</a>
+            {% endif %}
             <a href="#" class="btn bam">Detalle de Director</a>
             <a href="#" class="btn bam">Detalle de Co-director</a>
             <a href="#" class="btn bam">Detalle de Asesor</a>

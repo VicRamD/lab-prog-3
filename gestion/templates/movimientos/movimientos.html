@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Nueva Instancia{% endblock %}
+{% block title %}Movimientos{% endblock %}
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/proyecto.css' %}">
@@ -12,12 +12,12 @@
 {% block content %}
     <div class="body-pages">
     <h1 class="textoPrincipal pt-3 text-center">Movimientos y Estados de un Trabajo Final</h1>
-    <div class="container-fluid border border-dark pt-3 mt-6">
+    <div class="container-fluid border-dark pt-3 mt-6">
         <div class="row">
             <!-- Columna para detalles -->
             <div class="col-md-7">
                 <div class="table-responsive mt-3">
-                    <table class="table table-hover table-sm">
+                    <table class="table table-hover table-sm border">
                         <tr class="table-info">
                             <th>ID</th>
                             <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">PTF-{{proyecto.id}}</a></td>
@@ -28,7 +28,7 @@
                         </tr>
                         <tr>
                             <th>Fecha de presentación</th>
-                            <td>{{proyecto.fecha_presentacion|date:"SHORT_DATE_FORMAT"}}</td>
+                            <td>{{proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                         </tr>
                         {% for instancia in proyecto.proyecto_instancia.all %}
                             <tr class="table-info">
@@ -46,16 +46,31 @@
                                 </tr>
                                 <tr>
                                     <th>Fecha evaluación</th>
-                                    <td>{{evaluacion.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>{{evaluacion.fecha|date:"d-m-Y"}}</td>
                                 </tr>
                                 <tr>
                                     <th>Informe</th>
                                     <td><a href="{{evaluacion.informe.url}}">Ver documento</a></td>
                                 </tr>
-                                <tr>
-                                    <th>Nueva version de Proyecto:</th>
-                                    <td><a href="{{evaluacion.informe.url}}">Cargar archivo</a></td>
-                                </tr>
+                                {% if evaluacion.estado == 'OBSERVADO' %}
+                                    {% if evaluacion.nuevoPTF %}
+                                    <tr>
+                                        <th>Nueva version de Proyecto:</th>
+                                        <td><a href="{{evaluacion.nuevoPTF.url}}">Ver archivo</a></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr class="table-danger">
+                                        <th>Nueva version de Proyecto:</th>
+                                        <td>
+                                            <form method="post" action="{% url 'gestion:cargar-nuevo-PTF' proyecto.id %}" enctype="multipart/form-data">
+                                                <input type="file" name="nuevoPTF" required="" id="nuevoPTF">
+                                                {% csrf_token %}
+                                                <input type="submit" value="Cargar" class="btn btn-outline-dark boton m-1">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endif %}
                             {% endfor %}
                         {% endfor %}
                         {% if proyecto.defensa_proyecto %}
@@ -65,7 +80,7 @@
                             </tr>
                             <tr>
                                 <th>Fecha:</th>
-                                <td>{{proyecto.defensa_proyecto.fecha|date:"SHORT_DATE_FORMAT"}}</td>
+                                <td>{{proyecto.defensa_proyecto.fecha|date:"d-m-Y"}}</td>
                             </tr>
                             <tr>
                                 <th>Acta:</th>
@@ -78,7 +93,8 @@
 
             <!-- Columna para el formulario -->
             <div class="col-md-5">
-                    <div class="container body1 pt-3">
+            {% if habilitar_evaluacion %}
+                <div class="container body1 pt-3">
                     <form method="post"  enctype="multipart/form-data">
                         <div class="card">
                             <div class="card-header1">
@@ -102,42 +118,49 @@
                                 </div>
                             </div>
                             {% csrf_token %}
-                            <input type="submit" value="Guardar" class="btn btn-success mt-3">
+                            <div class="text-right">
+                                <input type="submit" value="Guardar" class="btn btn-outline-dark boton m-3">
+                            </div>
                         </div>
                         </form>
                     </div>
+                    {% endif %}
+                    {% if habilitar_defensa and not proyecto.defensa_proyecto %}
                     <div class="container body1 pt-3">
                         <form method="post" enctype="multipart/form-data">
-                        <div class="card">
-                            <div class="card-header1">
-                                Resultados de Defensa
+                            <div class="card">
+                                <div class="card-header1">
+                                    Resultados de Defensa
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="{{ form_defensa.fecha.id_for_label }}" class="mt-1 mb-2 form-label">Fecha:</label>
+                                            {{form_defensa.fecha}}
+                                            {{form_defensa.fecha.errors}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form_defensa.nota.id_for_label }}" class="mt-1 mb-2 form-label">Nota:</label>
+                                            {{form_defensa.nota}}
+                                            {{form_defensa.nota.errors}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form_defensa.acta.id_for_label }}" class="mt-1 mb-2 form-label">Acta:</label>
+                                            {{form_defensa.acta}}
+                                            {{form_defensa.acta.errors}}
+                                    </div>
+                                </div>
+                                {% csrf_token %}
+                                <div>
+                                    <input type="submit" value="Guardar" class="btn btn-outline-dark boton  m-3">
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="{{ form_defensa.fecha.id_for_label }}" class="mt-1 mb-2 form-label">Fecha:</label>
-                                        {{form_defensa.fecha}}
-                                        {{form_defensa.fecha.errors}}
-                                </div>
-                                <div class="form-group">
-                                    <label for="{{ form_defensa.nota.id_for_label }}" class="mt-1 mb-2 form-label">Nota:</label>
-                                        {{form_defensa.nota}}
-                                        {{form_defensa.nota.errors}}
-                                </div>
-                                <div class="form-group">
-                                    <label for="{{ form_defensa.acta.id_for_label }}" class="mt-1 mb-2 form-label">Acta:</label>
-                                        {{form_defensa.acta}}
-                                        {{form_defensa.acta.errors}}
-                                </div>
-                            </div>
-                            {% csrf_token %}
-                            <input type="submit" value="Guardar" class="btn btn-success mt-3">
-                        </div>
                         </form>
                     </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 {% endblock %}

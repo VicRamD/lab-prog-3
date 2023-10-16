@@ -1,36 +1,53 @@
 from django import forms
-from persona.models import Estudiante, Persona
+from persona.models import Estudiante, Persona, Asesor, Docente
+from django.core.exceptions import ValidationError
 
-class NuevoEstudianteForm(forms.Form):
+class EstudianteForm(forms.ModelForm):
 
     class Meta:
         model = Estudiante
-        fields = ['nombre', 'apellido', 'cuil', 'email', 'telefono', 'matricula']
+        fields = ('nombre', 'apellido', 'cuil', 'email', 'telefono', 'matricula')
         #fields = [__all__]
+        widgets = {
+            'nombre': forms.TextInput(attrs={"id": "id_nombre"}),
+            'apellido': forms.TextInput(attrs={"id": "id_apellido"}),
+            'cuil': forms.TextInput(attrs={"id": "id_cuil"}),
+            'email': forms.EmailInput(attrs={"id": "id_email"}),
+            'telefono': forms.TextInput(attrs={"id": "id_telefono"}),
+            'matricula': forms.TextInput(attrs={"id": "id_matricula"}),
+        }
 
+class AsesorForm(forms.ModelForm):
+    class Meta:
+        model = Asesor
+        fields = ('nombre', 'apellido', 'cuil', 'email', 'telefono', 'cv')
 
-# class Persona(models.Model):
-#     nombre = models.CharField(max_length=30)
-#     apellido = models.CharField(max_length=30)
-#     cuil = models.IntegerField()
-#     dni = models.IntegerField()
-#     email = models.EmailField(max_length=45)
-#     telefono = models.CharField()
+        widgets = {
+            'nombre': forms.TextInput(attrs={"id": "id_nombre"}),
+            'apellido': forms.TextInput(attrs={"id": "id_apellido"}),
+            'cuil': forms.TextInput(attrs={"id": "id_cuil"}),
+            'email': forms.EmailInput(attrs={"id": "id_email"}),
+            'telefono': forms.TextInput(attrs={"id": "id_telefono"}),
+            'cv': forms.ClearableFileInput(attrs={"id": "id_cv"}),
+        }
 
-# class Docente(Persona):
-#     fecha_alta = models.DateField(blank=True)
-#     fecha_baja = models.DateField(blank=True)
-#
-#     def registrar_alta(self):
-#         self.fecha_alta = date.today()
-#
-#     def registrar_baja(self):
-#         self.fecha_baja = date.today()
-# # Create your models here.
-#
-# class Estudiante(Persona):
-#     matricula = models.CharField(max_length=12)
-#
-# class Asesor(Persona):
-#     matricula = models.CharField(max_length=12)
+        def clean_requisitos(self):
+            cv = self.cleaned_data['cv']
+            if cv:
+                extension = cv.name.rsplit('.', 1)[1].lower()
+                if extension != 'pdf':
+                    raise ValidationError('El archivo seleccionado no tiene el formato PDF.')
+            return cv
 
+class DocenteForm(forms.ModelForm):
+    class Meta:
+        model = Docente
+        fields = ('nombre', 'apellido', 'cuil', 'email', 'telefono')
+
+        widgets = {
+            'nombre': forms.TextInput(attrs={"id": "id_nombre"}),
+            'apellido': forms.TextInput(attrs={"id": "id_apellido"}),
+            'cuil': forms.TextInput(attrs={"id": "id_cuil"}),
+            'email': forms.EmailInput(attrs={"id": "id_email"}),
+            'telefono': forms.TextInput(attrs={"id": "id_telefono"}),
+        }

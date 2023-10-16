@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {% if tipo_persona == "estudiante" %}
+        Datos del Estudiante
+    {% elif tipo_persona == "docente" %}
+        Datos del Docente
+    {% else %}
+        Datos del Asesor
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="body-pages">
+    <div class="container titulo-formulario">
+    <h1>
+        {% if tipo_persona == "estudiante" %}
+            Estudiante: {{persona.nombre_completo}}
+        {% elif tipo_persona == "docente" %}
+            Docente: {{persona.nombre_completo}}
+        {% else %}
+            Asesor: {{persona.nombre_completo}}
+        {% endif %}
+    </h1>
+
+    </div>
+      <section>
+        <div class="container body1">
+          <div class="card">
+            <div class="card-header1">
+              Datos guardados
+            </div>
+            <div class="card-body">
+              <p><strong>Nombre: </strong>{{ persona.nombre }}</p>
+              <p><strong>Apellido: </strong>{{ persona.apellido }}</p>
+              <p><strong>CUIL: </strong>{{ persona.cuil }}</p>
+              <p><strong>Email: </strong>{{ persona.email }}</p>
+              <p><strong>Telefono: </strong>{{ persona.telefono }}</p>
+              {% if tipo_persona == "estudiante" %}
+                <p><strong>Matricula: </strong>{{ persona.matricula }}</p>
+              {% elif tipo_persona == "asesor" %}
+                <p><strong>CV: </strong><a href="{{ persona.cv.url }}">Ver</a></p>
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </section>
+  </div>
+{% endblock %}

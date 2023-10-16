@@ -44,12 +44,14 @@
                 </tr>
                 <tr>
                     <th>Fecha de alta</th>
-                    <td>{{integrante.fecha_alta|date:"SHORT_DATE_FORMAT"}}</td>
+                    <td>{{integrante.fecha_alta|date:"d-m-Y"}}</td>
                 </tr>
+                {% if integrante.fecha_baja|date:"SHORT_DATE_FORMAT" != '12/31/9999' %}
                 <tr>
                     <th>Fecha de baja</th>
-                    <td>{{integrante.fecha_baja|date:"SHORT_DATE_FORMAT"}}</td>
+                    <td>{{integrante.fecha_baja|date:"d-m-Y"}}</td>
                 </tr>
+                {% endif %}
                 <tr>
                     <th>Cuil</th>
                     <td>{{integrante.docente.cuil}}</td>

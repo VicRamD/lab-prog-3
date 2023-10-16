@@ -1,4 +1,4 @@
-function agregarEstudiante(){
+/*function agregarEstudiante(){
     let bodyTabla = document.getElementById("tablaAlumnos");
     let nombreInput = document.getElementById("nombreAlumno");
     let nombreValor = nombreInput.value;
@@ -34,9 +34,9 @@ function agregarEstudiante(){
         dniInput.value = "";
         matriculaInput.value = "";
     }
-}
+} */
 
-function evitarEstudiantesRepetidos(dni){
+/*function evitarEstudiantesRepetidos(dni){
     let celdasDatosEstudiantes = document.getElementsByTagName("td");
     let comparacion = false;
     let hijoCelda;
@@ -47,4 +47,14 @@ function evitarEstudiantesRepetidos(dni){
         }
     }
     return comparacion;
+}*/
+
+function validacionDeTeclasNumericas(event){
+    return (event.charCode >= 48 && event.charCode <= 57)
 }
+
+function validacionDeTeclasLetras(evt){
+    return ((evt.charCode >= 65 && evt.charCode <= 90)||(evt.charCode >= 97 && evt.charCode <= 122)||evt.charCode == 32);
+}
+
+let nombreInput = document.getElementById("id_nombre");
