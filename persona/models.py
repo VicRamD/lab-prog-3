@@ -9,7 +9,7 @@ class Persona(models.Model):
     cuil = models.CharField(max_length=12)
     dni = models.CharField(max_length=8)
     email = models.EmailField(max_length=45)
-    telefono = models.CharField()
+    telefono = models.CharField(max_length=15, blank=True)
 
     class Meta:
         abstract = True

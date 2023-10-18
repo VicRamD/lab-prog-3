@@ -8,15 +8,15 @@ from persona.models import Estudiante, Asesor, Docente
 
 def nuevoEstudiante(request):
     if request.method == 'POST':
-        form_estudiante = EstudianteForm(request.POST, request.FILES)
-        if form_estudiante.is_valid():
-            estudiante_instance = form_estudiante.save()
+        form_persona = EstudianteForm(request.POST, request.FILES)
+        if form_persona.is_valid():
+            estudiante_instance = form_persona.save()
             estudiante_instance.guardar_dni()
             estudiante_instance.save()
             return redirect(reverse('persona:detalle_estudiante', args={estudiante_instance.id}))
     else:
         form_persona = EstudianteForm()
-
+    #estudiantes_registrados = Estudiante.objects.all()
     return render(request, 'formulario_creacion.html', {'form_persona': form_persona,
                                                         'tipo_persona': 'estudiante'})
 
@@ -33,6 +33,8 @@ def nuevoAsesor(request):
             asesor_instance.guardar_dni()
             asesor_instance.save()
             return redirect(reverse('persona:detalle_asesor', args={asesor_instance.id}))
+        else:
+            form_persona = AsesorForm(request.POST, request.FILES)
     else:
         form_persona = AsesorForm()
 
@@ -52,6 +54,8 @@ def nuevoDocente(request):
             docente_instance.guardar_dni()
             docente_instance.save()
             return redirect(reverse('persona:detalle_docente', args={docente_instance.id}))
+        else:
+            form_persona = DocenteForm(request.POST, request.FILES)
     else:
         form_persona = DocenteForm()
 
