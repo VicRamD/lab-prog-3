@@ -14,6 +14,7 @@
 
 {% block content %}
 <div class="body-pages">
+    <div class="row d-flex justify-content-center">
         <div class="container titulo-formulario">
         <h1>
             {% if tipo_persona == "estudiante" %}
@@ -25,13 +26,12 @@
             {% endif %}
         </h1>
         </div>
-    <div class="row d-flex justify-content-center">
         <div class="col-4" >
           <section class="container">
             <div class="container body1">
               <div class="card">
                 <div class="card-header1">
-                  Datos guardados
+                  Datos registrados
                 </div>
                 <div class="card-body">
                   <p><strong>Nombre: </strong>{{ persona.nombre }}</p>

@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="body-home">
+            <img src="{% static 'img/landing.jpg' %}">
+    <div class="row">
+            <!-- Si no está logueado sale la sección de iniciar sesión, caso contarrio no -->
+        {% if user.is_authenticated %}
+        <div class="col-11 landing-container mt-4">
+            <p class="landing-paragraph">
+                GTF es un Sistema de gestión de Trabajos Finales diseñado para facilitar la administración y seguimiento de los proyectos académicos. Tanto los profesores, el personal administrativo como los estudiantes encontrarán en esta plataforma una solución eficiente y efectiva para llevar un registro detallado de los Trabajos Finales. Desde la presentación inicial hasta la evaluación y aprobación final, nuestro sistema simplifica cada paso del proceso, asegurando una gestión eficaz y un seguimiento transparente de los estados de los proyectos. ¡Ahora puedes ver el status de tu trabajo!
+            </p>
+        </div>
+        {% else %}
+        <div class="col-7 landing-container mt-4">
+            <p class="landing-paragraph">
+                GTF es un Sistema de gestión de Trabajos Finales diseñado para facilitar la administración y seguimiento de los proyectos académicos. Tanto los profesores, el personal administrativo como los estudiantes encontrarán en esta plataforma una solución eficiente y efectiva para llevar un registro detallado de los Trabajos Finales. Desde la presentación inicial hasta la evaluación y aprobación final, nuestro sistema simplifica cada paso del proceso, asegurando una gestión eficaz y un seguimiento transparente de los estados de los proyectos. ¡Únete a nosotros y optimiza tu trabajo académico hoy mismo!
+            </p>
+        </div>
+            <div class="col-5 border border-dark" id="formularioLogin">
+                <form class="form-inline" name=form action="{% url 'usuarios:login' %}" method="post">
+                    <h4>UNCA GTF</h4>
+                    {% csrf_token %}
+                    <div class="form-group mx-sm-3">
+                        <label for="usuario" class="sr-only">Usuario</label>
+                        <input type="text" class="form-control" name="usuario" id="usuario">
+                    </div>
+                    <div class="form-group mx-sm-3">
+                        <label for="password" class="sr-only">Password</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div><br>
+                    <div class="botones-form">
+                        <input type="submit" class="btn btn-primary" value="Acceder">
+                    </div>
+                    {% if mensaje %}
+                        <br><div class="alert alert-info text-center" role="alert">{{mensaje}}</div>
+                     {% endif %}
+                </form>
+
+            </div>
+        {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+

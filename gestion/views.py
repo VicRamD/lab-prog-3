@@ -137,7 +137,7 @@ def detalleProyecto(request, id):
             'proyecto': proyecto,
             'tribunal_true': id_tribunal})
     except Proyecto.tribunal_proyecto.RelatedObjectDoesNotExist:
-        messages.success(request, 'El usuario no tiene tribunal.')
+        messages.success(request, 'El usuario no tiene tribunal. Por favor asigne un tribunal.')
         return render(request, 'proyectos/detalleProyecto.html', {
             'proyecto': proyecto,
             'tribunal_true': False})
@@ -160,7 +160,7 @@ def nuevoProyecto(request):
             agregarCSTFProyecto(comision_seleccionada[0], proyecto_instance)
             agregarInstanciaEvaluacion('COMISION DE SEGUIMIENTO', proyecto_instance)
 
-            messages.success(request, 'Se ha creado el proyecto correctamente.')
+            messages.success(request, 'Se ha creado el proyecto correctamente. Asigne un tribunal para el mismo.')
             # return redirect(reverse('gestion:detalle_proyecto', args={proyecto_instance.id}))
             # return redirect('gestion:detalle_proyecto', proyecto_instance.id)
             return redirect('gestion:nuevo_tribunal',proyecto_instance.id)
@@ -305,7 +305,7 @@ def nuevaComision(request):
             comision_instance = form_comision.save()
             agregarIntegranteComision(integrantes_seleccionados, comision_instance)
 
-            messages.success(request, 'Se ha creado el comision correctamente.')
+            messages.success(request, 'Se ha creado la comision correctamente.')
             return redirect('gestion:detalle_integrantes_comision', comision_instance.id)
             # return redirect('detalle_integrantes_comision', id=comision_instance.id)
             # return redirect(reverse('detalle_integrantes_comision', args=[comision_instance.id]))
@@ -370,8 +370,8 @@ def nuevoTribunal(request, id):
             agregarIntegrantesTribunal(vocales_seleccionados, tribunal_instance, 'Vocal')
             agregarIntegrantesTribunal(vocales_suplentes_seleccionados, tribunal_instance, 'Vocal suplente')
 
-            messages.success(request, 'Se ha creado el tribunal correctamente.')
-            return redirect('gestion:detalle_integrantes_tribunal', tribunal_instance.id)
+            messages.success(request, 'Se ha asignado el tribunal al pryecto correctamente.')
+            return redirect('gestion:detalle_proyecto', id)
     else:
         form_tribunal = TribunalForm(prefix='tribunal')
 

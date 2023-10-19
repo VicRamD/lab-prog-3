@@ -20,9 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('index/', include('gestion.urls', namespace="gestion")),
-    path('admin/', admin.site.urls),
     path('', include('usuarios.urls', namespace='usuarios')),
+    path('gestion/', include('gestion.urls', namespace="gestion")),
+    path('admin/', admin.site.urls),
     path('personas/', include('persona.urls', namespace='persona')),
 ]
 if settings.DEBUG:

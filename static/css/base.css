@@ -15,6 +15,9 @@ body {
 textarea {
     width: 100%;
 }
+a {
+  text-decoration: none;
+}
 /*h1*/
 div.franja .textoPrincipal {
     text-align: center;
@@ -234,9 +237,9 @@ div.body-home div.botones-form{
 }
 
 .landing-container {
-      width: 60%;
+      //width: 60%;
       margin: 0 auto;
-      padding: 20px;
+      //padding: 20px;
       text-align: left;
       position: absolute;
       top: 15%;

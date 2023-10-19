@@ -41,11 +41,7 @@
                   <td>{{tribunal.numero_disposicion}}</td>
                   <td>{{tribunal.fecha_disposicion|date:"d-m-Y"}}</td>
                   <td><a href="{{ tribunal.disposicion.url }}">Ver documento</a></td>
-                  <td>
-                    {% for integrante in tribunal.tribunal.all%}
-                    <a href="{% url 'persona:detalle_docente' integrante.docente.id %}">{{integrante.descripcion}} - {{integrante.docente.apellido}} {{integrante.docente.nombre}}</a><br>
-                    {% endfor %}
-                  </td>
+                  <td><a href="{% url 'gestion:detalle_integrantes_tribunal' tribunal.id %}">Ver detalle de integrantes</a></td>
                   <td>
                       <a href="#">Modificar</a>
                       <a href="#">Eliminar</a>

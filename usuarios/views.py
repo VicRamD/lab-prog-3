@@ -3,7 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 # Create your views here.
-
+def index(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("usuarios:login"))
+    return render(request, "index.html")
 def login_view(request):
     if request.method == "POST":
         usuario = request.POST["usuario"]
@@ -11,10 +14,11 @@ def login_view(request):
         user = authenticate(request, username=usuario, password=password)
         if user:
             login(request, user)
-            return HttpResponseRedirect(reverse("usuarios:index_login"))
+            return HttpResponseRedirect(reverse("usuarios:index"))
         else:
             return render(request, "index.html", {"mensaje": "Los datos son incorrectos"})
-    return render(request, 'login.html')
+    return render(request, 'index.html')
 
-def index_logeado(request):
-    return render(request, 'index.html', {"login_correcto": True})
+def logout_view(request):
+    logout(request)
+    return render(request, "index.html", { "mensaje": "Sesión finalizada" })

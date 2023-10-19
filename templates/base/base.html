@@ -16,14 +16,15 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark" id="barraNav">
         <div class="container-fluid">
-            <a class="navbar-brand" href="../index.html">GTF</a>
+            <a class="navbar-brand" href="/">GTF</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#miNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+                {% if user.is_authenticated %}
             <div class="collapse navbar-collapse" id="miNavbar">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link boton-nav" href="">Inicio</a>
+                        <a class="nav-link boton-nav" href="/">Inicio</a>
                         <!--<a class="nav-link boton-nav" href="{}">Inicio</a>-->
                     </li>
                     <li class="nav-item">
@@ -40,16 +41,19 @@
                         <a class="nav-link boton-nav" href="../estadisticas/estadisticas.html">Estadisticas</a>
                     </li>
                 </ul>
-                <a href="{% url 'admin:login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark">{{ request.user.username }} - Cerrar sesión</a>
             </div>
+                {% endif %}
         </div>
     </nav>
-    {% if mensaje %}
-        <div style="color: red; border:solid;" class="mt-2">{{message}}</div>
-    {% endif %}
     <div class="body-base">
+        {% if messages %}
+          {% for message in messages %}
+              {% if message.tags == 'success' %}  <div class="alert alert-success text-center" role="alert">{{ message }}</div>{% endif %}
+          {% endfor %}
+        {% endif %}
         {% block content %}
-    {% endblock %}
+        {% endblock %}
     </div>
 
 

@@ -79,6 +79,11 @@
                     <td><a href="{% url 'persona:detalle_docente' rol.docente.id %}">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                <tr>
+                    <th>Tribunal:</th>
+                    <td><a href="{% url 'persona:nuevo_tribunal' proyecto.id %}">Asignar Tribunal</a></td>
+                </tr>
                 {% endif %}
                 <tr>
                     <th>Estado Actual</th>
