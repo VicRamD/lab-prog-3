@@ -34,6 +34,6 @@ function controlCuil(evt){
     if(esTeclaNum && longitud11){
         return true;
     }else{
-    return false;
+        return false;
     }
 }

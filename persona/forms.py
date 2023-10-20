@@ -94,21 +94,21 @@ class DocenteForm(forms.ModelForm):
         }
 
     def clean_cuil(self):
-         cuil = self.cleaned_data['cuil']
-         if cuil:
-             estudiantes_con_cuil = Estudiante.objects.filter(cuil=cuil)
-             if estudiantes_con_cuil.count() != 0:
-                 mensaje = "Hay un estudiante registrado con ese cuil: " + estudiantes_con_cuil[0].nombre_completo()
-                 #raise ValidationError(mensaje)
-                 raise forms.ValidationError(mensaje, code="cuil repetido", )
-             docentes_con_cuil = Docente.objects.filter(cuil=cuil)
-             if docentes_con_cuil.count() != 0:
-                 mensaje = "Hay un docente registrado con ese cuil: " + estudiantes_con_cuil[0].nombre_completo()
-                 #raise ValidationError(mensaje)
-                 raise forms.ValidationError(mensaje, code="cuil repetido", )
-             asesores_con_cuil = Asesor.objects.filter(cuil=cuil)
-             if asesores_con_cuil.count() != 0:
-                 mensaje = "Hay un asesor registrado con ese cuil: " + estudiantes_con_cuil[0].nombre_completo()
-                 #raise ValidationError(mensaje)
-                 raise forms.ValidationError(mensaje, code="cuil repetido", )
-         return cuil
+        cuil = self.cleaned_data['cuil']
+        if cuil:
+            estudiantes_con_cuil = Estudiante.objects.filter(cuil=cuil)
+            if estudiantes_con_cuil.count() != 0:
+                mensaje = "Hay un estudiante registrado con ese cuil: " + estudiantes_con_cuil[0].nombre_completo()
+                # raise ValidationError(mensaje)
+                raise forms.ValidationError(mensaje, code="cuil repetido", )
+            docentes_con_cuil = Docente.objects.filter(cuil=cuil)
+            if docentes_con_cuil.count() != 0:
+                mensaje = "Hay un docente registrado con ese cuil: " + estudiantes_con_cuil[0].nombre_completo()
+                # raise ValidationError(mensaje)
+                raise forms.ValidationError(mensaje, code="cuil repetido", )
+            asesores_con_cuil = Asesor.objects.filter(cuil=cuil)
+            if asesores_con_cuil.count() != 0:
+                mensaje = "Hay un asesor registrado con ese cuil: " + estudiantes_con_cuil[0].nombre_completo()
+                # raise ValidationError(mensaje)
+                raise forms.ValidationError(mensaje, code="cuil repetido", )
+        return cuil

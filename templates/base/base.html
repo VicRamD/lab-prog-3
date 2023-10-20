@@ -51,6 +51,9 @@
           {% for message in messages %}
               {% if message.tags == 'success' %}  <div class="alert alert-success text-center" role="alert">{{ message }}</div>{% endif %}
           {% endfor %}
+          {% for message in messages %}
+              {% if message.tags == 'error' %}  <div class="alert alert-danger text-center" role="alert">{{ message }}</div>{% endif %}
+          {% endfor %}
         {% endif %}
         {% block content %}
         {% endblock %}

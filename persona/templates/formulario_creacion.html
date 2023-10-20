@@ -36,46 +36,61 @@
 
               <form method="post" class="row g-3" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="col-md-6">
-                  <label for="id_nombre" class="form-label">Nombre</label>
-                  <input id="id_nombre" type="text" name="nombre" class="form-control" placeholder="Ana Maria" onkeypress="return validacionDeTeclasLetras(event);" required>
-                  <!-- <input type="text" class="form-control" id="nombre" placeholder="Laura" required onkeypress="return validacionDeTeclasLetras(event);">-->
-                </div>
-                <div class="col-md-6">
-                  <label for="id_apellido" class="form-label">Apellido</label>
-                  <input id="id_apellido" type="text" name="apellido" class="form-control" placeholder="Lopez San Juan" onkeypress="return validacionDeTeclasLetras(event);" required>
-                  <!-- <input type="text" class="form-control" id="apellidoD" required onkeypress="return validacionDeTeclasLetras(event);">-->
-                </div>
-                <div class="col-md-6">
-                    <label for="id_cuil" class="form-label">CUIL</label>
-                    <input id="id_cuil" type="text" name="cuil" class="form-control" placeholder="CUIL sin Guiones" onkeypress="return controlCuil(event);" required>
-                  <!--<label for="{{ form_persona.cuil.id_for_label }}" class="form-label">Nombre</label>
-                    { form_persona.nombre }
-                    { form_persona.nombre.errors  -->
-                  <!--<input type="text" class="form-control" id="cuilD" placeholder="Ingrese Su CUIL sin Guiones" required onkeypress="return validacionDeTeclasNumericas(event);">-->
-                </div>
+                {% if campos %}
+                  <div class="col-md-6">
+                      <label for="id_nombre" class="form-label">Nombre</label>
+                      <input id="id_nombre" type="text" name="nombre" class="form-control" value="{{ campos.nombre }}" onkeypress="return validacionDeTeclasLetras(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_apellido" class="form-label">Apellido</label>
+                      <input id="id_apellido" type="text" name="apellido" class="form-control" value="{{ campos.apellido }}" onkeypress="return validacionDeTeclasLetras(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_cuil" class="form-label">CUIL</label>
+                      <input id="id_cuil" type="text" name="cuil" class="form-control" value="{{ campos.cuil }}" onkeypress="return controlCuil(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_telefono" class="form-label">Telefono</label>
+                      <input id="id_telefono" type="text" name="telefono" class="form-control" value="{{ campos.telefono }}" onkeypress="return validacionDeTeclasNumericas(event);">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_email" class="form-label">Correo Electronico</label>
+                      <input id="id_email" type="email" name="email" class="form-control" value="{{ campos.email }}" required>
+                  </div>
+                {% else %}
+                  <div class="col-md-6">
+                      <label for="id_nombre" class="form-label">Nombre</label>
+                      <input id="id_nombre" type="text" name="nombre" class="form-control" placeholder="Ana Maria" onkeypress="return validacionDeTeclasLetras(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_apellido" class="form-label">Apellido</label>
+                      <input id="id_apellido" type="text" name="apellido" class="form-control" placeholder="Lopez San Juan" onkeypress="return validacionDeTeclasLetras(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_cuil" class="form-label">CUIL</label>
+                      <input id="id_cuil" type="text" name="cuil" class="form-control" placeholder="CUIL sin Guiones" onkeypress="return controlCuil(event);" required>
+                  </div>
+                                    <div class="col-md-6">
+                      <label for="id_telefono" class="form-label">Telefono</label>
+                      <input id="id_telefono" type="text" name="telefono" class="form-control" onkeypress="return validacionDeTeclasNumericas(event);">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_email" class="form-label">Correo Electronico</label>
+                      <input id="id_email" type="email" name="email" class="form-control" required>
+                  </div>
+                {% endif %}
+
                 {% if tipo_persona == "estudiante" %}
                     <div class="col-md-6">
                       <label for="id_matricula" class="form-label">Matricula</label>
                       <input id="id_matricula" type="text" name="matricula" class="form-control" onkeypress="return validacionDeTeclasNumericas(event);" required>
-                      <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
                     </div>
                 {% endif %}
-                <div class="col-md-6">
-                  <label for="id_telefono" class="form-label">Telefono</label>
-                  <input id="id_telefono" type="text" name="telefono" class="form-control" onkeypress="return validacionDeTeclasNumericas(event);">
-                  <!--<input type="" class="form-control" id="telefono" placeholder="Departamento" required onkeypress="return validacionDeTeclasLetras(event);">-->
-                </div>
-                <div class="col-md-6">
-                  <label for="id_email" class="form-label">Correo Electronico</label>
-                  <input id="id_email" type="email" name="email" class="form-control" required>
-                  <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
-                </div>
+
                 {% if tipo_persona == "asesor" %}
                     <div class="col-md-6">
                       <label for="id_cv" class="form-label">CV</label>
                       <input id="id_cv" type="file" name="cv" class="form-control" required>
-                      <!-- <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" required>-->
                     </div>
                 {% endif %}
 
