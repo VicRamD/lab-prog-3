@@ -6,7 +6,7 @@
 
 {% block content %}
   <div class="body-pages pt-3">
-    <h1 class="textoPrincipal pt-3 text-center">Gestión de Docentes - Alumnos - Asesores</h1>
+    <h1 class="textoPrincipal pt-3 text-center">Gestión de Docentes - Alumnos - Asesores <i class="fas fa-user-friends"></i></h1>
     <div class="container p-6 border border-dark">
       <div class="row bg-color-oscuro">
         <div class="col-sm-12 btn-group p-2">
@@ -58,8 +58,7 @@
                   <!-- <td>{{estudiante.nombre}}</td> -->
                   <td>{{estudiante.cuil}}</td>
                   <td>
-                      <a href="#">Modificar</a>
-                      <a href="#">Eliminar</a>
+                      <a href="{% url 'persona:detalle_estudiante' estudiante.id %}">Detalle</a>
                   </td>
                 </tr>
               {% endfor %}
@@ -71,8 +70,7 @@
                   <!-- <td>{{estudiante.nombre}}</td> -->
                   <td>{{docente.cuil}}</td>
                   <td>
-                      <a href="#">Modificar</a>
-                      <a href="#">Eliminar</a>
+                      <a href="{% url 'persona:detalle_docente' docente.id %}">Detalle</a>
                   </td>
                 </tr>
               {% endfor %}
@@ -84,8 +82,7 @@
                   <!-- <td>{{estudiante.nombre}}</td> -->
                   <td>{{asesor.cuil}}</td>
                   <td>
-                      <a href="#">Modificar</a>
-                      <a href="#">Eliminar</a>
+                      <a href="{% url 'persona:detalle_asesor' asesor.id %}">Detalle</a>
                   </td>
                 </tr>
               {% endfor %}
