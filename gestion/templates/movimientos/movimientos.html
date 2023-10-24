@@ -58,7 +58,7 @@
                                         <th>Nueva version de Proyecto:</th>
                                         <td><a href="{{evaluacion.nuevoPTF.url}}">Ver archivo</a></td>
                                     </tr>
-                                    {% else %}
+                                    {% elif perms.gestion.change_evaluacion %}
                                     <tr class="table-danger">
                                         <th>Nueva version de Proyecto:</th>
                                         <td>
@@ -125,7 +125,7 @@
                         </form>
                     </div>
                     {% endif %}
-                    {% if habilitar_defensa and not proyecto.defensa_proyecto %}
+                    {% if habilitar_defensa %}
                     <div class="container body1 pt-3">
                         <form method="post" enctype="multipart/form-data">
                             <div class="card">
