@@ -127,6 +127,17 @@ def estudianteModificar(request, pk):
                                                            'tipo_persona': 'estudiante',
                                                                'persona': estudiante_revisado})
 
+def estudianteEliminar(request):
+    if request.method == 'POST':
+        if 'id_persona' in request.POST:
+            estudiante = get_object_or_404(Estudiante, pk=request.POST['id_persona'])
+            nombre_estudiante = estudiante.nombre_completo()
+            estudiante.delete()
+            messages.success(request, 'Se ha eliminado exitosamente al estudiante: {}'.format(nombre_estudiante))
+        else:
+            messages.error(request, 'Debe indicar qué Estudiante se desea eliminar')
+    return redirect(reverse('persona:lista_personas'))
+
 #========================================================
 # ============== Asesor =================================
 @login_required(login_url='usuarios:login')
@@ -179,6 +190,17 @@ def asesorModificar(request, pk):
                                                            'tipo_persona': 'asesor',
                                                                'persona': asesorDetalle_revisado})
 
+def asesorEliminar(request):
+    if request.method == 'POST':
+        if 'id_persona' in request.POST:
+            asesor = get_object_or_404(Asesor, pk=request.POST['id_persona'])
+            nombre_asesor = asesor.nombre_completo()
+            asesor.delete()
+            messages.success(request, 'Se ha eliminado exitosamente al asesor: {}'.format(nombre_asesor))
+        else:
+            messages.error(request, 'Debe indicar qué Asesor se desea eliminar')
+    return redirect(reverse('persona:lista_personas'))
+
 #========================================================
 # ============== Docente =================================
 def nuevoDocente(request):
@@ -225,6 +247,17 @@ def docenteModificar(request, pk):
     return render(request, 'formulario_edicion_persona.html', {'form_persona': form_persona,
                                                            'tipo_persona': 'docente',
                                                                'persona': docente_revisado})
+
+def docenteEliminar(request):
+    if request.method == 'POST':
+        if 'id_persona' in request.POST:
+            docente = get_object_or_404(Docente, pk=request.POST['id_persona'])
+            nombre_docente = docente.nombre_completo()
+            docente.delete()
+            messages.success(request, 'Se ha eliminado exitosamente al docente: {}'.format(nombre_docente))
+        else:
+            messages.error(request, 'Debe indicar qué Docente se desea eliminar')
+    return redirect(reverse('persona:lista_personas'))
 
 #========================================================
 #Funciones para ser usadas

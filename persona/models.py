@@ -37,6 +37,9 @@ class Estudiante(Persona):
 class Asesor(Persona):
     cv = models.FileField(upload_to='uploads/')
 
+    def devolverCV(self):
+        return self.cv
+
 class AsesorProyecto(models.Model):
     proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, related_name="asesor_proyecto")
     asesor = models.ForeignKey(Asesor, on_delete=models.PROTECT, related_name="asesor")

@@ -46,14 +46,30 @@
                   {% endif %}
 
                 </div>
-                <div class="card-footer">
+                <div class="card-footer cont-flex">
                     {% if tipo_persona == "estudiante" %}
                         <a class="btn btn-outline-dark m-2" href="{% url 'persona:editar_estudiante' persona.id %}">Editar <i class="fas fa-edit"></i></a>
+                        <form action="{% url 'persona:delete_estudiante' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_persona" value="{{ persona.id }}">
+                            <input type="submit" class="btn btn-outline-dark m-2" value="Eliminar" onclick="return confirm('¿Está seguro que desea eliminar el registro?');">
+                        </form>
                     {% elif tipo_persona == "docente" %}
                         <a class="btn btn-outline-dark m-2" href="{% url 'persona:editar_docente' persona.id %}">Editar <i class="fas fa-edit"></i></a>
+                        <form action="{% url 'persona:delete_docente' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_persona" value="{{ persona.id }}">
+                            <input type="submit" class="btn btn-outline-dark m-2" value="Eliminar" onclick="return confirm('¿Está seguro que desea eliminar el registro?');">
+                        </form>
                     {% else %}
                         <a class="btn btn-outline-dark m-2" href="{% url 'persona:editar_asesor' persona.id %}">Editar <i class="fas fa-edit"></i></a>
+                        <form action="{% url 'persona:delete_asesor' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_persona" value="{{ persona.id }}">
+                            <input type="submit" class="btn btn-outline-dark m-2" value="Eliminar" onclick="return confirm('¿Está seguro que desea eliminar el registro?');">
+                        </form>
                     {% endif %}
+
                 </div>
               </div>
             </div>
