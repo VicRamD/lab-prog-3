@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from persona.forms import EstudianteForm, AsesorForm, DocenteForm
@@ -7,6 +8,80 @@ from django.contrib import messages
 from persona.models import Estudiante, Asesor, Docente
 # Create your views here.
 
+def buscarStringEnCuil(tipo, cuil):
+    listas_devueltas = []
+    if tipo == 'estudiantes':
+        l_busqueda = Estudiante.objects.filter(cuil__icontains=cuil)
+        listas_devueltas.append(l_busqueda)
+    elif tipo == 'docentes':
+        l_busqueda = Docente.objects.filter(cuil__icontains=cuil)
+        listas_devueltas.append(l_busqueda)
+    elif tipo == 'asesores':
+        l_busqueda = Asesor.objects.filter(cuil__icontains=cuil)
+        listas_devueltas.append(l_busqueda)
+    else:
+        lb_estudiantes = Estudiante.objects.filter(cuil__icontains=cuil)
+        lb_docentes = Docente.objects.filter(cuil__icontains=cuil)
+        lb_asesores = Asesor.objects.filter(cuil__icontains=cuil)
+        listas_devueltas.append(lb_estudiantes)
+        listas_devueltas.append(lb_docentes)
+        listas_devueltas.append(lb_asesores)
+    return listas_devueltas
+
+def listadoPersonas(request):
+    estudiantes = Estudiante.objects.all().order_by('apellido', 'nombre')
+    docentes = Docente.objects.all().order_by('apellido', 'nombre')
+    asesores = Asesor.objects.all().order_by('apellido', 'nombre')
+    if request.method == 'POST':
+        tipo_seleccionado = request.POST.get('tipo_seleccionado')
+        cuil_buscado = request.POST.get('cuil_buscado')
+        estudiantes_lista = estudiantes
+        print(type(tipo_seleccionado))
+        print(type(cuil_buscado))
+        docentes_lista = docentes
+        asesores_lista = asesores
+        #listas = []
+        if tipo_seleccionado != 'TODOS' and cuil_buscado:
+            if tipo_seleccionado == 'ESTUDIANTES':
+                estudiantes_cuil = buscarStringEnCuil('estudiantes', cuil_buscado)
+                return render(request, 'personas_registradas.html', {'estudiantes': estudiantes_cuil[0]})
+            if tipo_seleccionado == 'DOCENTES':
+                #listas.append(docentes_lista)
+                docentes_cuil = buscarStringEnCuil('docentes', cuil_buscado)
+                return render(request, 'personas_registradas.html', {'docentes': docentes_cuil[0]})
+            if tipo_seleccionado == 'ASESORES':
+                asesores_cuil = buscarStringEnCuil('asesores', cuil_buscado)
+                return render(request, 'personas_registradas.html', {'asesores': asesores_cuil[0]})
+        elif cuil_buscado:
+            #print("En elif cuil buscado")
+            # listas.append(estudiantes_lista)
+            # listas.append(docentes_lista)
+            # listas.append(asesores_lista)
+            lista_registros_cuil = buscarStringEnCuil('todos', cuil_buscado)
+            return render(request, 'personas_registradas.html', {'estudiantes': lista_registros_cuil[0],
+                                                                 'docentes': lista_registros_cuil[1],
+                                                                 'asesores': lista_registros_cuil[2]
+                                                                 })
+        elif tipo_seleccionado != 'TODOS':
+            if tipo_seleccionado == 'ESTUDIANTES':
+                return render(request, 'personas_registradas.html', {'estudiantes': estudiantes_lista})
+            if tipo_seleccionado == 'DOCENTES':
+                return render(request, 'personas_registradas.html', {'docentes': docentes_lista})
+            if tipo_seleccionado == 'ASESORES':
+                return render(request, 'personas_registradas.html', {'asesores': asesores_lista})
+        else:
+            return render(request, 'personas_registradas.html', {'estudiantes': estudiantes,
+                                                                 'docentes': docentes,
+                                                                 'asesores': asesores
+                                                                 })
+    else:
+        return render(request, 'personas_registradas.html', {'estudiantes': estudiantes,
+                                                                 'docentes': docentes,
+                                                                 'asesores': asesores
+                                                                 })
+
+
+
 def nuevoEstudiante(request):
     if request.method == 'POST':
         form_persona = EstudianteForm(request.POST, request.FILES)
@@ -15,7 +90,8 @@ def nuevoEstudiante(request):
             estudiante_instance.guardar_dni()
             estudiante_instance.save()
             messages.success(request, 'Datos de estudiante guardados correctamente')
-            return redirect(reverse('persona:detalle_estudiante', args={estudiante_instance.id}))
+            #return redirect(reverse('persona:detalle_estudiante', args={estudiante_instance.id}))
+            return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': estudiante_instance.id, 'grupo': 'Estudiante'}))
         else:
             datos = request.POST.dict()
             cuil = datos.get("cuil")
@@ -37,6 +113,9 @@ def estudianteDetalle(request, pk):
     return render(request, 'detalle_persona.html',
                   {'persona': estudiante, 'tipo_persona': 'estudiante'})
 
+@login_required(login_url='usuarios:login')
+@permission_required('asesor.add_asesor', raise_exception=True)
+
 def nuevoAsesor(request):
     if request.method == 'POST':
         form_persona = AsesorForm(request.POST, request.FILES)
@@ -45,7 +124,8 @@ def nuevoAsesor(request):
             asesor_instance.guardar_dni()
             asesor_instance.save()
             messages.success(request, 'Datos de asesor guardados correctamente')
-            return redirect(reverse('persona:detalle_asesor', args={asesor_instance.id}))
+            #return redirect(reverse('persona:detalle_asesor', args={asesor_instance.id}))
+            return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': asesor_instance.id, 'grupo': 'Asesor'}))
         else:
             datos = request.POST.dict()
             archivos = request.FILES.dict()
@@ -77,7 +157,8 @@ def nuevoDocente(request):
             docente_instance.guardar_dni()
             docente_instance.save()
             messages.success(request, 'Datos de docente guardados correctamente')
-            return redirect(reverse('persona:detalle_docente', args={docente_instance.id}))
+            #return redirect(reverse('persona:detalle_docente', args={docente_instance.id}))
+            return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': docente_instance.id, 'grupo': 'Docente'}))
         else:
             datos = request.POST.dict()
             cuil = datos.get("cuil")

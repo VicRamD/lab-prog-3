@@ -1,0 +1,100 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Docentes y Estudiantes{% endblock %}
+
+{% block content %}
+  <div class="body-pages pt-3">
+    <h1 class="textoPrincipal pt-3 text-center">Gestión de Docentes - Alumnos - Asesores <i class="fas fa-user-friends"></i></h1>
+    <div class="container p-6 border border-dark">
+      <div class="row bg-color-oscuro">
+        <div class="col-sm-6 btn-group p-2">
+          <div class="bg-color form-inline d-flex">
+            <form method="post" class="d-flex flex-grow-1">
+                <label for="tipo_seleccionado" class="mt-3">Estado:</label>
+                <select name="tipo_seleccionado" id="tipo_seleccionado" class="form-control m-2">
+                    <option value="TODOS">Todos</option>
+                    <option value="ESTUDIANTES">Estudiantes</option>
+                    <option value="DOCENTES">Docentes</option>
+                    <option value="ASESORES">Asesores</option>
+                </select>
+                <label for="id_cuil" class="form-label mt-3">Cuil</label>
+                <input id="id_cuil" type="text" name="cuil_buscado" class="form-control m-2" onkeypress="return controlCuil(event);">
+               <!-- <input type="date" name="fecha_desde" id="fecha_desde" class="form-control m-2">
+                <span class="mt-3">-</span>
+                <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control m-2"> -->
+                {% csrf_token %}
+                <input type="submit" value="Filtrar" id="btn_filtrar" class="btn btn-outline-dark m-2">
+            </form>
+        </div>
+
+        </div>
+        <div class="col-sm-6 btn text-right">
+          <a href="{% url 'persona:nuevo_docente' %}" class="btn btn-outline-dark mt-2">Nuevo Docente</a>
+          <a href="{% url 'persona:nuevo_estudiante' %}" class="btn btn-outline-dark mt-2">Nuevo Estudiante</a>
+          <a href="{% url 'persona:nuevo_asesor' %}" class="btn btn-outline-dark mt-2">Nuevo Asesor</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 columna-tabla">
+          <div class="table-responsive mt-3">
+            <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Nombre completo</th>
+                  <!-- <th scope="col">Nombre</th>-->
+                  <th scope="col">Cuil</th>
+                  <th scope="col">Operación</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for estudiante in estudiantes%}
+                <tr>
+
+                  <td>Estudiante</td>
+                  <td>{{estudiante.nombre_completo}}</td>
+                  <!-- <td>{{estudiante.nombre}}</td> -->
+                  <td>{{estudiante.cuil}}</td>
+                  <td>
+                      <a href="{% url 'persona:detalle_estudiante' estudiante.id %}">Detalle</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              {% for docente in docentes%}
+                <tr>
+
+                  <td>Docente</td>
+                  <td>{{docente.nombre_completo}}</td>
+                  <!-- <td>{{estudiante.nombre}}</td> -->
+                  <td>{{docente.cuil}}</td>
+                  <td>
+                      <a href="{% url 'persona:detalle_docente' docente.id %}">Detalle</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              {% for asesor in asesores%}
+                <tr>
+
+                  <td>Asesor</td>
+                  <td>{{asesor.nombre_completo}}</td>
+                  <!-- <td>{{estudiante.nombre}}</td> -->
+                  <td>{{asesor.cuil}}</td>
+                  <td>
+                      <a href="{% url 'persona:detalle_asesor' asesor.id %}">Detalle</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block funciones %}
+    <script src="{% static 'scripts/validacionPersona.js' %}"></script>
+{% endblock %}
