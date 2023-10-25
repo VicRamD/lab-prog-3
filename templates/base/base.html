@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- Icono de la página -->
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+rel="stylesheet" />
     {% block head %} {% endblock %}
 </head>
 <body>
@@ -38,10 +40,13 @@
                         <a class="nav-link boton-nav" href="{% url 'gestion:tribunales' %}">Tribunales</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link boton-nav" href="{% url 'persona:lista_personas' %}">Docentes y Estudiantes</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link boton-nav" href="../estadisticas/estadisticas.html">Estadisticas</a>
                     </li>
                 </ul>
-                <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark">{{ request.user.username }} - Cerrar sesión</a>
+                <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark"><i class="fas fa-user-circle"></i> {{ request.user.username }} - Cerrar sesión</a>
             </div>
                 {% endif %}
         </div>
