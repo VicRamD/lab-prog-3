@@ -9,7 +9,7 @@
     <h1 class="textoPrincipal pt-3 text-center">Gestión de Docentes - Alumnos - Asesores <i class="fas fa-user-friends"></i></h1>
     <div class="container p-6 border border-dark">
       <div class="row bg-color-oscuro">
-        <div class="col-sm-12 btn-group p-2">
+        <div class="col-sm-6 btn-group p-2">
           <div class="bg-color form-inline d-flex">
             <form method="post" class="d-flex flex-grow-1">
                 <label for="tipo_seleccionado" class="mt-3">Estado:</label>
@@ -30,7 +30,7 @@
         </div>
 
         </div>
-        <div class="col-sm-12 btn text-right">
+        <div class="col-sm-6 btn text-right">
           <a href="{% url 'persona:nuevo_docente' %}" class="btn btn-outline-dark mt-2">Nuevo Docente</a>
           <a href="{% url 'persona:nuevo_estudiante' %}" class="btn btn-outline-dark mt-2">Nuevo Estudiante</a>
           <a href="{% url 'persona:nuevo_asesor' %}" class="btn btn-outline-dark mt-2">Nuevo Asesor</a>

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from persona.forms import EstudianteForm, AsesorForm, DocenteForm, EstudianteUpdateForm, AsesorUpdateForm, DocenteUpdateForm
@@ -87,7 +88,8 @@ def nuevoEstudiante(request):
             estudiante_instance.guardar_dni()
             estudiante_instance.save()
             messages.success(request, 'Datos de estudiante guardados correctamente')
-            return redirect(reverse('persona:detalle_estudiante', args={estudiante_instance.id}))
+            #return redirect(reverse('persona:detalle_estudiante', args={estudiante_instance.id}))
+            return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': estudiante_instance.id, 'grupo': 'Estudiante'}))
         else:
             datos = request.POST.dict()
             cuil = datos.get("cuil")
@@ -127,6 +129,8 @@ def estudianteModificar(request, pk):
 
 #========================================================
 # ============== Asesor =================================
+@login_required(login_url='usuarios:login')
+@permission_required('asesor.add_asesor', raise_exception=True)
 def nuevoAsesor(request):
     if request.method == 'POST':
         form_persona = AsesorForm(request.POST, request.FILES)
@@ -135,7 +139,8 @@ def nuevoAsesor(request):
             asesor_instance.guardar_dni()
             asesor_instance.save()
             messages.success(request, 'Datos de asesor guardados correctamente')
-            return redirect(reverse('persona:detalle_asesor', args={asesor_instance.id}))
+            #return redirect(reverse('persona:detalle_asesor', args={asesor_instance.id}))
+            return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': asesor_instance.id, 'grupo': 'Asesor'}))
         else:
             datos = request.POST.dict()
             archivos = request.FILES.dict()
@@ -184,7 +189,8 @@ def nuevoDocente(request):
             docente_instance.guardar_dni()
             docente_instance.save()
             messages.success(request, 'Datos de docente guardados correctamente')
-            return redirect(reverse('persona:detalle_docente', args={docente_instance.id}))
+            #return redirect(reverse('persona:detalle_docente', args={docente_instance.id}))
+            return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': docente_instance.id, 'grupo': 'Docente'}))
         else:
             datos = request.POST.dict()
             cuil = datos.get("cuil")
