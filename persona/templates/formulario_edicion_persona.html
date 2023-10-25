@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {% if tipo_persona == "estudiante" %}
+        Editar Estudiante
+    {% elif tipo_persona == "docente" %}
+        Editar Docente
+    {% else %}
+        Editar Asesor
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="body-pages">
+    <div class="container titulo-formulario">
+    <h1>
+        {% if tipo_persona == "estudiante" %}
+            Estudiante:
+        {% elif tipo_persona == "docente" %}
+            Docente: {{persona.nombre_completo}}
+        {% else %}
+            Asesor: {{persona.nombre_completo}}
+        {% endif %}
+    </h1>
+
+    </div>
+      <section>
+        <div class="container body1">
+          <div class="card">
+            <div class="card-header1">
+              Ingrese los Datos Solicitados
+            </div>
+            <div class="card-body">
+
+              <form method="post" class="row g-3" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <div class="col-md-6">
+                      <label for="id_nombre" class="form-label">Nombre</label>
+                      <input id="id_nombre" type="text" name="nombre" class="form-control" value="{{ form_persona.nombre.value }}" onkeypress="return validacionDeTeclasLetras(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_apellido" class="form-label">Apellido</label>
+                      <input id="id_apellido" type="text" name="apellido" class="form-control" value="{{ form_persona.apellido.value }}" onkeypress="return validacionDeTeclasLetras(event);" required>
+                  </div>
+                  <div class="col-md-6">
+                      <p><strong>CUIL: </strong>{{ persona.cuil }}</p>
+                      <!--<label for="id_cuil" class="form-label">CUIL</label>
+                      <input id="id_cuil" type="text" name="cuil" class="form-control" value="{{ form_persona.cuil.value }}" onkeypress="return controlCuil(event);" required>-->
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_telefono" class="form-label">Teléfono</label>
+                      <input id="id_telefono" type="text" name="telefono" class="form-control" value="{{ form_persona.telefono.value }}" onkeypress="return validacionDeTeclasNumericas(event);">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="id_email" class="form-label">Correo Electronico</label>
+                      <input id="id_email" type="email" name="email" class="form-control" value="{{ form_persona.email.value }}" required>
+                  </div>
+                {% if tipo_persona == "estudiante" %}
+                    <div class="col-md-6">
+                      <label for="id_matricula" class="form-label">Matricula</label>
+                      <input id="id_matricula" type="text" name="matricula" class="form-control" value="{{ form_persona.matricula.value }}" onkeypress="return validacionDeTeclasNumericas(event);" required>
+                    </div>
+                {% endif %}
+
+                {% if tipo_persona == "asesor" %}
+                    <div class="col-md-6">
+                      <label for="id_cv" class="form-label">CV</label>
+                        <input id="id_cv" type="file" name="cv" class="form-control" required>
+                        <p mt-2><strong>CV (actual): </strong><a href="{{ persona.cv.url }}">{{ persona.cv.name }}</a></p>
+                    </div>
+                {% endif %}
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-outline-dark boton">Guardar <i class="far fa-save"></i></button>
+                  <button type="reset" class="btn btn-outline-dark boton">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+  </div>
+{% endblock  %}
+
+{% block funciones %}
+    <script src="{% static 'scripts/validacionPersona.js' %}"></script>
+{% endblock %}

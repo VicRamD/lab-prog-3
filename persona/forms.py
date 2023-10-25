@@ -2,6 +2,7 @@ from django import forms
 from persona.models import Estudiante, Persona, Asesor, Docente
 from django.core.exceptions import ValidationError
 
+#==================Para Estudiantes================================
 class EstudianteForm(forms.ModelForm):
 
     class Meta:
@@ -37,7 +38,43 @@ class EstudianteForm(forms.ModelForm):
                  raise forms.ValidationError(mensaje, code="cuil repetido", )
          return cuil
 
+    def clean(self):
+        datos = super().clean()
+        nombre = datos.get('nombre')
+        apellido = datos.get('apellido')
+        email = datos.get('email')
+        matricula = datos.get('matricula')
 
+        if len(nombre) == 0 or len(apellido) == 0 or len(email) == 0 or len(matricula) == 0:
+            raise forms.ValidationError("Hay al menos un campo vacio que es requerido, deb completarlo", code="Sin completar", )
+
+class EstudianteUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Estudiante
+        fields = ('nombre', 'apellido', 'email', 'telefono', 'matricula')
+        #fields = [__all__]
+        widgets = {
+            'nombre': forms.TextInput(attrs={"id": "id_nombre"}),
+            'apellido': forms.TextInput(attrs={"id": "id_apellido"}),
+            #'cuil': forms.TextInput(attrs={"id": "id_cuil"}),
+            'email': forms.EmailInput(attrs={"id": "id_email"}),
+            'telefono': forms.TextInput(attrs={"id": "id_telefono"}),
+            'matricula': forms.TextInput(attrs={"id": "id_matricula"}),
+        }
+
+    def clean(self):
+        datos = super().clean()
+        nombre = datos.get('nombre')
+        apellido = datos.get('apellido')
+        email = datos.get('email')
+        matricula = datos.get('matricula')
+
+        if len(nombre) == 0 or len(apellido) == 0 or len(email) == 0 or len(matricula) == 0:
+            raise forms.ValidationError("Hay al menos un campo vacio que es requerido, deb completarlo", code="Sin completar", )
+
+#==============================================================================
+#======================Para Asesores===========================================
 class AsesorForm(forms.ModelForm):
     class Meta:
         model = Asesor
@@ -80,6 +117,39 @@ class AsesorForm(forms.ModelForm):
                  raise forms.ValidationError(mensaje, code="cuil repetido", )
          return cuil
 
+class AsesorUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Asesor
+        fields = ('nombre', 'apellido', 'email', 'telefono', 'cv')
+        #fields = [__all__]
+        widgets = {
+            'nombre': forms.TextInput(attrs={"id": "id_nombre"}),
+            'apellido': forms.TextInput(attrs={"id": "id_apellido"}),
+            'email': forms.EmailInput(attrs={"id": "id_email"}),
+            'telefono': forms.TextInput(attrs={"id": "id_telefono"}),
+            'cv': forms.ClearableFileInput(attrs={"id": "id_cv"}),
+        }
+
+    def clean_cv(self):
+        cv = self.cleaned_data['cv']
+        if cv:
+            extension = cv.name.rsplit('.', 1)[1].lower()
+            if extension != 'pdf':
+                raise ValidationError('El archivo seleccionado no tiene el formato PDF.')
+        return cv
+
+    def clean(self):
+        datos = super().clean()
+        nombre = datos.get('nombre')
+        apellido = datos.get('apellido')
+        email = datos.get('email')
+
+        if len(nombre) == 0 or len(apellido) == 0 or len(email) == 0:
+            raise forms.ValidationError("Hay al menos un campo vacio que es requerido, deb completarlo", code="Sin completar", )
+
+#==============================================================================
+#======================Para Docentes===========================================
 class DocenteForm(forms.ModelForm):
     class Meta:
         model = Docente
@@ -112,3 +182,24 @@ class DocenteForm(forms.ModelForm):
                 # raise ValidationError(mensaje)
                 raise forms.ValidationError(mensaje, code="cuil repetido", )
         return cuil
+
+class DocenteUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Docente
+        fields = ('nombre', 'apellido', 'email', 'telefono')
+        widgets = {
+            'nombre': forms.TextInput(attrs={"id": "id_nombre"}),
+            'apellido': forms.TextInput(attrs={"id": "id_apellido"}),
+            'email': forms.EmailInput(attrs={"id": "id_email"}),
+            'telefono': forms.TextInput(attrs={"id": "id_telefono"}),
+        }
+
+    def clean(self):
+        datos = super().clean()
+        nombre = datos.get('nombre')
+        apellido = datos.get('apellido')
+        email = datos.get('email')
+
+        if len(nombre) == 0 or len(apellido) == 0 or len(email) == 0:
+            raise forms.ValidationError("Hay al menos un campo vacio que es requerido, deb completarlo", code="Sin completar", )

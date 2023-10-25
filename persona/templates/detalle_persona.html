@@ -38,13 +38,22 @@
                   <p><strong>Apellido: </strong>{{ persona.apellido }}</p>
                   <p><strong>CUIL: </strong>{{ persona.cuil }}</p>
                   <p><strong>Email: </strong>{{ persona.email }}</p>
-                  <p><strong>Telefono: </strong>{{ persona.telefono }}</p>
+                  <p><strong>Teléfono: </strong>{{ persona.telefono }}</p>
                   {% if tipo_persona == "estudiante" %}
                     <p><strong>Matricula: </strong>{{ persona.matricula }}</p>
                   {% elif tipo_persona == "asesor" %}
                     <p><strong>CV: </strong><a href="{{ persona.cv.url }}">Ver documento</a></p>
                   {% endif %}
 
+                </div>
+                <div class="card-footer">
+                    {% if tipo_persona == "estudiante" %}
+                        <a class="btn btn-outline-dark m-2" href="{% url 'persona:editar_estudiante' persona.id %}">Editar <i class="fas fa-edit"></i></a>
+                    {% elif tipo_persona == "docente" %}
+                        <a class="btn btn-outline-dark m-2" href="{% url 'persona:editar_docente' persona.id %}">Editar <i class="fas fa-edit"></i></a>
+                    {% else %}
+                        <a class="btn btn-outline-dark m-2" href="{% url 'persona:editar_asesor' persona.id %}">Editar <i class="fas fa-edit"></i></a>
+                    {% endif %}
                 </div>
               </div>
             </div>

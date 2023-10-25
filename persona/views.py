@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-from persona.forms import EstudianteForm, AsesorForm, DocenteForm
+from persona.forms import EstudianteForm, AsesorForm, DocenteForm, EstudianteUpdateForm, AsesorUpdateForm, DocenteUpdateForm
 from django.urls import reverse
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
 
 from persona.models import Estudiante, Asesor, Docente
 # Create your views here.
@@ -35,8 +36,6 @@ def listadoPersonas(request):
         tipo_seleccionado = request.POST.get('tipo_seleccionado')
         cuil_buscado = request.POST.get('cuil_buscado')
         estudiantes_lista = estudiantes
-        print(type(tipo_seleccionado))
-        print(type(cuil_buscado))
         docentes_lista = docentes
         asesores_lista = asesores
         #listas = []
@@ -111,7 +110,20 @@ def estudianteDetalle(request, pk):
                   {'persona': estudiante, 'tipo_persona': 'estudiante'})
 
 def estudianteModificar(request, pk):
-    estudiante = get_object_or_404(Estudiante, pk=request.POST['id'])
+    estudiante_revisado = Estudiante.objects.get(id=pk)
+    estudiante = get_object_or_404(Estudiante, pk=pk)
+    if request.method == 'POST':
+        form_persona = EstudianteUpdateForm(request.POST, request.FILES, instance=estudiante)
+        print(form_persona.is_valid())
+        if form_persona.is_valid():
+            form_persona.save()
+            messages.success(request, 'Se ha actualizado correctamente los datos del estudiante')
+            return redirect(reverse('persona:detalle_estudiante', args=[estudiante.id]))
+    else:
+        form_persona = EstudianteUpdateForm(instance=estudiante)
+    return render(request, 'formulario_edicion_persona.html', {'form_persona': form_persona,
+                                                           'tipo_persona': 'estudiante',
+                                                               'persona': estudiante_revisado})
 
 #========================================================
 # ============== Asesor =================================
@@ -147,6 +159,21 @@ def asesorDetalle(request, pk):
     return render(request, 'detalle_persona.html',
                   {'persona': asesor, 'tipo_persona': 'asesor'})
 
+def asesorModificar(request, pk):
+    asesorDetalle_revisado = Asesor.objects.get(id=pk)
+    asesor = get_object_or_404(Asesor, pk=pk)
+    if request.method == 'POST':
+        form_persona = AsesorUpdateForm(request.POST, request.FILES, instance=asesor)
+        if form_persona.is_valid():
+            form_persona.save()
+            messages.success(request, 'Se ha actualizado correctamente los datos del asesor')
+            return redirect(reverse('persona:detalle_asesor', args=[asesor.id]))
+    else:
+        form_persona = AsesorUpdateForm(instance=asesor)
+    return render(request, 'formulario_edicion_persona.html', {'form_persona': form_persona,
+                                                           'tipo_persona': 'asesor',
+                                                               'persona': asesorDetalle_revisado})
+
 #========================================================
 # ============== Docente =================================
 def nuevoDocente(request):
@@ -177,6 +204,21 @@ def docenteDetalle(request, pk):
     docente = get_object_or_404(Docente, pk=pk)
     return render(request, 'detalle_persona.html',
                   {'persona': docente, 'tipo_persona': 'docente'})
+
+def docenteModificar(request, pk):
+    docente_revisado = Docente.objects.get(id=pk)
+    docente = get_object_or_404(Docente, pk=pk)
+    if request.method == 'POST':
+        form_persona = DocenteUpdateForm(request.POST, request.FILES, instance=docente)
+        if form_persona.is_valid():
+            form_persona.save()
+            messages.success(request, 'Se ha actualizado correctamente los datos del docente')
+            return redirect(reverse('persona:detalle_docente', args=[docente.id]))
+    else:
+        form_persona = DocenteUpdateForm(instance=docente)
+    return render(request, 'formulario_edicion_persona.html', {'form_persona': form_persona,
+                                                           'tipo_persona': 'docente',
+                                                               'persona': docente_revisado})
 
 #========================================================
 #Funciones para ser usadas
@@ -218,3 +260,4 @@ def mensajeExtensionCV(request, cv):
         extension = cv.name.rsplit('.', 1)[1].lower()
         if extension != 'pdf':
             messages.error(request, 'El archivo seleccionado no tiene el formato PDF.')
+
