@@ -7,6 +7,7 @@ from django.contrib import messages
 from persona.models import Estudiante, Asesor, Docente
 # Create your views here.
 
+# ============== Estudiante =================================
 def nuevoEstudiante(request):
     if request.method == 'POST':
         form_persona = EstudianteForm(request.POST, request.FILES)
@@ -37,6 +38,11 @@ def estudianteDetalle(request, pk):
     return render(request, 'detalle_persona.html',
                   {'persona': estudiante, 'tipo_persona': 'estudiante'})
 
+def estudianteModificar(request, pk):
+    estudiante = get_object_or_404(Estudiante, pk=request.POST['id'])
+
+#========================================================
+# ============== Asesor =================================
 def nuevoAsesor(request):
     if request.method == 'POST':
         form_persona = AsesorForm(request.POST, request.FILES)
@@ -69,6 +75,8 @@ def asesorDetalle(request, pk):
     return render(request, 'detalle_persona.html',
                   {'persona': asesor, 'tipo_persona': 'asesor'})
 
+#========================================================
+# ============== Docente =================================
 def nuevoDocente(request):
     if request.method == 'POST':
         form_persona = DocenteForm(request.POST, request.FILES)
@@ -98,7 +106,7 @@ def docenteDetalle(request, pk):
     return render(request, 'detalle_persona.html',
                   {'persona': docente, 'tipo_persona': 'docente'})
 
-
+#========================================================
 #Funciones para ser usadas
 def mensajeErrorCuil(request, cuil):
     estudiantes_con_cuil = Estudiante.objects.filter(cuil=cuil)
