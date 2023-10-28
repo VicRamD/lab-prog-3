@@ -1,5 +1,5 @@
 # from django.http import HttpResponse
-
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils import timezone
@@ -12,6 +12,8 @@ from gestion.models import Proyecto, Comision, InstanciaEvaluacion, ComisionProy
 from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm, ComisionForm, TribunalForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision, \
     AsesorProyecto, RolTribunal
+from usuarios.views import asignarUsuariosGrupo, es_asesor, es_comision, es_tribunal, es_estudiante, es_departamento, \
+    es_docente, es_movimientos
 
 
 # Create your views here.
@@ -92,7 +94,6 @@ def filtrarProyectoEstadoYRango(estado, fecha_desde, fecha_hasta):
     return proyectos_en_rango
 
 
-
 def seccionProyectos(request):
     proyectos = Proyecto.objects.all().order_by('-fecha_presentacion')
     if request.method == 'POST':
@@ -116,7 +117,6 @@ def seccionProyectos(request):
     return render(request, 'proyectos/proyectos.html', {'proyectos': proyectos})
 
 
-
 def verificar_tiene_tribunal(proyecto_id):
     try:
         proyecto = Proyecto.objects.get(id=proyecto_id)
@@ -125,7 +125,6 @@ def verificar_tiene_tribunal(proyecto_id):
         return True
     except Proyecto.tribunal_proyecto.RelatedObjectDoesNotExist:
         print(proyecto.tribunal_proyecto.id)
-        # Manejo de excepciones si el proyecto no se encuentra
         return False
 
 
@@ -142,7 +141,8 @@ def detalleProyecto(request, id):
             'proyecto': proyecto,
             'tribunal_true': False})
 
-
+@login_required
+@user_passes_test(es_departamento)
 def nuevoProyecto(request):
     if request.method == 'POST':
         form_proyecto = ProyectoForm(request.POST, request.FILES, prefix='proyecto')
@@ -163,7 +163,7 @@ def nuevoProyecto(request):
             messages.success(request, 'Se ha creado el proyecto correctamente. Asigne un tribunal para el mismo.')
             # return redirect(reverse('gestion:detalle_proyecto', args={proyecto_instance.id}))
             # return redirect('gestion:detalle_proyecto', proyecto_instance.id)
-            return redirect('gestion:nuevo_tribunal',proyecto_instance.id)
+            return redirect('gestion:nuevo_tribunal', proyecto_instance.id)
     else:
         form_proyecto = ProyectoForm(prefix='proyecto')
 
@@ -180,6 +180,7 @@ def nuevoProyecto(request):
     })
 
 
+@user_passes_test(es_movimientos)
 def cargarNuevoPTF(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
     ultimo_estado = proyecto.proyecto_instancia.last()
@@ -199,7 +200,7 @@ def cargarNuevoPTF(request, id):
         ultima_evaluacion.nuevoPTF = nuevo_adjunto
         ultima_evaluacion.save()
         return redirect(reverse('gestion:movimientos', args=[proyecto.id]))
-        #return render(request, 'movimientos/movimientos.html', {'proyecto': proyecto})
+        # return render(request, 'movimientos/movimientos.html', {'proyecto': proyecto})
 
 
 def habilitarDefensa(proyecto):
@@ -221,7 +222,7 @@ def habilitarEvaluacion(proyecto):
     if ultimo_estado.descripcion == 'FINALIZADO':
         return False
     elif ultima_evaluacion is None:
-        #if ultimo_estado.descripcion == 'COMISION DE SEGUIMIENTO':
+        # if ultimo_estado.descripcion == 'COMISION DE SEGUIMIENTO':
         return True
     elif ultima_evaluacion.estado == 'OBSERVADO' and not ultima_evaluacion.nuevoPTF:
         return False
@@ -244,6 +245,7 @@ def controlEstado(id):
         agregarInstanciaEvaluacion('FINALIZADO', proyecto)
 
 
+@user_passes_test(es_movimientos)
 def movimientos(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
     if request.method == 'POST':
@@ -279,10 +281,6 @@ def movimientos(request, id):
         'habilitar_evaluacion': habilitar_evaluacion})
 
 
-def estadisticas(request):
-    return render(request, 'proyectos/eProyectos.html')
-
-
 def seccionComision(request):
     comisiones = Comision.objects.all()
     return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
@@ -297,6 +295,7 @@ def agregarIntegranteComision(integrantes, comision):
         integrante_comision_instance.save()
 
 
+@user_passes_test(es_departamento)
 def nuevaComision(request):
     if request.method == 'POST':
         form_comision = ComisionForm(request.POST, request.FILES)
@@ -304,11 +303,10 @@ def nuevaComision(request):
         if form_comision.is_valid() and integrantes_seleccionados:
             comision_instance = form_comision.save()
             agregarIntegranteComision(integrantes_seleccionados, comision_instance)
+            asignarUsuariosGrupo(integrantes_seleccionados, 'Comision de Seguimiento')
 
-            messages.success(request, 'Se ha creado la comision correctamente.')
+            messages.success(request, 'Se ha creado la comisión correctamente.')
             return redirect('gestion:detalle_integrantes_comision', comision_instance.id)
-            # return redirect('detalle_integrantes_comision', id=comision_instance.id)
-            # return redirect(reverse('detalle_integrantes_comision', args=[comision_instance.id]))
 
     else:
         form_comision = ComisionForm()
@@ -355,6 +353,7 @@ def agregarIntegrantesTribunal(integrantes, tribunal, rol):
         integrante_tribunal_instance.save()
 
 
+@user_passes_test(es_departamento)
 def nuevoTribunal(request, id):
     if request.method == 'POST':
         form_tribunal = TribunalForm(request.POST, request.FILES, prefix='tribunal')
@@ -362,13 +361,15 @@ def nuevoTribunal(request, id):
         vocales_seleccionados = request.POST.getlist('vocales_seleccionados')
         vocales_suplentes_seleccionados = request.POST.getlist('vocales_suplentes_seleccionados')
         if form_tribunal.is_valid() and presidente_seleccionado and vocales_seleccionados and vocales_suplentes_seleccionados:
-            #tribunal_instance = form_tribunal.save()
             tribunal_instance = form_tribunal.save(commit=False)
             tribunal_instance.proyecto = get_object_or_404(Proyecto, id=id)
             tribunal_instance.save()
             agregarIntegrantesTribunal(presidente_seleccionado, tribunal_instance, 'Presidente')
             agregarIntegrantesTribunal(vocales_seleccionados, tribunal_instance, 'Vocal')
             agregarIntegrantesTribunal(vocales_suplentes_seleccionados, tribunal_instance, 'Vocal suplente')
+            asignarUsuariosGrupo(presidente_seleccionado, 'Tribunal')
+            asignarUsuariosGrupo(vocales_seleccionados, 'Tribunal')
+            asignarUsuariosGrupo(vocales_seleccionados, 'Tribunal')
 
             messages.success(request, 'Se ha asignado el tribunal al pryecto correctamente.')
             return redirect('gestion:detalle_proyecto', id)

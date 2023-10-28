@@ -11,9 +11,8 @@
             <!-- Si no está logueado sale la sección de iniciar sesión, caso contarrio no -->
         {% if user.is_authenticated %}
         <div class="col-11 landing-container mt-4">
-            <p class="landing-paragraph">
-                ¡Bienvenido de nuevo! GTF te ofrece una eficiente gestión de tus proyectos académicos.
-            </p>
+            <p class="landing-paragraph">¡Bienvenido {{user.first_name}} de nuevo!</p>
+            <p class="landing-paragraph">GTF te ofrece una eficiente gestión de tus proyectos académicos.</p>
         </div>
         {% else %}
         <div class="col-7 landing-container mt-4">
