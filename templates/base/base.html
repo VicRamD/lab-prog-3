@@ -41,7 +41,7 @@ rel="stylesheet" />
                         <a class="nav-link boton-nav" href="{% url 'persona:lista_personas' %}">Docentes y Estudiantes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link boton-nav" href="">Proyectos asociados</a>
+                        <a class="nav-link boton-nav" href="{% url 'persona:listado_proyectos' %}">Proyectos asociados</a>
                     </li>
                 </ul>
                 <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark"><i class="fas fa-user-circle"></i> {{ request.user.username }} - Cerrar sesión</a>

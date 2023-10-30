@@ -6,7 +6,9 @@ from django.urls import reverse
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 
-from persona.models import Estudiante, Asesor, Docente
+from persona.models import Estudiante, Asesor, Docente, IntegranteProyecto, RolProyecto, AsesorProyecto
+from usuarios.models import Usuario_persona
+from gestion.models import Proyecto
 # Create your views here.
 
 def buscarStringEnCuil(tipo, cuil):
@@ -260,6 +262,50 @@ def docenteEliminar(request):
     return redirect(reverse('persona:lista_personas'))
 
 #========================================================
+#=========================================================
+def listado_proyectos(request):
+    current_user = request.user
+    if request.user.is_authenticated:
+        relacion = Usuario_persona.objects.get(user=current_user)
+        if relacion.tipo == "estudiante":
+            persona = relacion.estudiante
+            proyectos_que_integra = IntegranteProyecto.objects.filter(estudiante=persona)
+            proyectos_lista = proyectos_devolver(proyectos_que_integra)
+        elif relacion.tipo == "docente":
+            persona = relacion.docente
+            proyectos_que_integra = RolProyecto.objects.filter(docente=persona)
+            proyectos_lista = proyectos_devolver(proyectos_que_integra)
+        else:
+            persona = relacion.asesor
+            proyectos_que_integra = AsesorProyecto.objects.filter(asesor=persona)
+            proyectos_lista = proyectos_devolver(proyectos_que_integra)
+
+        return render(request, 'con_sesion/ptf_relacionados_cuenta.html', {
+            'persona': persona,
+            'tipo_persona': relacion.tipo,
+            'proyectos_lista': proyectos_lista,
+        })
+
+def estado_proyecto(request):
+    current_user = request.user
+    if request.user.is_authenticated:
+        relacion = Usuario_persona.objects.get(user=current_user)
+        if relacion.tipo == "estudiante":
+            persona = relacion.estudiante
+            tipo = "estudiante"
+        elif relacion.tipo == "docente":
+            persona = relacion.docente
+            tipo = "docente"
+        else:
+            persona = relacion.asesor
+            tipo = "asesor"
+
+        return render(request, 'con_sesion/ptf_estado_estudiante.html', {
+                                                        'persona': persona,
+                                                        'tipo_persona': tipo,
+                                                        })
+
+#========================================================
 #Funciones para ser usadas
 def mensajeErrorCuil(request, cuil):
     estudiantes_con_cuil = Estudiante.objects.filter(cuil=cuil)
@@ -300,3 +346,8 @@ def mensajeExtensionCV(request, cv):
         if extension != 'pdf':
             messages.error(request, 'El archivo seleccionado no tiene el formato PDF.')
 
+def proyectos_devolver(proyectos_que_integra):
+    proyectos_lista = []
+    for proyecto in proyectos_que_integra:
+        proyectos_lista.append(proyecto.proyecto)
+    return proyectos_lista

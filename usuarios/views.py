@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from .forms import CrearUsuarioForm
 from persona.models import Estudiante, Docente, Asesor
 from django.contrib.auth.models import User
+from usuarios.models import Usuario_estudiante, Usuario_docente, Usuario_asesor, Usuario_persona
 
 
 # Create your views here.
@@ -78,6 +79,7 @@ def registrar_usuario(request, id, grupo):
             usuario_instance.last_name = persona.apellido
             usuario_instance.email = persona.email
             usuario_instance.save()
+            enlace_usuario_persona(usuario_instance, persona, grupo)
             usuario_group = Group.objects.get(name=grupo)
             usuario_instance.groups.add(usuario_group)
             return redirect('persona:lista_personas')
@@ -114,3 +116,15 @@ def es_movimientos(user):
     grupos_permiso = ['Tribunal', 'Comision de Seguimiento', 'Departamento Academico']
 
     return user.groups.filter(name__in=grupos_permiso).exists()
+
+
+def enlace_usuario_persona(user, persona, grupo):
+    if grupo == 'Estudiante':
+        usuario_persona = Usuario_persona(user=user, estudiante=persona, asesor=None, docente=None, tipo="estudiante")
+        usuario_persona.save()
+    elif grupo == 'Docente':
+        usuario_persona = Usuario_persona(user=user, estudiante=None, asesor=None, docente=persona, tipo="docente")
+        usuario_persona.save()
+    else:
+        usuario_persona = Usuario_persona(user=user, estudiante=None, asesor=persona, docente=None, tipo="asesor")
+        usuario_persona.save()
