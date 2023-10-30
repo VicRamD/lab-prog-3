@@ -14,7 +14,30 @@
     <div class="container p-6 border-dark">
       <div class="row">
         <div class="col-sm-12 columna-tabla">
-
+          <div class="progress">
+            {% if proyecto.proyecto_instancia.last.descripcion == 'COMISION DE SEGUIMIENTO' %}
+              <div id="progresion" class="progress-bar bg-success" style="width:25%">
+                En Comisión de Seguimiento
+              </div>
+            {% elif proyecto.proyecto_instancia.last.descripcion == 'TRIBUNAL EVALUADOR' %}
+              <div id="progresion" class="progress-bar bg-success" style="width:50%">
+                En Tribunal Evaluador
+              </div>
+            {% elif proyecto.proyecto_instancia.last.descripcion == 'DEFENSA TRABAJO FINAL' %}
+              <div id="progresion" class="progress-bar bg-success" style="width:75%">
+                Para Defensa
+              </div>
+            {% elif proyecto.proyecto_instancia.last.descripcion == 'FINALIZADO' and proyecto.proyecto_instancia.instancia_evaluacion.estado == 'RECHAZADO' %}
+              <div id="progresion" class="progress-bar bg-danger" style="width:100%">
+                Finalizado - Reprobado
+              </div>
+            {% else %}
+              <div class="progress-bar bg-success" style="width:100%">
+                Finalizado - Aprobado
+              </div>
+            {% endif %}
+          </div>
+          </div>
           <div class="table-responsive mt-3">
             <table class="table table-hover table-sm">
                 <tr>
@@ -33,24 +56,36 @@
                     <th>Fecha de presentación</th>
                     <td>{{proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                 </tr>
+                <tr>
+                    <th colspan="2" class="bg-warning seccion-tabla">Integrantes del Proyecto</th>
+                </tr>
                 {% for integrante in proyecto.proyecto_integrante.all%}
                 <tr>
                     <th>Integrante</th>
-                    <td><a href="{% url 'persona:detalle_estudiante' integrante.estudiante.id %}">{{integrante.estudiante.matricula}} - {{integrante.estudiante.apellido}} {{integrante.estudiante.nombre}}</a></td>
+                    <td>{{integrante.estudiante.nombre_completo}}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <th colspan="2" class="bg-warning seccion-tabla">Directores del Proyecto</th>
+                </tr>
                 {% for rol in proyecto.proyecto.all%}
                 <tr>
                     <th>{{rol.descripcion}}</th>
-                    <td><a href="{% url 'persona:detalle_docente' rol.docente.id %}">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
+                    <td>{{rol.docente.nombre_completo}}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <th colspan="2" class="bg-warning seccion-tabla">Asesor del Proyecto</th>
+                </tr>
                 {% for asesor in proyecto.asesor_proyecto.all%}
                 <tr>
                     <th>Asesor</th>
-                    <td><a href="{% url 'persona:detalle_asesor' asesor.asesor.id %}">{{asesor.asesor.apellido}} {{asesor.asesor.nombre}}</a></td>
+                    <td>{{asesor.asesor.nombre_completo}}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="2" class="bg-warning"></td>
+                </tr>
                 <tr>
                     <th>Archivo del Proyecto</th>
                     <td><a href="{{proyecto.nota_aceptacion.url}}">Ver documento</a></td>
@@ -63,27 +98,17 @@
                     <th>Nota al Director</th>
                     <td><a href="{{proyecto.nota_aceptacion.url}}">Ver documento</a></td>
                 </tr>
-                <tr>
-                    <th>Comisión asignada</th>
-                    <td><a href="{ url 'gestion:detalle_integrantes_comision' proyecto.comision_proyecto.comision.id %}">CSTF-{{proyecto.comision_proyecto.comision.id} - {proyecto.comision_proyecto.comision.descripcio}}</a></td>
-
-                </tr>
                 {% if tribunal_true %}
-                {% for rol in proyecto.tribunal_proyecto.tribunal.all%}
-                <tr>
-                    <th>{{rol.descripcion}}</th>
-                    <td><a href="{% url 'persona:detalle_docente' rol.docente.id %}">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <tr>
-                    <th>Tribunal:</th>
-                    <td><a href="{% url 'persona:nuevo_tribunal' proyecto.id %}">Asignar Tribunal</a></td>
-                </tr>
+                    {% for rol in proyecto.tribunal_proyecto.tribunal.all%}
+                    <tr>
+                        <th>{{rol.descripcion}}</th>
+                        <td><a href="{ url 'persona:detalle_docente' rol.docente.id %">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
+                    </tr>
+                    {% endfor %}
                 {% endif %}
                 <tr>
                     <th>Estado Actual</th>
-                    <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{proyecto.proyecto_instancia.last.descripcion}}</a></td>
+                    <td>{{proyecto.proyecto_instancia.last.descripcion}}</td>
                 </tr>
             </table>
           </div>

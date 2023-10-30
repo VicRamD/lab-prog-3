@@ -29,12 +29,12 @@
               <tbody>
               {% for proyecto in proyectos_lista %}
                 <tr>
-                  <td><a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">PTF-{{proyecto.id}}</a></td>
+                  <td>PTF-{{proyecto.id}}</td>
                   <td>{{proyecto.titulo}}</td>
                   <td>{{proyecto.descripcion}}</td>
                   <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{ proyecto.proyecto_instancia.last.descripcion }}</a></td>
                   <td>
-                      <a href="#">Detalle</a>
+                      <a href="{% url 'persona:estado_del_proyecto' proyecto.id %}">Detalle</a>
                   </td>
                 </tr>
               {% endfor %}

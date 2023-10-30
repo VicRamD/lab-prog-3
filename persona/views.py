@@ -286,23 +286,24 @@ def listado_proyectos(request):
             'proyectos_lista': proyectos_lista,
         })
 
-def estado_proyecto(request):
+def estado_proyecto(request, pk):
     current_user = request.user
+    print(pk)
+    print(type(pk))
     if request.user.is_authenticated:
+        proyecto = Proyecto.objects.get(id=pk)
         relacion = Usuario_persona.objects.get(user=current_user)
         if relacion.tipo == "estudiante":
             persona = relacion.estudiante
-            tipo = "estudiante"
         elif relacion.tipo == "docente":
             persona = relacion.docente
-            tipo = "docente"
         else:
             persona = relacion.asesor
-            tipo = "asesor"
 
-        return render(request, 'con_sesion/ptf_estado_estudiante.html', {
+        return render(request, 'con_sesion/ptf_estado_proyecto.html', {
                                                         'persona': persona,
-                                                        'tipo_persona': tipo,
+                                                        'proyecto': proyecto,
+                                                        'tipo_persona': relacion.tipo,
                                                         })
 
 #========================================================
