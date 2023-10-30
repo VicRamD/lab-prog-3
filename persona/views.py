@@ -288,8 +288,6 @@ def listado_proyectos(request):
 
 def estado_proyecto(request, pk):
     current_user = request.user
-    print(pk)
-    print(type(pk))
     if request.user.is_authenticated:
         proyecto = Proyecto.objects.get(id=pk)
         relacion = Usuario_persona.objects.get(user=current_user)

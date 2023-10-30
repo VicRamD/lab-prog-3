@@ -14,29 +14,31 @@
     <div class="container p-6 border-dark">
       <div class="row">
         <div class="col-sm-12 columna-tabla">
-          <div class="progress">
-            {% if proyecto.proyecto_instancia.last.descripcion == 'COMISION DE SEGUIMIENTO' %}
-              <div id="progresion" class="progress-bar bg-success" style="width:25%">
-                En Comisión de Seguimiento
+          <div class="progresion">
+              <div class="progress">
+                {% if proyecto.proyecto_instancia.last.descripcion == 'COMISION DE SEGUIMIENTO' %}
+                  <div class="progress-bar bg-success" style="width:25%">
+                    En Comisión de Seguimiento
+                  </div>
+                {% elif proyecto.proyecto_instancia.last.descripcion == 'TRIBUNAL EVALUADOR' %}
+                  <div class="progress-bar bg-success" style="width:50%">
+                    En Tribunal Evaluador
+                  </div>
+                {% elif proyecto.proyecto_instancia.last.descripcion == 'DEFENSA TRABAJO FINAL' %}
+                  <div class="progress-bar bg-success" style="width:75%">
+                    Para Defensa
+                  </div>
+                {% elif proyecto.proyecto_instancia.last.descripcion == 'FINALIZADO' and proyecto.proyecto_instancia.instancia_evaluacion.estado == 'RECHAZADO' %}
+                  <div class="progress-bar bg-danger" style="width:100%">
+                    Finalizado - Reprobado
+                  </div>
+                {% else %}
+                  <div class="progress-bar bg-success" style="width:100%">
+                    Finalizado - Aprobado
+                  </div>
+                {% endif %}
               </div>
-            {% elif proyecto.proyecto_instancia.last.descripcion == 'TRIBUNAL EVALUADOR' %}
-              <div id="progresion" class="progress-bar bg-success" style="width:50%">
-                En Tribunal Evaluador
               </div>
-            {% elif proyecto.proyecto_instancia.last.descripcion == 'DEFENSA TRABAJO FINAL' %}
-              <div id="progresion" class="progress-bar bg-success" style="width:75%">
-                Para Defensa
-              </div>
-            {% elif proyecto.proyecto_instancia.last.descripcion == 'FINALIZADO' and proyecto.proyecto_instancia.instancia_evaluacion.estado == 'RECHAZADO' %}
-              <div id="progresion" class="progress-bar bg-danger" style="width:100%">
-                Finalizado - Reprobado
-              </div>
-            {% else %}
-              <div class="progress-bar bg-success" style="width:100%">
-                Finalizado - Aprobado
-              </div>
-            {% endif %}
-          </div>
           </div>
           <div class="table-responsive mt-3">
             <table class="table table-hover table-sm">
