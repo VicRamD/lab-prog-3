@@ -38,14 +38,37 @@ class EstudianteForm(forms.ModelForm):
                  raise forms.ValidationError(mensaje, code="cuil repetido", )
          return cuil
 
+    def clean_matricula(self):
+        matricula = self.cleaned_data['matricula']
+        if matricula:
+            estudiantes_con_matricula = Estudiante.objects.filter(matricula=matricula)
+            if estudiantes_con_matricula.count() != 0:
+                mensaje = "Hay un estudiante registrado con el cuil " + matricula + ": " + estudiantes_con_matricula[0].nombre_completo()
+                raise forms.ValidationError(mensaje, code="matricula repetida", )
+            return matricula
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        estudiantes_con_email = Estudiante.objects.filter(email=email)
+        if estudiantes_con_email.count() != 0:
+            mensaje = "Hay un estudiante registrado con el cuil " + email + ": " + estudiantes_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        docentes_con_email = Docente.objects.filter(email=email)
+        if docentes_con_email.count() != 0:
+            mensaje = "Hay un docente registrado con el cuil " + email + ": " + docentes_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        asesores_con_email = Asesor.objects.filter(email=email)
+        if asesores_con_email.count() != 0:
+            mensaje = "Hay un asesor registrado con el cuil " + email + ": " + asesores_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        return email
+
     def clean(self):
         datos = super().clean()
         nombre = datos.get('nombre')
         apellido = datos.get('apellido')
-        email = datos.get('email')
-        matricula = datos.get('matricula')
 
-        if len(nombre) == 0 or len(apellido) == 0 or len(email) == 0 or len(matricula) == 0:
+        if len(nombre) == 0 or len(apellido) == 0:
             raise forms.ValidationError("Hay al menos un campo vacio que es requerido, deb completarlo", code="Sin completar", )
 
 class EstudianteUpdateForm(forms.ModelForm):

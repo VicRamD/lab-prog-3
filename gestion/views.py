@@ -142,8 +142,17 @@ def detalleProyecto(request, id):
             'tribunal_true': False})
 
 @login_required
-def proyecto_edit(request):
-    
+def proyecto_edit(request, id):
+    proyecto = Proyecto.objects.get(id=id)
+    if request.method == 'POST':
+        form_proyecto = ProyectoForm(request.POST, request.FILES, instance=proyecto)
+        form_proyecto.save()
+        messages.success(request, 'Se ha actualizado correctamente el Programa')
+        return redirect(reverse('programa:programa_detalle', args=[proyecto.id]))
+    else:
+        form_proyecto = ProyectoForm(instance=proyecto)
+    return render(request, 'proyectos/proyecto_edit.html', {'form': form_proyecto,
+                                                            'proyecto': proyecto})
 #===================================================
 #===================================================
 

@@ -95,7 +95,11 @@ def nuevoEstudiante(request):
         else:
             datos = request.POST.dict()
             cuil = datos.get("cuil")
+            matricula = datos.get("matricula")
+            email = datos.get("email")
             mensajeErrorCuil(request, cuil)
+            mensajeErrorMatricula(request, matricula)
+            mensajeErrorEmail(request, email)
             diccionario = datosEnDiccionario(datos)
             return render(request, 'formulario_creacion.html', {'form_persona': form_persona,
                                                         'tipo_persona': 'estudiante',
@@ -323,6 +327,28 @@ def mensajeErrorCuil(request, cuil):
         messages.error(request, mensaje)
         #return mensaje
 
+def mensajeErrorMatricula(request, matricula):
+    estudiantes_con_matricula = Estudiante.objects.filter(matricula=matricula)
+    if estudiantes_con_matricula.count() != 0:
+        mensaje = "Hay un estudiante registrado con el cuil " + matricula + ": " + estudiantes_con_matricula[0].nombre_completo()
+        messages.error(request, mensaje)
+
+def mensajeErrorEmail(request, email):
+    estudiantes_con_email = Estudiante.objects.filter(email=email)
+    if estudiantes_con_email.count() != 0:
+        mensaje = "Hay un estudiante registrado con el cuil " + email + ": " + estudiantes_con_email[0].nombre_completo()
+        messages.error(request, mensaje)
+        #return mensaje
+    docentes_con_email = Docente.objects.filter(email=email)
+    if docentes_con_email.count() != 0:
+        mensaje = "Hay un docente registrado con el cuil " + email + ": " + docentes_con_email[0].nombre_completo()
+        messages.error(request, mensaje)
+        #return mensaje
+    asesores_con_email = Asesor.objects.filter(email=email)
+    if asesores_con_email.count() != 0:
+        mensaje = "Hay un asesor registrado con el cuil " + email + ": " + asesores_con_email[0].nombre_completo()
+        messages.error(request, mensaje)
+        #return mensaje
 
 def datosEnDiccionario(datos):
     nombre = datos.get("nombre")

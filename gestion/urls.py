@@ -7,6 +7,7 @@ urlpatterns = [
     #path('', views.index, name='index'),
     path('proyectos/', views.seccionProyectos, name='proyectos'),
     path('proyectos/nuevo_proyecto', views.nuevoProyecto, name='nuevo_proyecto'),
+    path('proyectos/editar_proyecto/<int:id>/', views.ProyectoForm, name='editar_proyecto'),
     path('proyectos/detalle_proyecto/<int:id>/', views.detalleProyecto, name='detalle_proyecto'),
     path('movimientos/<int:id>/', views.movimientos, name='movimientos'),
     path('movimientos/cargar_nuevo_PTF/<int:id>/', views.cargarNuevoPTF, name='cargar-nuevo-PTF'),
