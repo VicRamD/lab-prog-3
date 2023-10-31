@@ -24,6 +24,25 @@ div.franja .textoPrincipal {
     color: white;
 }
 
+.menor-vp{
+    display: line;
+    font-size: 10px;
+    text-align: center;
+}
+
+.mayor-vp{
+    display: none;
+}
+
+li.nav-item a {
+    font-size: 10px;
+}
+
+.btn-group-vertical {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 /*fondo de la lista de proyectos*/
 .fondoC {
     background-color: darkturquoise;
@@ -84,11 +103,29 @@ nav a.navbar-brand {
     color: yellow;
 }
 
+
 a.bam {
     background-color: #0693e3;
+    width: 90%;
+    width: 30%;
+    max-height: 50px;
     color: white;
     border-style: solid;
     border-color: black;
+    font-size: 12px;
+}
+
+.fila-btn {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.fila-btn .boton-estilo {
+    width: 100%;
+    min-width: 40px;
+    font-size; 14px;
 }
 
 .cont-flex {
@@ -260,4 +297,24 @@ div.body-home div.botones-form{
 }
 .body-base {
     min-height: 71vh;
+}
+
+@media (min-width: 800px){
+    .mayor-vp {
+        display: inline;
+    }
+
+    .menor-vp{
+        display: none;
+    }
+
+    li.nav-item a {
+        font-size: 16px;
+    }
+
+    .fila-btn .boton-estilo {
+        width: 45%;
+        min-width: 40px;
+        font-size; 14px;
+    }
 }

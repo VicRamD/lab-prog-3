@@ -142,6 +142,12 @@ def detalleProyecto(request, id):
             'tribunal_true': False})
 
 @login_required
+def proyecto_edit(request):
+    
+#===================================================
+#===================================================
+
+@login_required
 @user_passes_test(es_departamento)
 def nuevoProyecto(request):
     if request.method == 'POST':

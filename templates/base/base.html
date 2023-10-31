@@ -47,7 +47,8 @@ rel="stylesheet" />
                                 <a class="nav-link boton-nav" href="{% url 'persona:listado_proyectos' %}">Proyectos asociados</a>
                             </li>
                         </ul>
-                        <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark"><i class="fas fa-user-circle"></i> {{ request.user.username }} - Cerrar sesión</a>
+                        <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark menor-vp"><i class="fas fa-user-circle"></i> Cerrar sesión</a>
+                        <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-dark mayor-vp"><i class="fas fa-user-circle"></i> {{ request.user.username }} - Cerrar sesión</a>
                     </div>
                 {% endif %}
         </div>

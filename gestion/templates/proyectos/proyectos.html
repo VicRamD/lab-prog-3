@@ -56,8 +56,7 @@
                   <td>{{proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                   <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{ proyecto.proyecto_instancia.last.descripcion }}</a></td>
                   <td>
-                      <a href="#">Modificar</a>
-                      <a href="#">Eliminar</a>
+                      <a href="{% url 'gestion:detalle_proyecto' proyecto.id %}">Detalle</a>
                   </td>
                 </tr>
               {% endfor %}
