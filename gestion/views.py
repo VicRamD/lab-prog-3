@@ -416,6 +416,25 @@ def agregarIntegranteComision(integrantes, comision):
                                                           fecha_alta=timezone.now())
         integrante_comision_instance.save()
 
+def actualizarIntegrantesComision(integrantesSelec, comision, integrantes):
+    docentes_seleccionados = Docente.objects.filter(id__in=integrantesSelec)
+    docentes_integrantes = []
+    for i in integrantes:
+        docentes_integrantes.append(i.docente)
+
+    for integrante in docentes_seleccionados:
+        if integrante not in docentes_integrantes:
+            integrante_comision_instance = IntegranteComision(comision=comision,
+                                                              docente=integrante,
+                                                              fecha_alta=timezone.now())
+            integrante_comision_instance.save()
+
+    for integrante in integrantes:
+        docente = integrante.docente
+        if docente not in docentes_seleccionados:
+            integrante_baja = IntegranteComision.objects.filter(comision=comision, docente=docente)
+            for integ in integrante_baja:
+                integ.delete()
 
 @user_passes_test(es_departamento)
 def nuevaComision(request):
@@ -444,6 +463,26 @@ def detalleIntegrantesComision(request, id):
     comision = get_object_or_404(Comision, id=id)
     return render(request, 'comision/detalleIntegrantes.html', {'comision': comision})
 
+def comision_edit(request, id):
+    comision = get_object_or_404(Comision, id=id)
+    integrantes = IntegranteComision.objects.filter(comision=comision)
+    if request.method == 'POST':
+        form_comision = ComisionForm(request.POST, request.FILES, instance=comision)
+        integrantes_seleccionados = request.POST.getlist('integrantesSelecionados')
+        if form_comision.is_valid() and integrantes_seleccionados:
+            comision_instance = form_comision.save()
+            actualizarIntegrantesComision(integrantes_seleccionados, comision_instance, integrantes)
+            messages.success(request, 'Se ha actualizado correctamente la comisión')
+            return redirect(reverse('gestion:detalle_integrantes_comision', args=[comision_instance.id]))
+    else:
+        form_comision = ComisionForm(instance=comision)
+    docentes = Docente.objects.all()
+    return render(request, 'comision/comision_edit.html', {
+        'form_comision': form_comision,
+        'docentes': docentes,
+        'integrantes': integrantes,
+        'comision': comision,
+    })
 
 def detalleProyectosComision(request, id):
     comision = get_object_or_404(Comision, id=id)

@@ -11,17 +11,15 @@
       <div class="row">
         <div class="col-sm-2 btn-group-vertical">
           <a href="{% url 'gestion:nuevo_integrante' %}" class="btn bam">Nueva Comision</a>
-          <a href="#" class="btn bam">Modificar Integrante</a>
-          <a href="#" class="btn bam">Eliminar Integrante</a>
         </div>
         <div class="col-sm-10 columna-tabla">
           <h4>Lista de Comisiones:</h4>
           <label for="opcionDespliegue">Listar por departamento:</label>
           <select id="opcionDespliegue">
-            <option value="E">Informatica</option>
-            <option value="F">Minas</option>
-            <option value="E">Electronica</option>
-            <option value="F">Agrimensura</option>
+            <option value="Informatica">Informatica</option>
+            <option value="Minas">Minas</option>
+            <option value="Electronica">Electronica</option>
+            <option value="Agrimensura">Agrimensura</option>
           </select>
           <div class="table-responsive mt-3">
             <table class="table table-hover table-sm">

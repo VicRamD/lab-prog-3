@@ -115,6 +115,11 @@ a.bam {
     font-size: 12px;
 }
 
+a.bam:hover{
+    border: solid blue 2px;
+    background-color: lightsalmon;
+}
+
 .fila-btn {
     width: 100%;
     display: flex;

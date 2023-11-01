@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Nueva Comision{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/proyecto.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <div class="body-pages" >
+        <h1 class="textoPrincipal pt-3 text-center">Alta de Comisión de Seguimiento de Trabajos Finales (CSTF)</h1>
+        <div class="container-fluid border-dark pt-3 mt-6">
+            <form method="post" enctype="multipart/form-data">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-5" >
+                        <div class="container body1 pt-3">
+                            <div class="card">
+                                <div class="card-header1">
+                                    Datos la nueva comisión
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <label for="{{ form_comision.descripcion.id_for_label }}" class="mt-1 mb-2 form-label">Descripcion:</label>
+                                        <input type="text" id="id_descripcion" name="descripcion" value="{{ comision.descripcion }}" required >
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="{{ form_comision.resolucion.id_for_label }}" class="mt-1 mb-2 form-label">Resolucion:</label><br>
+                                        <input type="file" id="id_resolucion" name="resolucion" required >
+                                        <p><strong>Resolucion actual: </strong><a href="{{ comision.resolucion.url }}">Ver documento</a></p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="{{ form_comision.departamento.id_for_label }}" class="mt-1 mb-2 form-label">Departamento:</label>
+                                        <select id="id_departamento" name="departamento" required>
+                                            {% if comision.departamento == 'Informatica' %}
+                                                <option value="Informatica" selected>Informatica</option>
+                                                <option value="Minas">Minas</option>
+                                                <option value="Electronica">Electronica</option>
+                                                <option value="Agrimensura">Agrimensura</option>
+                                            {% elif comision.departamento == 'Minas' %}
+                                                <option value="Informatica">Informatica</option>
+                                                <option value="Minas" selected>Minas</option>
+                                                <option value="Electronica">Electronica</option>
+                                                <option value="Agrimensura">Agrimensura</option>
+                                            {% elif comision.departamento  == 'Electronica' %}
+                                                <option value="Informatica">Informatica</option>
+                                                <option value="Minas">Minas</option>
+                                                <option value="Electronica" selected>Electronica</option>
+                                                <option value="Agrimensura">Agrimensura</option>
+                                            {% else %}
+                                                <option value="Informatica">Informatica</option>
+                                                <option value="Minas">Minas</option>
+                                                <option value="Electronica">Electronica</option>
+                                                <option value="Agrimensura" selected>Agrimensura</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="integrantesSelecionados">Seleccione Integrante/s:</label><br>
+                                        <select id="integrantesSelecionados" name="integrantesSelecionados" multiple>
+                                        {% for docente in docentes %}
+                                          {% if docente in integrantes %}
+                                            <option value="{{ docente.id }}" selected>{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                          {% else %}
+                                            <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                          {% endif %}
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% csrf_token %}
+                                    <input type="submit" value="Guardar" class="btn btn-outline-dark boton  mt-3">
+                                    <a href="{% url 'gestion:comision'%}" class="btn btn-outline-dark boton  mt-3">Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
