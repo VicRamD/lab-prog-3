@@ -25,12 +25,11 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="{{ form_tribunal.numero_disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Número de disposición:</label>
-                                                    {{form_tribunal.numero_disposicion}}
-                                                    {{form_tribunal.numero_disposicion.errors}}
+                                                 <input type="text" name="tribunal-numero_disposicion" required id="id_tribunal-numero_disposicion" onkeypress="return validacionDeTeclasNumericas(event);">
                                             </div>
                                             <div class="form-group">
                                                 <label for="{{ form_tribunal.fecha_disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Fecha de disposición:</label>
-                                                <input type="date" name="tribunal-fecha_disposicion" required="" id="id_tribunal-fecha_disposicion">
+                                                <input type="date" name="tribunal-fecha_disposicion" required id="id_tribunal-fecha_disposicion">
                                             </div>
                                             <div class="form-group">
                                                 <label for="{{ form_tribunal.disposicion.id_for_label }}" class="mt-1 mb-2 form-label">Documento de disposicion:</label>
@@ -77,6 +76,9 @@
 
 {% endblock %}
 
-
+{% block funciones %}
+    <script src="{% static 'scripts/validarFecha.js' %}"></script>
+    <script src="{% static 'scripts/validacionPersona.js' %}"></script>
+{% endblock %}
 
 
