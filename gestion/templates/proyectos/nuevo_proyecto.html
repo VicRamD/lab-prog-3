@@ -33,9 +33,8 @@
                                         {{form_proyecto.descripcion.errors}}
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="{{ form_proyecto.fecha_presentacion.id_for_label }}" class="mt-1 mb-2 form-label">Fecha de presentacion:</label>
-                                        {{form_proyecto.fecha_presentacion}}
-                                        {{form_proyecto.fecha_presentacion.errors}}
+                                        <label for="id_fecha_presentacion" class="mt-1 mb-2 form-label">Fecha de presentacion:</label>
+                                        <input id="id_fecha_presentacion" type="date" name="proyecto-fecha_presentacion" class="form-control" required>
                                     </div>
                                     <div class="col-md-12">
                                         <label for="{{ form_proyecto.proyecto_escrito.id_for_label }}" class="mt-1 mb-2 form-label">Archivo del Proyecto:</label>
@@ -120,4 +119,8 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block funciones %}
+    <script src="{% static 'scripts/validarFecha.js' %}"></script>
 {% endblock %}

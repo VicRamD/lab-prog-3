@@ -10,7 +10,7 @@ class ProyectoForm(forms.ModelForm):
         fields = ('titulo','descripcion', 'fecha_presentacion', 'proyecto_escrito', 'certificado_analitico', 'nota_aceptacion')
 
         widgets = {
-            'fecha_presentacion': DateInput(format='%d-m-Y%', attrs={'type': 'date'})
+            'fecha_presentacion': DateInput(format='%d-m-Y%', attrs={"id": "id_fecha_presentacion", 'type': 'date'})
         }
 class EvaluacionForm(forms.ModelForm):
     class Meta:

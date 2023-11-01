@@ -6,7 +6,11 @@ function validacionDeTeclasLetras(evt){
     return ((evt.charCode >= 65 && evt.charCode <= 90)||(evt.charCode >= 97 && evt.charCode <= 122)||evt.charCode == 32);
 }
 
-let cuilInput = document.getElementById("id_cuil");
+let cuilInput = '';
+if(document.getElementById("id_cuil") !== null){
+    cuilInput = document.getElementById("id_cuil");
+}
+
 
 /*cuilInput.addEventListener("keydown", (evt) => {
     let valorCuil = cuilInput.value;
