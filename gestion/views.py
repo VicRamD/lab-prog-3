@@ -302,7 +302,7 @@ def nuevoProyecto(request):
     })
 
 
-
+@user_passes_test(es_movimientos)
 def cargarNuevoPTF(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
     ultimo_estado = proyecto.proyecto_instancia.last()
