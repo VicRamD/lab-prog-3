@@ -436,21 +436,17 @@ def agregarIntegranteComision(integrantes, comision):
                                                           fecha_alta=timezone.now())
         integrante_comision_instance.save()
 
-def actualizarIntegrantesComision(integrantesSelec, comision, integrantes):
+def actualizarIntegrantesComision(integrantesSelec, comision, docentes_reg):
     docentes_seleccionados = Docente.objects.filter(id__in=integrantesSelec)
-    docentes_integrantes = []
-    for i in integrantes:
-        docentes_integrantes.append(i.docente)
 
     for integrante in docentes_seleccionados:
-        if integrante not in docentes_integrantes:
+        if integrante not in docentes_reg:
             integrante_comision_instance = IntegranteComision(comision=comision,
                                                               docente=integrante,
                                                               fecha_alta=timezone.now())
             integrante_comision_instance.save()
 
-    for integrante in integrantes:
-        docente = integrante.docente
+    for docente in docentes_reg:
         if docente not in docentes_seleccionados:
             integrante_baja = IntegranteComision.objects.filter(comision=comision, docente=docente)
             for integ in integrante_baja:
@@ -489,12 +485,13 @@ def comision_edit(request, id):
     docentes_integrantes = []
     for i in integrantes:
         docentes_integrantes.append(i.docente)
+
     if request.method == 'POST':
         form_comision = ComisionForm(request.POST, request.FILES, instance=comision)
         integrantes_seleccionados = request.POST.getlist('integrantesSelecionados')
         if form_comision.is_valid() and integrantes_seleccionados:
             comision_instance = form_comision.save()
-            actualizarIntegrantesComision(integrantes_seleccionados, comision_instance, integrantes)
+            actualizarIntegrantesComision(integrantes_seleccionados, comision_instance, docentes_integrantes)
             messages.success(request, 'Se ha actualizado correctamente la comisión')
             return redirect(reverse('gestion:detalle_integrantes_comision', args=[comision_instance.id]))
     else:
