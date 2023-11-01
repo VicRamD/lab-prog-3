@@ -61,7 +61,7 @@
                                         <label for="integrantesSelecionados">Seleccione Integrante/s:</label><br>
                                         <select id="integrantesSelecionados" name="integrantesSelecionados" multiple>
                                         {% for docente in docentes %}
-                                          {% if docente in integrantes %}
+                                          {% if docente in docentes_integrantes %}
                                             <option value="{{ docente.id }}" selected>{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
                                           {% else %}
                                             <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>

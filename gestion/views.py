@@ -486,6 +486,9 @@ def detalleIntegrantesComision(request, id):
 def comision_edit(request, id):
     comision = get_object_or_404(Comision, id=id)
     integrantes = IntegranteComision.objects.filter(comision=comision)
+    docentes_integrantes = []
+    for i in integrantes:
+        docentes_integrantes.append(i.docente)
     if request.method == 'POST':
         form_comision = ComisionForm(request.POST, request.FILES, instance=comision)
         integrantes_seleccionados = request.POST.getlist('integrantesSelecionados')
@@ -500,7 +503,7 @@ def comision_edit(request, id):
     return render(request, 'comision/comision_edit.html', {
         'form_comision': form_comision,
         'docentes': docentes,
-        'integrantes': integrantes,
+        'docentes_integrantes': docentes_integrantes,
         'comision': comision,
     })
 
