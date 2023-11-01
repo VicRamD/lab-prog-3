@@ -11,8 +11,8 @@
       <div class="row">
           <div class="col-sm-2 btn-group-vertical">
               <a href="{% url 'gestion:comision' %}" class="btn bam">Comisiones</a>
-              <a href="#" class="btn bam">Modificar Comision</a>
-              <a href="#" class="btn bam">Proyectos Asociados</a>
+              <a href="{% url 'gestion:editar_comision' comision.id %}" class="btn bam">Modificar Comision</a>
+              <a href="{% url 'gestion:detalle_integrantes_comision' comision.id %}" class="btn bam">Integrantes</a>
           </div>
         <div class="col-sm-10 columna-tabla">
           <div class="table-responsive mt-3">
