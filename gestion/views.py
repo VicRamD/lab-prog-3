@@ -9,7 +9,7 @@ import os
 from django.db.models import OuterRef, Subquery
 
 from gestion.models import Proyecto, Comision, InstanciaEvaluacion, ComisionProyecto, Tribunal, Evaluacion
-from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm, ComisionForm, TribunalForm
+from gestion.forms import ProyectoForm, EvaluacionForm, DefensaForm, TFBForm, ComisionForm, TribunalForm
 from persona.models import Estudiante, IntegranteProyecto, Asesor, Docente, RolProyecto, IntegranteComision, \
     AsesorProyecto, RolTribunal
 from usuarios.views import asignarUsuariosGrupo, es_asesor, es_comision, es_tribunal, es_estudiante, es_departamento, \
@@ -302,7 +302,7 @@ def nuevoProyecto(request):
     })
 
 
-@user_passes_test(es_movimientos)
+
 def cargarNuevoPTF(request, id):
     proyecto = get_object_or_404(Proyecto, id=id)
     ultimo_estado = proyecto.proyecto_instancia.last()
@@ -324,17 +324,33 @@ def cargarNuevoPTF(request, id):
         return redirect(reverse('gestion:movimientos', args=[proyecto.id]))
         # return render(request, 'movimientos/movimientos.html', {'proyecto': proyecto})
 
+def habilitarTFB(proyecto):
+    try:
+        ultimo_estado = proyecto.proyecto_instancia.last()
+        if ultimo_estado.descripcion == 'TRABAJO FINAL BORRADOR':
+            if proyecto.tf_proyecto:
+                return False
+            else:
+                return True
+        else:
+            return False
+    except Proyecto.tf_proyecto.RelatedObjectDoesNotExist:
+        return True
 
 def habilitarDefensa(proyecto):
     ultimo_estado = proyecto.proyecto_instancia.last()
     if ultimo_estado.descripcion == 'FINALIZADO':
+        try:
+            if proyecto.defensa_proyecto:
+                return False
+        except Proyecto.defensa_proyecto.RelatedObjectDoesNotExist:
+            return True
         estados_anteriores = proyecto.proyecto_instancia.exclude(id=ultimo_estado.id).order_by('-id')
         if estados_anteriores.exists():
             estado_anterior = estados_anteriores.first()
             ultima_evaluacion = estado_anterior.instancia_evaluacion.last()
             if ultima_evaluacion and ultima_evaluacion.estado == 'APROBADO':
                 return True
-
     return False
 
 
@@ -360,6 +376,8 @@ def controlEstado(id):
         if ultimo_estado.descripcion == 'COMISION DE SEGUIMIENTO':
             agregarInstanciaEvaluacion('TRIBUNAL EVALUADOR', proyecto)
         elif ultimo_estado.descripcion == 'TRIBUNAL EVALUADOR':
+            agregarInstanciaEvaluacion('TRABAJO FINAL BORRADOR', proyecto)
+        elif ultimo_estado.descripcion == 'TRABAJO FINAL BORRADOR':
             agregarInstanciaEvaluacion('DEFENSA TRABAJO FINAL', proyecto)
         elif ultimo_estado.descripcion == 'DEFENSA TRABAJO FINAL':
             agregarInstanciaEvaluacion('FINALIZADO', proyecto)
@@ -373,6 +391,7 @@ def movimientos(request, id):
     if request.method == 'POST':
         form_evaluacion = EvaluacionForm(request.POST, request.FILES, prefix='evaluacion')
         form_defensa = DefensaForm(request.POST, request.FILES, prefix='defensa')
+        form_TFB = TFBForm(request.POST, request.FILES, prefix='tfb')
         instancia_actual = proyecto.proyecto_instancia.last()
 
         if form_evaluacion.is_valid():
@@ -388,19 +407,28 @@ def movimientos(request, id):
             defensa_instance.proyecto = proyecto
             defensa_instance.save()
             return redirect(reverse('gestion:movimientos', args={proyecto.id}))
+        elif form_TFB.is_valid():
+            tfb_instance = form_TFB.save(commit=False)
+            tfb_instance.proyecto = proyecto
+            tfb_instance.save()
+            return redirect(reverse('gestion:movimientos', args={proyecto.id}))
 
     else:
         form_evaluacion = EvaluacionForm(prefix='evaluacion')
         form_defensa = DefensaForm(prefix='defensa')
+        form_TFB = TFBForm(prefix='tfb')
 
     habilitar_defensa = habilitarDefensa(proyecto)
     habilitar_evaluacion = habilitarEvaluacion(proyecto)
+    habilitar_TFB = habilitarTFB(proyecto)
     return render(request, 'movimientos/movimientos.html', {
         'proyecto': proyecto,
         'form_evaluacion': form_evaluacion,
         'form_defensa': form_defensa,
+        'form_TFB': form_TFB,
         'habilitar_defensa': habilitar_defensa,
-        'habilitar_evaluacion': habilitar_evaluacion})
+        'habilitar_evaluacion': habilitar_evaluacion,
+        'habilitar_TFB': habilitar_TFB})
 
 
 def seccionComision(request):

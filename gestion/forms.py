@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput
 
-from gestion.models import Proyecto, Defensa, Evaluacion, Comision,Tribunal
+from gestion.models import Proyecto, Defensa, Evaluacion, TrabajoFinal, Comision,Tribunal
 
 
 class ProyectoForm(forms.ModelForm):
@@ -24,6 +24,14 @@ class DefensaForm(forms.ModelForm):
 
         widgets = {
             'fecha': DateInput(format='%d-m-Y%', attrs={'type': 'date'})
+        }
+class TFBForm(forms.ModelForm):
+    class Meta:
+        model = TrabajoFinal
+        fields = ('borrador', 'aceptacion_director', 'fecha_presentacion')
+
+        widgets = {
+            'fecha_presentacion': DateInput(format='%d-m-Y%', attrs={'type': 'date'})
         }
 class ComisionForm(forms.ModelForm):
     class Meta:

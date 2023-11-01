@@ -18,6 +18,7 @@ class TrabajoFinal(models.Model):
     fecha_presentacion = models.DateField()
 
 
+
 class Tribunal(models.Model):
     disposicion = models.FileField(upload_to='uploads/')
     fecha_disposicion = models.DateField()
@@ -49,6 +50,7 @@ class InstanciaEvaluacion(models.Model):
     DESCRIPCION_EVALUACION = (
         ('COMISION DE SEGUIMIENTO', 'COMISION DE SEGUIMIENTO'),
         ('TRIBUNAL EVALUADOR', 'TRIBUNAL EVALUADOR'),
+        ('TRABAJO FINAL BORRADOR', 'TRABAJO FINAL BORRADOR'),
         ('DEFENSA TRABAJO FINAL', 'DEFENSA TRABAJO FINAL'),
         ('FINALIZADO', 'FINALIZADO'),
     )

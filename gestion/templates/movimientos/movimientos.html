@@ -30,6 +30,24 @@
                             <th>Fecha de presentación</th>
                             <td>{{proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                         </tr>
+                        <tr>
+                            <th>Proyecto Presentado</th>
+                            <td><a href="{{proyecto.proyecto_escrito.url}}">Ver documento</a></td>
+                        </tr>
+                        {% if proyecto.tf_proyecto %}
+                        <tr class="table-info">
+                            <th>Trabajo Final</th>
+                            <td><a href="{{proyecto.tf_proyecto.borrador.url}}">Ver documento</a></td>
+                        </tr>
+                        <tr>
+                            <th>Aceptacion director</th>
+                            <td><a href="{{proyecto.tf_proyecto.aceptacion_director.url}}">Ver documento</a></td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de presentación</th>
+                            <td>{{proyecto.tf_proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
+                        </tr>
+                        {% endif %}
                         {% for instancia in proyecto.proyecto_instancia.all %}
                             <tr class="table-info">
                                 <th>Estado</th>
@@ -157,6 +175,38 @@
                         </form>
                     </div>
                     {% endif %}
+                    {% if habilitar_TFB %}
+                        <div class="container body1 pt-3">
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-header1">
+                                        Trabajo Final Borrador
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="{{ form_TFB.borrador.id_for_label }}" class="mt-1 mb-2 form-label">Borrador:</label>
+                                                {{form_TFB.borrador}}
+                                                {{form_TFB.borrador.errors}}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="{{ form_TFB.aceptacion_director.id_for_label }}" class="mt-1 mb-2 form-label">Aceptacion del Director:</label>
+                                                {{form_TFB.aceptacion_director}}
+                                                {{form_TFB.aceptacion_director.errors}}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="{{ form_TFB.fecha_presentacion.id_for_label }}" class="mt-1 mb-2 form-label">Fecha presentacion:</label>
+                                                {{form_TFB.fecha_presentacion}}
+                                                {{form_TFB.fecha_presentacion.errors}}
+                                        </div>
+                                    </div>
+                                    {% csrf_token %}
+                                    <div>
+                                        <input type="submit" value="Guardar" class="btn btn-outline-dark boton  m-3">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        {% endif %}
                 </div>
             </div>
         </div>
