@@ -15,12 +15,17 @@
         <div class="col-sm-10 columna-tabla">
           <h4>Lista de Comisiones:</h4>
           <label for="opcionDespliegue">Listar por departamento:</label>
-          <select id="opcionDespliegue">
-            <option value="Informatica">Informatica</option>
-            <option value="Minas">Minas</option>
-            <option value="Electronica">Electronica</option>
-            <option value="Agrimensura">Agrimensura</option>
-          </select>
+          <form method="post" class="d-flex flex-grow-1">
+            <select id="opcionDespliegue" name="opcionDespliegue">
+              <option value="Todos" selected>Todos</option>
+              <option value="Informatica">Informatica</option>
+              <option value="Minas">Minas</option>
+              <option value="Electronica">Electronica</option>
+              <option value="Agrimensura">Agrimensura</option>
+            </select>
+            {% csrf_token %}
+             <input type="submit" value="Filtrar" id="btn_filtrar" class="btn btn-outline-dark m-2">
+          </form>
           <div class="table-responsive mt-3">
             <table class="table table-hover table-sm">
               <thead>

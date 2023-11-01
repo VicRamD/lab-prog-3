@@ -404,8 +404,28 @@ def movimientos(request, id):
 
 
 def seccionComision(request):
+    if request.method == 'POST':
+        tipo_seleccionado = request.POST.get('opcionDespliegue')
+        print(tipo_seleccionado)
+        if tipo_seleccionado != 'Todos':
+            if tipo_seleccionado == 'Informatica':
+                comisiones = Comision.objects.filter(departamento='Informatica')
+                return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
+            elif tipo_seleccionado == 'Minas':
+                comisiones = Comision.objects.filter(departamento='Minas')
+                return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
+            elif tipo_seleccionado == 'Electronica':
+                comisiones = Comision.objects.filter(departamento='Electronica')
+                return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
+            elif tipo_seleccionado == 'Agrimensura':
+                comisiones = Comision.objects.filter(departamento='Agrimensura')
+                return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
+        else:
+            comisiones = Comision.objects.all()
+            return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
     comisiones = Comision.objects.all()
     return render(request, 'comision/comision_seguimiento.html', {'comisiones': comisiones})
+
 
 
 def agregarIntegranteComision(integrantes, comision):
