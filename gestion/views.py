@@ -147,14 +147,121 @@ def proyecto_edit(request, id):
     if request.method == 'POST':
         form_proyecto = ProyectoForm(request.POST, request.FILES, instance=proyecto)
         form_proyecto.save()
-        messages.success(request, 'Se ha actualizado correctamente el Programa')
-        return redirect(reverse('programa:programa_detalle', args=[proyecto.id]))
+        messages.success(request, 'Se ha actualizado correctamente el Proyecto')
+        return redirect(reverse('gestion:detalle_proyecto', args=[proyecto.id]))
     else:
         form_proyecto = ProyectoForm(instance=proyecto)
-    return render(request, 'proyectos/proyecto_edit.html', {'form': form_proyecto,
+    return render(request, 'proyectos/proyecto_edit.html', {'form_proyecto': form_proyecto,
                                                             'proyecto': proyecto})
 #===================================================
 #===================================================
+def obtenerIntegrantes(proyecto):
+    estudiantes = Estudiante.objects.all()
+    estudiantes_selecionados = proyecto.proyecto_integrante.all()
+    docentes = Docente.objects.all()
+    rolProyecto = proyecto.proyecto.all()
+    for rol in rolProyecto:
+        if rol.descripcion == 'Director':
+            director = rol
+        else:
+            codirector = rol
+    asesores = Asesor.objects.all()
+    asesor_proyecto = proyecto.asesor_proyecto.all()
+    for asesorp in asesor_proyecto:
+        asesor = asesorp
+    comisiones = Comision.objects.all()
+    comision = proyecto.comision_proyecto
+    return estudiantes, estudiantes_selecionados,docentes, director, codirector, asesores, asesor, comisiones, comision
+
+def modificarIntegranteProyecto(integrantes_seleccionados, proyecto):
+    estudiantes_actuales = proyecto.proyecto_integrante.all()
+    estudiantes_seleccionados = Estudiante.objects.filter(id__in=integrantes_seleccionados)
+    nuevosIntegrantes = []
+    # Verificar si hay integrantes a eliminar
+    integrantes_a_eliminar = []
+    for integrante_actual in estudiantes_actuales:
+        if integrante_actual.estudiante not in estudiantes_seleccionados:
+            integrantes_a_eliminar.append(integrante_actual)
+    # Eliminar integrantes no seleccionados
+    for integrante_a_eliminar in integrantes_a_eliminar:
+        integrante_a_eliminar.fecha_baja = timezone.now()
+        integrante_a_eliminar.save()
+    # Agregar nuevos integrantes
+    for integrante in estudiantes_seleccionados:
+        if integrante not in estudiantes_actuales:
+            nuevosIntegrantes.append(integrante.id)
+
+    agregarIntegranteProyecto(nuevosIntegrantes, proyecto)
+
+def modificarRolProyecto(director_seleccionado, codirector_seleccionado, proyecto):
+    print (director_seleccionado)
+    roles_actuales = proyecto.proyecto.all()
+    for rol_actual in roles_actuales:
+        if rol_actual.descripcion == 'Director':
+            # Verifica si el director seleccionado coincide con el rol actual
+            if rol_actual.docente.id == int(director_seleccionado):
+                pass
+            else:
+                # Establece la fecha de baja para el Director actual y agrega un nuevo Director
+                rol_actual.fecha_baja = timezone.now()
+                rol_actual.save()
+                agregarRolProyecto(director_seleccionado, proyecto, 'Director')
+        else:
+            if rol_actual.docente.id == int(codirector_seleccionado):
+                pass
+            else:
+                # Establece la fecha de baja para el Codirector actual y agrega un nuevo Codirector
+                rol_actual.fecha_baja = timezone.now()
+                rol_actual.save()
+                agregarRolProyecto(codirector_seleccionado, proyecto, 'Codirector')
+
+def modificarAsesorProyecto(asesor_seleccionado, proyecto):
+    asesor_actual_list = proyecto.asesor_proyecto.all()
+    for asesor_actual in asesor_actual_list:
+        if asesor_actual.asesor.id == asesor_seleccionado:
+            pass
+        else:
+            asesor_actual.asesor = Asesor.objects.get(id=asesor_seleccionado)
+            asesor_actual.save()
+
+def modificarCSTFProyecto(comision_seleccionada, proyecto):
+    comision_actual = proyecto.comision_proyecto
+    if comision_actual.comision.id == comision_seleccionada:
+        pass
+    else:
+        comision_actual.comision = Comision.objects.get(id=comision_seleccionada)
+        comision_actual.fecha_alta = timezone.now()
+        comision_actual.save()
+@login_required
+def proyecto_integrante_edit(request, id):
+    proyecto = Proyecto.objects.get(id=id)
+
+    if request.method == 'POST':
+        integrantes_seleccionados = request.POST.getlist('integrantesSelecionados')
+        asesor_seleccionado = request.POST.get('asesor_seleccionado')
+        director_seleccionado = request.POST.get('director_seleccionado')
+        codirector_seleccionado = request.POST.get('codirector_seleccionado')
+        comision_seleccionada = request.POST.get('comision_seleccionada')
+        if integrantes_seleccionados and asesor_seleccionado and director_seleccionado and codirector_seleccionado:
+            modificarIntegranteProyecto(integrantes_seleccionados, proyecto)
+            modificarRolProyecto(director_seleccionado, codirector_seleccionado, proyecto)
+            modificarAsesorProyecto(asesor_seleccionado, proyecto)
+            modificarCSTFProyecto(comision_seleccionada, proyecto)
+            messages.success(request, 'Se ha actualizado correctamente los integrantes del Proyecto')
+            return redirect(reverse('gestion:detalle_proyecto', args=[proyecto.id]))
+
+    estudiantes, estudiantes_selecionados, docentes, director, codirector, asesores, asesor, comisiones, comision = obtenerIntegrantes(
+        proyecto)
+
+    return render(request, 'proyectos/proyecto_integrante_edit.html', {'estudiantes': estudiantes,
+                                                                       'estudiantes_selecionados': estudiantes_selecionados,
+                                                                       'docentes': docentes,
+                                                                       'director': director.docente,
+                                                                       'codirector': codirector.docente,
+                                                                       'asesores': asesores,
+                                                                       'asesor_seleccionado': asesor.asesor,
+                                                                       'comisiones': comisiones,
+                                                                       'comision_seleccionada': comision})
 
 @login_required
 @user_passes_test(es_departamento)

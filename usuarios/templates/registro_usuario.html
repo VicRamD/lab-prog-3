@@ -10,26 +10,27 @@
 {% endblock %}
 
 {% block content %}
+{% load crispy_forms_tags %}
     <div class="body-pages" >
         <h1 class="textoPrincipal pt-3 text-center">Registrar usuario</h1>
         <div class="container-fluid border-dark pt-3 mt-6">
             <form method="post" enctype="multipart/form-data">
                 <div class="row d-flex justify-content-center">
                     <div class="col-5" >
-                        <div class="container body1 pt-3">
+                        <div class="container body1">
                             <div class="card">
                                 <div class="card-header1">
                                     Datos usuario
                                 </div>
-                                <div class="card mx-auto" style="width: 30rem;">
+                                <div class="mx-auto mt-3" style="width: 30rem;">
                                   <div class="card-body">
                                     <h5 class="card-title">Complete todos los campos</h5>
-                                    {{ form }}
+                                    {{ form | crispy}}
                                   </div>
                                 </div>
                                 {% csrf_token %}
+                                <div class="m-3 d-flex justify-content-center">
                                 <input type="submit" value="Guardar" class="btn btn-outline-dark boton  mt-3">
-                                <a href="{% url 'persona:lista_personas'%}" class="btn btn-outline-dark boton  mt-3">Cancelar</a>
                                 </div>
                             </div>
                         </div>

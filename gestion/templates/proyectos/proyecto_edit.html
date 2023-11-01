@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}Editar proyecto{% endblock %}
+
+{% block content %}
+<div class="body-pages">
+    <div class="container titulo-formulario">
+    <h1>Editar proyecto</h1>
+
+    </div>
+    <div class="container body1 ">
+      <div class="row d-flex justify-content-center ">
+          <div class="card col-md-6">
+            <div class="card-header1">
+              Ingrese los Datos Solicitados
+            </div>
+            <div class="card-body">
+
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <div >
+                      <div>
+                          <label for="id_titulo" class="form-label">Título</label>
+                          <input id="id_titulo" type="text" name="titulo" class="form-control" value="{{ form_proyecto.titulo.value }}" >
+                      </div>
+                      <div>
+                          <label for="id_descripcion" class="form-label">Descipcion</label>
+                          <textarea id="id_descripcion" name="descripcion" class="form-control" required>{{ form_proyecto.descripcion.value }}</textarea>
+                      </div>
+                      <div>
+                          <label for="id_fecha_presentacion" class="form-label">Fecha de presentación</label>
+                          <input id="id_fecha_presentacion" type="date" name="fecha_presentacion" class="form-control" value="{{ form_proyecto.fecha_presentacion.value|date:'d-m-Y' }}">
+                      </div>
+                      <div>
+                          <label for="id_proyecto_escrito" class="form-label">Archivo del Proyecto</label>
+                          <input id="id_proyecto_escrito" type="file" name="proyecto_escrito" class="form-control">
+                          <p><strong>Archivo (actual): </strong><a href="{{ proyecto.proyecto_escrito.url }}">{{ proyecto.proyecto_escrito.name }}</a></p>
+                      </div>
+                      <div>
+                          <label for="id_certificado_analitico" class="form-label">Certificado analítico</label>
+                          <input id="id_certificado_analitico" type="file" name="certificado_analitico" class="form-control">
+                          <p><strong>Archivo (actual): </strong><a href="{{ proyecto.certificado_analitico.url }}">{{ proyecto.certificado_analitico.name }}</a></p>
+                      </div>
+                      <div>
+                          <label for="id_nota_aceptacion" class="form-label">Nota de aceptacion</label>
+                          <input id="id_nota_aceptacion" type="file" name="nota_aceptacion" class="form-control">
+                          <p><strong>Archivo (actual): </strong><a href="{{ proyecto.nota_aceptacion.url }}">{{ proyecto.nota_aceptacion.name }}</a></p>
+                      </div>
+                      <button type="submit" class="btn btn-outline-dark boton">Guardar <i class="far fa-save"></i></button>
+                      <a href="{% url 'gestion:proyectos'%}" class="btn btn-outline-dark boton">Cancelar</a>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </di>
+  </div>
+{% endblock  %}
+
+{% block funciones %}
+    <script src="{% static 'scripts/validacionPersona.js' %}"></script>
+{% endblock %}

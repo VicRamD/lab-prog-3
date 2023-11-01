@@ -197,7 +197,7 @@ def asesorModificar(request, pk):
     else:
         form_persona = AsesorUpdateForm(instance=asesor)
     return render(request, 'formulario_edicion_persona.html', {'form_persona': form_persona,
-                                                           'tipo_persona': 'asesor',
+                                                               'tipo_persona': 'asesor',
                                                                'persona': asesorDetalle_revisado})
 
 def asesorEliminar(request):

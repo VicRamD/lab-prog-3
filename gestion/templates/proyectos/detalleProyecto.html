@@ -9,13 +9,11 @@
     <h1 class="textoPrincipal pt-3 text-center">Detalle del Proyecto</h1>
     <div class="container p-6 border-dark">
         <div class="row bg-color-oscuro text-right">
-            <div class="col-sm-5"></div>
-            <div class="col-sm-7">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-5">
               <div class="btn justify-content-end">
-                  <div class="fila-btn">
-                      <a href="{% url 'gestion:editar_proyecto' proyecto.id %}" class="btn btn-outline-dark boton-estilo">Modificar Proyecto</a>
-                      <a href="#" class="btn btn-outline-dark boton-estilo">Eliminar Proyecto</a>
-                  </div>
+                  <a href="{% url 'gestion:editar_proyecto' proyecto.id %}" class="btn btn-outline-dark boton-estilo">Modificar Proyecto</a>
+                  <a href="{% url 'gestion:editar_integrante_proyecto' proyecto.id %}" class="btn btn-outline-dark boton-estilo">Modificar Integrante Proyecto</a>
               </div>
             </div>
       </div>
@@ -40,19 +38,39 @@
                     <td>{{proyecto.fecha_presentacion|date:"d-m-Y"}}</td>
                 </tr>
                 {% for integrante in proyecto.proyecto_integrante.all%}
-                <tr>
-                    <th>Integrante</th>
+                <tr class="table-info">
+                    <th>Alumno Integrante</th>
                     <td><a href="{% url 'persona:detalle_estudiante' integrante.estudiante.id %}">{{integrante.estudiante.matricula}} - {{integrante.estudiante.apellido}} {{integrante.estudiante.nombre}}</a></td>
                 </tr>
+                <tr>
+                    <th>Fecha de alta</th>
+                    <td>{{integrante.fecha_alta|date:"d-m-Y"}}</td>
+                </tr>
+                {% if integrante.fecha_baja%}
+                <tr>
+                    <th>Fecha de baja</th>
+                    <td>{{integrante.fecha_baja|date:"d-m-Y"}}</td>
+                </tr>
+                {% endif %}
                 {% endfor %}
                 {% for rol in proyecto.proyecto.all%}
-                <tr>
+                <tr class="table-info">
                     <th>{{rol.descripcion}}</th>
                     <td><a href="{% url 'persona:detalle_docente' rol.docente.id %}">{{rol.docente.apellido}} {{rol.docente.nombre}}</a></td>
                 </tr>
+                <tr>
+                    <th>Fecha de alta</th>
+                    <td>{{rol.fecha_alta|date:"d-m-Y"}}</td>
+                </tr>
+                {% if rol.fecha_baja%}
+                <tr>
+                    <th>Fecha de baja</th>
+                    <td>{{rol.fecha_baja|date:"d-m-Y"}}</td>
+                </tr>
+                {% endif %}
                 {% endfor %}
                 {% for asesor in proyecto.asesor_proyecto.all%}
-                <tr>
+                <tr class="table-info">
                     <th>Asesor</th>
                     <td><a href="{% url 'persona:detalle_asesor' asesor.asesor.id %}">{{asesor.asesor.apellido}} {{asesor.asesor.nombre}}</a></td>
                 </tr>
@@ -83,7 +101,7 @@
                 {% else %}
                 <tr>
                     <th>Tribunal:</th>
-                    <td><a href="{% url 'persona:nuevo_tribunal' proyecto.id %}">Asignar Tribunal</a></td>
+                    <td><a href="{% url 'gestion:nuevo_tribunal' proyecto.id %}">Asignar Tribunal</a></td>
                 </tr>
                 {% endif %}
                 <tr>

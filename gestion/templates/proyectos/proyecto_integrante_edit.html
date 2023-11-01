@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Nuevo Proyecto{% endblock %}
+{% block title %}Editar Integrantes{% endblock %}
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/proyecto.css' %}">
@@ -11,51 +11,10 @@
 
 {% block content %}
     <div class="body-pages" >
-        <h1 class="textoPrincipal pt-3 text-center">Alta del Proyecto</h1>
+        <h1 class="textoPrincipal pt-3 text-center">Editar Integrantes del Proyecto</h1>
         <div class="container-fluid border-dark pt-3 mt-6">
             <form method="post" id="formulario" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-6">
-                        <div class="container body1 pt-3">
-                            <div class="card">
-                                <div class="card-header1">
-                                    Datos Proyecto
-                                </div>
-                                <div class="card-body">
-                                    <div class="col-md-12">
-                                        <label for="{{ form_proyecto.titulo.id_for_label }}" class="mt-1 mb-2 form-label">Titulo:</label>
-                                        {{form_proyecto.titulo}}
-                                        {{form_proyecto.titulo.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_proyecto.descripcion.id_for_label }}" class="mt-1 mb-2 form-label">Descripcion:</label><br>
-                                        {{form_proyecto.descripcion}}
-                                        {{form_proyecto.descripcion.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_proyecto.fecha_presentacion.id_for_label }}" class="mt-1 mb-2 form-label">Fecha de presentacion:</label>
-                                        {{form_proyecto.fecha_presentacion}}
-                                        {{form_proyecto.fecha_presentacion.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_proyecto.proyecto_escrito.id_for_label }}" class="mt-1 mb-2 form-label">Archivo del Proyecto:</label>
-                                        {{form_proyecto.proyecto_escrito}}
-                                        {{form_proyecto.proyecto_escrito.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_proyecto.certificado_analitico.id_for_label }}" class="mt-1 mb-2 form-label">Certificado analítico:</label>
-                                        {{form_proyecto.certificado_analitico}}
-                                        {{form_proyecto.certificado_analitico.errors}}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="{{ form_proyecto.nota_aceptacion.id_for_label }}" class="mt-1 mb-2 form-label">Nota al Director:</label>
-                                        {{form_proyecto.nota_aceptacion}}
-                                        {{form_proyecto.nota_aceptacion.errors}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-6" >
                         <div class="container body1 pt-3">
                             <div class="card">
@@ -68,7 +27,11 @@
                                         <label for="integrantesSelecionados">Seleccione Alumno/s Integrante/s:</label>
                                         <select name="integrantesSelecionados" multiple>
                                         {% for estudiante in estudiantes %}
-                                          <option value="{{ estudiante.id }}">{{ estudiante.matricula }} - {{ estudiante.apellido }} {{ estudiante.nombre }}</option>
+                                            {% for seleccionado in estudiantes_selecionados %}
+                                              <option value="{{ estudiante.id }}" {% if estudiante.id == seleccionado.estudiante.id %}selected{% endif %}>
+                                                  {{ estudiante.matricula }} - {{ estudiante.apellido }} {{ estudiante.nombre }}
+                                              </option>
+                                            {% endfor %}
                                         {% endfor %}
                                         </select>
                                     </div>
@@ -77,7 +40,9 @@
                                         <label for="director_seleccionado">Seleccione un Director de proyecto:</label>
                                         <select name="director_seleccionado">
                                         {% for docente in docentes %}
-                                          <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                            <option value="{{ docente.id }}" {% if docente.id == director.id %}selected{% endif %}>
+                                                {{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}
+                                            </option>
                                         {% endfor %}
                                         </select>
                                     </div>
@@ -86,7 +51,9 @@
                                         <label for="codirector_seleccionado">Seleccione un Co-director de proyecto:</label>
                                         <select name="codirector_seleccionado">
                                         {% for docente in docentes %}
-                                          <option value="{{ docente.id }}">{{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}</option>
+                                          <option value="{{ docente.id }}" {% if docente.id == codirector.id %}selected{% endif %}>
+                                              {{ docente.dni }} - {{ docente.apellido }} {{ docente.nombre }}
+                                          </option>
                                         {% endfor %}
                                         </select>
                                     </div>
@@ -95,7 +62,9 @@
                                         <label for="asesor_seleccionado">Seleccione un Asesor de proyecto:</label>
                                         <select name="asesor_seleccionado">
                                         {% for asesor in asesores %}
-                                          <option value="{{ asesor.id }}">{{ asesor.dni }} - {{ asesor.apellido }} {{ asesor.nombre }}</option>
+                                          <option value="{{ asesor.id }}" {% if asesor.id == asesor_seleccionado.id %}selected{% endif %}>
+                                              {{ asesor.dni }} - {{ asesor.apellido }} {{ asesor.nombre }}
+                                          </option>
                                         {% endfor %}
                                         </select>
                                     </div>
@@ -104,7 +73,9 @@
                                         <label for="comision_seleccionada">Seleccione una Comision de seguimiento de Trabajos Finales:</label>
                                         <select name="comision_seleccionada">
                                         {% for comision in comisiones %}
-                                          <option value="{{ comision.id }}">{{ comision.descripcion }}</option>
+                                          <option value="{{ comision.id }}" {% if comision.id == comision_seleccionada.id %}selected{% endif %}>
+                                              {{ comision.descripcion }}
+                                          </option>
                                         {% endfor %}
                                         </select>
                                     </div>

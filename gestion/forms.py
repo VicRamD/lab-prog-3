@@ -15,7 +15,7 @@ class ProyectoForm(forms.ModelForm):
 class EvaluacionForm(forms.ModelForm):
     class Meta:
         model = Evaluacion
-        fields = ('estado','informe', 'observacion')
+        fields = ('estado', 'informe', 'observacion')
 
 class DefensaForm(forms.ModelForm):
     class Meta:
