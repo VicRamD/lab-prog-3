@@ -82,6 +82,8 @@ def listadoPersonas(request):
                                                                  })
 
 # ============== Estudiante =================================
+@login_required(login_url='usuarios:login')
+@permission_required('estudiante.add_estudiante', raise_exception=True)
 def nuevoEstudiante(request):
     if request.method == 'POST':
         form_persona = EstudianteForm(request.POST, request.FILES)
@@ -162,9 +164,11 @@ def nuevoAsesor(request):
             datos = request.POST.dict()
             archivos = request.FILES.dict()
             cuil = datos.get("cuil")
+            email = datos.get("email")
             cv = archivos.get("cv")
             mensajeErrorCuil(request, cuil)
             mensajeExtensionCV(request, cv)
+            mensajeErrorEmail(request, email)
             diccionario = datosEnDiccionario(datos)
             return render(request, 'formulario_creacion.html', {'form_persona': form_persona,
                                                                 'tipo_persona': 'asesor',
@@ -209,6 +213,8 @@ def asesorEliminar(request):
 
 #========================================================
 # ============== Docente =================================
+@login_required(login_url='usuarios:login')
+@permission_required('docente.add_docente', raise_exception=True)
 def nuevoDocente(request):
     if request.method == 'POST':
         form_persona = DocenteForm(request.POST, request.FILES)
@@ -217,12 +223,13 @@ def nuevoDocente(request):
             docente_instance.guardar_dni()
             docente_instance.save()
             messages.success(request, 'Datos de docente guardados correctamente')
-            #return redirect(reverse('persona:detalle_docente', args={docente_instance.id}))
             return redirect(reverse('usuarios:registrar_usuario', kwargs={'id': docente_instance.id, 'grupo': 'Docente'}))
         else:
             datos = request.POST.dict()
             cuil = datos.get("cuil")
+            email = datos.get("email")
             mensajeErrorCuil(request, cuil)
+            mensajeErrorEmail(request, email)
             diccionario = datosEnDiccionario(datos)
             return render(request, 'formulario_creacion.html', {'form_persona': form_persona,
                                                                 'tipo_persona': 'docente',
@@ -267,28 +274,33 @@ def docenteEliminar(request):
 
 #========================================================
 #=========================================================
+@login_required(login_url='usuarios:login')
 def listado_proyectos(request):
     current_user = request.user
     if request.user.is_authenticated:
-        relacion = Usuario_persona.objects.get(user=current_user)
-        if relacion.tipo == "estudiante":
-            persona = relacion.estudiante
-            proyectos_que_integra = IntegranteProyecto.objects.filter(estudiante=persona)
-            proyectos_lista = proyectos_devolver(proyectos_que_integra)
-        elif relacion.tipo == "docente":
-            persona = relacion.docente
-            proyectos_que_integra = RolProyecto.objects.filter(docente=persona)
-            proyectos_lista = proyectos_devolver(proyectos_que_integra)
-        else:
-            persona = relacion.asesor
-            proyectos_que_integra = AsesorProyecto.objects.filter(asesor=persona)
-            proyectos_lista = proyectos_devolver(proyectos_que_integra)
+        try:
+            relacion = Usuario_persona.objects.get(user=current_user)
+            if relacion.tipo == "estudiante":
+                persona = relacion.estudiante
+                proyectos_que_integra = IntegranteProyecto.objects.filter(estudiante=persona)
+                proyectos_lista = proyectos_devolver(proyectos_que_integra)
+            elif relacion.tipo == "docente":
+                persona = relacion.docente
+                proyectos_que_integra = RolProyecto.objects.filter(docente=persona)
+                proyectos_lista = proyectos_devolver(proyectos_que_integra)
+            else:
+                persona = relacion.asesor
+                proyectos_que_integra = AsesorProyecto.objects.filter(asesor=persona)
+                proyectos_lista = proyectos_devolver(proyectos_que_integra)
 
-        return render(request, 'con_sesion/ptf_relacionados_cuenta.html', {
-            'persona': persona,
-            'tipo_persona': relacion.tipo,
-            'proyectos_lista': proyectos_lista,
-        })
+            return render(request, 'con_sesion/ptf_relacionados_cuenta.html', {
+                'persona': persona,
+                'tipo_persona': relacion.tipo,
+                'proyectos_lista': proyectos_lista,
+            })
+        except:
+            messages.error(request, 'El usuario que esta usando no puede tener proyectos asociados')
+            return redirect(reverse('usuarios:login'))
 
 def estado_proyecto(request, pk):
     current_user = request.user

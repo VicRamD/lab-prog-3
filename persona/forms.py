@@ -140,6 +140,22 @@ class AsesorForm(forms.ModelForm):
                  raise forms.ValidationError(mensaje, code="cuil repetido", )
          return cuil
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        estudiantes_con_email = Estudiante.objects.filter(email=email)
+        if estudiantes_con_email.count() != 0:
+            mensaje = "Hay un estudiante registrado con el cuil " + email + ": " + estudiantes_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        docentes_con_email = Docente.objects.filter(email=email)
+        if docentes_con_email.count() != 0:
+            mensaje = "Hay un docente registrado con el cuil " + email + ": " + docentes_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        asesores_con_email = Asesor.objects.filter(email=email)
+        if asesores_con_email.count() != 0:
+            mensaje = "Hay un asesor registrado con el cuil " + email + ": " + asesores_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        return email
+
 class AsesorUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -205,6 +221,22 @@ class DocenteForm(forms.ModelForm):
                 # raise ValidationError(mensaje)
                 raise forms.ValidationError(mensaje, code="cuil repetido", )
         return cuil
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        estudiantes_con_email = Estudiante.objects.filter(email=email)
+        if estudiantes_con_email.count() != 0:
+            mensaje = "Hay un estudiante registrado con el cuil " + email + ": " + estudiantes_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        docentes_con_email = Docente.objects.filter(email=email)
+        if docentes_con_email.count() != 0:
+            mensaje = "Hay un docente registrado con el cuil " + email + ": " + docentes_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        asesores_con_email = Asesor.objects.filter(email=email)
+        if asesores_con_email.count() != 0:
+            mensaje = "Hay un asesor registrado con el cuil " + email + ": " + asesores_con_email[0].nombre_completo()
+            raise forms.ValidationError(mensaje, code="email repetido", )
+        return email
 
 class DocenteUpdateForm(forms.ModelForm):
 
