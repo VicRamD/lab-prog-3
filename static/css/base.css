@@ -288,6 +288,7 @@ div.body-home div.botones-form{
       position: absolute;
       top: 15%;
       left: 5%;
+      z-index: -1;
     }
 .landing-paragraph {
   font-size: 25px;
