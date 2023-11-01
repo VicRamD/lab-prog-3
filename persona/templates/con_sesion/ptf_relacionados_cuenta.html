@@ -32,7 +32,7 @@
                   <td>PTF-{{proyecto.id}}</td>
                   <td>{{proyecto.titulo}}</td>
                   <td>{{proyecto.descripcion}}</td>
-                  <td><a href="{% url 'gestion:movimientos' proyecto.id %}">{{ proyecto.proyecto_instancia.last.descripcion }}</a></td>
+                  <td>{{ proyecto.proyecto_instancia.last.descripcion }}</td>
                   <td>
                       <a href="{% url 'persona:estado_del_proyecto' proyecto.id %}">Detalle</a>
                   </td>

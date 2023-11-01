@@ -8,7 +8,7 @@ from django.core.files.storage import FileSystemStorage
 
 from persona.models import Estudiante, Asesor, Docente, IntegranteProyecto, RolProyecto, AsesorProyecto
 from usuarios.models import Usuario_persona
-from gestion.models import Proyecto
+from gestion.models import Proyecto, InstanciaEvaluacion, Evaluacion
 # Create your views here.
 
 def buscarStringEnCuil(tipo, cuil):
@@ -313,8 +313,19 @@ def estado_proyecto(request, pk):
             persona = relacion.docente
         else:
             persona = relacion.asesor
-
-        return render(request, 'con_sesion/ptf_estado_proyecto.html', {
+        #print(proyecto.proyecto_instancia.instancia_evaluacion.estado)
+        instancias = InstanciaEvaluacion.objects.filter(proyecto=proyecto)
+        ultimaInstancia = instancias[len(instancias)-1]
+        try:
+            evaluacion = Evaluacion.objects.get(instancia_evaluacion=ultimaInstancia)
+            return render(request, 'con_sesion/ptf_estado_proyecto.html', {
+                'persona': persona,
+                'proyecto': proyecto,
+                'tipo_persona': relacion.tipo,
+                'evaluacion': evaluacion,
+            })
+        except:
+            return render(request, 'con_sesion/ptf_estado_proyecto.html', {
                                                         'persona': persona,
                                                         'proyecto': proyecto,
                                                         'tipo_persona': relacion.tipo,

@@ -28,13 +28,9 @@
                   <div class="progress-bar bg-success" style="width:75%">
                     Para Defensa
                   </div>
-                {% elif proyecto.proyecto_instancia.last.descripcion == 'FINALIZADO' and proyecto.proyecto_instancia.instancia_evaluacion.estado == 'RECHAZADO' %}
-                  <div class="progress-bar bg-danger" style="width:100%">
-                    Finalizado - Reprobado
-                  </div>
-                {% else %}
+                {% elif proyecto.proyecto_instancia.last.descripcion == 'FINALIZADO'%}
                   <div class="progress-bar bg-success" style="width:100%">
-                    Finalizado - Aprobado
+                    Finalizado
                   </div>
                 {% endif %}
               </div>

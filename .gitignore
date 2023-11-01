@@ -2,11 +2,14 @@ lab23/configuraciones_locales.py
 
 /gestion/__pycache__/
 /gestion/migrations/__pycache__/
+/gestion/migrations/
 /lab23/__pycache__/
 /persona/__pycache__/
 /persona/migrations/__pycache__/
+/persona/migrations/
 /usuarios/__pycache__/
 /usuarios/migrations/__pycache__/
+/usuarios/migrations/
 
 /venv/
 /media/
