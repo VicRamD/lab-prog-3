@@ -353,23 +353,23 @@ def mensajeErrorCuil(request, cuil):
 def mensajeErrorMatricula(request, matricula):
     estudiantes_con_matricula = Estudiante.objects.filter(matricula=matricula)
     if estudiantes_con_matricula.count() != 0:
-        mensaje = "Hay un estudiante registrado con el cuil " + matricula + ": " + estudiantes_con_matricula[0].nombre_completo()
+        mensaje = "Hay un estudiante registrado con la matricula " + matricula + ": " + estudiantes_con_matricula[0].nombre_completo()
         messages.error(request, mensaje)
 
 def mensajeErrorEmail(request, email):
     estudiantes_con_email = Estudiante.objects.filter(email=email)
     if estudiantes_con_email.count() != 0:
-        mensaje = "Hay un estudiante registrado con el cuil " + email + ": " + estudiantes_con_email[0].nombre_completo()
+        mensaje = "Hay un estudiante registrado con el email " + email + ": " + estudiantes_con_email[0].nombre_completo()
         messages.error(request, mensaje)
         #return mensaje
     docentes_con_email = Docente.objects.filter(email=email)
     if docentes_con_email.count() != 0:
-        mensaje = "Hay un docente registrado con el cuil " + email + ": " + docentes_con_email[0].nombre_completo()
+        mensaje = "Hay un docente registrado con el email " + email + ": " + docentes_con_email[0].nombre_completo()
         messages.error(request, mensaje)
         #return mensaje
     asesores_con_email = Asesor.objects.filter(email=email)
     if asesores_con_email.count() != 0:
-        mensaje = "Hay un asesor registrado con el cuil " + email + ": " + asesores_con_email[0].nombre_completo()
+        mensaje = "Hay un asesor registrado con el email " + email + ": " + asesores_con_email[0].nombre_completo()
         messages.error(request, mensaje)
         #return mensaje
 

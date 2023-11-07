@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from .forms import CrearUsuarioForm
 from persona.models import Estudiante, Docente, Asesor
 from django.contrib.auth.models import User
-from usuarios.models import Usuario_estudiante, Usuario_docente, Usuario_asesor, Usuario_persona
+from usuarios.models import Usuario_persona
 
 
 # Create your views here.
