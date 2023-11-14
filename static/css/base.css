@@ -226,6 +226,23 @@ a.bam:hover{
     text-align: right;
 }
 
+div.btn-buscar-reset {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div.btn-buscar-reset input[type="text"]{
+    width: 100%;
+}
+
+div.btn-buscar-reset button[type="button"]{
+    width: 25%;
+    background-color: white;
+    border-radius: 5px;
+    border: solid 1px gray;
+}
+
 @media only screen and (max-width: 600px) {
 
     #formularioTribunal,

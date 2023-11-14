@@ -58,3 +58,34 @@ function validacionDeTeclasLetras(evt){
 }
 
 let nombreInput = document.getElementById("id_nombre");
+
+function ocultarOpciones(){
+    const list_e = document.getElementById('integrantesSelecionados');
+    const cadena = document.getElementById('buscarEstudiante').value.toUpperCase();
+    const options = list_e.childNodes;
+
+    if(cadena === ''){
+        for(i=1; i<options.length; i=i+2){
+            console.log(options[i]);
+            options[i].style.display = 'block';
+        }
+    }
+    else{
+        for(i=1; i<options.length; i=i+2){
+            if(options[i].innerHTML.toUpperCase().includes(cadena)){
+                options[i].style.display = 'block';
+            }else{
+                options[i].style.display = 'none';
+            }
+        }
+    }
+}
+
+function mostrarTodasLasOpciones(){
+    const list_e = document.getElementById('integrantesSelecionados');
+    const options = list_e.childNodes;
+
+    for(i=1; i<options.length; i=i+2){
+        options[i].style.display = 'block';
+    }
+}
