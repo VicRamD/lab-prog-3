@@ -38,9 +38,9 @@ class Comision(models.Model):
         ('Electronica', 'Electronica'),
         ('Agrimensura', 'Agrimensura'),
     )
-    descripcion = models.CharField(default="Comisión nueva")
+    descripcion = models.CharField(max_length=70, default="Comisión nueva")
     resolucion = models.FileField(upload_to='uploads/', null=True, blank=True)
-    departamento = models.CharField(choices=DESCRIPCION_DEPARTAMENTO, default="Informatica")
+    departamento = models.CharField(max_length=20, choices=DESCRIPCION_DEPARTAMENTO, default="Informatica")
 
 class ComisionProyecto(models.Model):
     proyecto = models.OneToOneField(Proyecto, on_delete=models.PROTECT, related_name="comision_proyecto")
@@ -54,7 +54,7 @@ class InstanciaEvaluacion(models.Model):
         ('DEFENSA TRABAJO FINAL', 'DEFENSA TRABAJO FINAL'),
         ('FINALIZADO', 'FINALIZADO'),
     )
-    descripcion = models.CharField(choices=DESCRIPCION_EVALUACION)
+    descripcion = models.CharField(max_length=30, choices=DESCRIPCION_EVALUACION)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, related_name="proyecto_instancia")
 class Evaluacion(models.Model):
     informe = models.FileField(upload_to='uploads/')
@@ -64,7 +64,7 @@ class Evaluacion(models.Model):
         ('APROBADO', 'APROBADO'),
         ('RECHAZADO', 'RECHAZADO'),
     )
-    estado = models.CharField(choices=ESTADO_OPCIONES)
+    estado = models.CharField(max_length=15, choices=ESTADO_OPCIONES)
     observacion = models.TextField()
     instancia_evaluacion = models.ForeignKey(InstanciaEvaluacion, on_delete=models.CASCADE, related_name="instancia_evaluacion")
     nuevoPTF = models.FileField(upload_to='uploads/', null=True, blank=True)
