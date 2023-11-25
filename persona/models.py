@@ -50,7 +50,7 @@ class RolProyecto(models.Model):
         ('Director', 'Director'),
         ('Codirector', 'Codirector'),
     )
-    descripcion = models.CharField(choices=ROL_OPCIONES)
+    descripcion = models.CharField(max_length=20, choices=ROL_OPCIONES)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.PROTECT, related_name="proyecto")
     docente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="docente_proyecto")
     fecha_alta = models.DateField(blank=True)
@@ -62,7 +62,7 @@ class RolTribunal(models.Model):
         ('Vocal', 'Vocal'),
         ('Vocal suplente', 'Vocal suplente'),
     )
-    descripcion = models.CharField(choices=ROL_OPCIONES)
+    descripcion = models.CharField(max_length=20, choices=ROL_OPCIONES)
     tribunal = models.ForeignKey(Tribunal, on_delete=models.CASCADE, related_name="tribunal")
     docente = models.ForeignKey(Docente, on_delete=models.PROTECT, related_name="docente_tribunal")
     fecha_alta = models.DateField(default=timezone.now)

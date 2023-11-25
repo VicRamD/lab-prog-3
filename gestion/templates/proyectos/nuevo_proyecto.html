@@ -65,7 +65,13 @@
                                     <div class="row p-3">
                                         <div class="col-md-6"></div>
                                         <label for="integrantesSelecionados">Seleccione Alumno/s Integrante/s:</label>
-                                        <select name="integrantesSelecionados" multiple>
+                                        <div class="btn-buscar-reset">
+                                            <input type="text" class="mt-2 mb-2" id="buscarEstudiante" placeholder="ingrese un nombre o cuil">
+                                            <button type="button" class="mt-2 mb-2" onclick="ocultarOpciones();">Buscar</button>
+                                            <button type="button" class="mt-2 mb-2" onclick="mostrarTodasLasOpciones();">Reset</button>
+                                        </div>
+
+                                        <select id="integrantesSelecionados" name="integrantesSelecionados" multiple>
                                         {% for estudiante in estudiantes %}
                                           <option value="{{ estudiante.id }}">{{ estudiante.matricula }} - {{ estudiante.apellido }} {{ estudiante.nombre }}</option>
                                         {% endfor %}
@@ -123,4 +129,5 @@
 
 {% block funciones %}
     <script src="{% static 'scripts/validarFecha.js' %}"></script>
+    <script src="{% static 'scripts/proyectosJS.js' %}"></script>
 {% endblock %}

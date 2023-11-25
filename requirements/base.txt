@@ -6,3 +6,6 @@ django==4.2.5
 psycopg2-binary==2.9.7
 
 django-extensions==3.2.3
+
+crispy-bootstrap5==2023.10
+django-crispy-forms==2.1
