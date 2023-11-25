@@ -9,12 +9,10 @@
   <div class="body-pages pt-3">
     <div class="container p-6 border border-dark">
       <div class="row bg-color-oscuro text-right">
-        <div class="col-sm-7"></div>
-        <div class="col-sm-5">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3">
           <div class="btn justify-content-end">
           <a href="{% url 'gestion:proyectos' %}" class="btn btn-outline-dark">Nuevo Tribunal</a>
-          <a href="#" class="btn btn-outline-dark">Modificar Tribunal</a>
-          <a href="#" class="btn btn-outline-dark">Eliminar Tribunal</a>
           </div>
         </div>
       </div>
@@ -30,7 +28,6 @@
                   <th scope="col">Fecha de disposición</th>
                   <th scope="col">Documento de disposición</th>
                   <th scope="col">Integrantes</th>
-                  <th scope="col">Operación</th>
                 </tr>
               </thead>
               <tbody>
@@ -42,10 +39,6 @@
                   <td>{{tribunal.fecha_disposicion|date:"d-m-Y"}}</td>
                   <td><a href="{{ tribunal.disposicion.url }}">Ver documento</a></td>
                   <td><a href="{% url 'gestion:detalle_integrantes_tribunal' tribunal.id %}">Ver detalle de integrantes</a></td>
-                  <td>
-                      <a href="#">Modificar</a>
-                      <a href="#">Eliminar</a>
-                  </td>
                 </tr>
                 {% endfor %}
               </tbody>

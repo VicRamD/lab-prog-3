@@ -84,6 +84,10 @@ WSGI_APPLICATION = 'lab23.wsgi.application'
 
 
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -133,11 +137,11 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-try:
-    from .configuraciones_locales import *
-except ImportError:
-    raise Exception("El archivo de configuraciones locales es requerido para ejecutar este proyecto")
+#Se comenta la conexion a postgresql
+#try:
+#    from .configuraciones_locales import *
+#except ImportError:
+#    raise Exception("El archivo de configuraciones locales es requerido para ejecutar este proyecto")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
